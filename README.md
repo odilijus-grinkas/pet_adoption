@@ -14,8 +14,13 @@
 3. Kai baigsit savo darba:
 
    3.1 Pushinkit savo branch
+   
    3.2 Per github pasirinkite savo branch ir padarykite Pull Request (zalias mygtukas)
+   
    3.3 Desinej pusej yra "reviews", jame pasirinkite projekto administratoriu(s) kuris tures perziureti jusu branch.
+   
    3.4 Spausti Create pull Request ir laukti kol priims/atsisakys jusu branch-o.
+   
      3.4.1 Jei priims bus sumergintas jusu branch su main ir pats branch bus istrintas is repositorijos (istorija jo liks)
+   
      3.4.1 Jei atsisakys bus jum parasytas review per github kokiu pakeitimu reikia (arba per teams chat padiskutuos). Ivedus pakeitimus pushinkit ir sukurkit nauja pull request
