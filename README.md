@@ -3,7 +3,7 @@
 2. ....?
 
 ### Pagrindines taisykles
-1. Niekada neliesti MAIN (origin/Main) - **nepushinti nieko i ji**. Jis skirtas tik atsibranchinimams ir merginimams su savo branch-u.
+1. Niekada neliesti MAIN (origin/Main) - **nepushinti nieko i ji**. Jis skirtas tik atsibranchinimams ir merginimams su **savo** branch-u.
 2. Neprikurti bereikalingu branch-u. Naudoti tik 1 branch kiekvienai savo pasirinktai uzduociai.
 
 ### Ka daryti pradedant dirbti su sita repositorija:
