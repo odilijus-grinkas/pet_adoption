@@ -5,6 +5,8 @@
 ### Pagrindines taisykles
 1. Niekada neliesti MAIN (origin/Main) - **nepushinti nieko i ji**. Jis skirtas tik atsibranchinimams ir merginimams su **savo** branch-u.
 2. Neprikurti bereikalingu branch-u gite. Pushinti tik 1 branch kiekvienai savo pasirinktai uzduociai.
+3. Stengtis naudoji angliskus pavadinimus funkcijom ir pan. Komentarus rasyti galit kokius norit.
+4. Stengtis dokumentuoti savo exportuojamas funkcijas naudojant /** , ten aprasyti ka ji daro, kaip ja naudotis, kokius parametrus jai duoti.
 
 ### Ka daryti pradedant dirbti su sita repositorija:
 1. Atsibranchinti nuo main
