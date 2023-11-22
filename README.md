@@ -1,12 +1,12 @@
-# Projekto administratoriai (zmones kurie reviewins ir mergins jusu branch):
+### Projekto administratoriai (zmones kurie reviewins ir mergins jusu branch):
 1. Odilijus
 2. ....?
 
-# Pagrindines taisykles
+### Pagrindines taisykles
 1. Niekada neliesti MAIN (origin/Main) - **nepushinti nieko i ji**. Jis skirtas tik atsibranchinimams ir merginimams su savo branch-u.
 2. Neprikurti bereikalingu branch-u. Naudoti tik 1 branch kiekvienai savo pasirinktai uzduociai.
 
-# Ka daryti pradedant dirbti su sita repositorija:
+### Ka daryti pradedant dirbti su sita repositorija:
 1. Atsibranchinti nuo main
 2. Susikurti nauja moduli moduliu folderyje ir jame dirbti, neliesti kitu failu nepakonsultavus failo savininko.
 3. Kai baigsit savo darba: 
