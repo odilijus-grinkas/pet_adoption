@@ -10,7 +10,7 @@
 
 ### Ka daryti pradedant dirbti su sita repositorija:
 1. Atsibranchinti nuo main
-2. Susikurti nauja moduli moduliu folderyje ir jame dirbti, neliesti kitu failu nepakonsultavus failo savininko.
+2. Susikurti nauja folderi modules folderyje ir jame dirbti, neliesti kitu failu nepakonsultavus failo savininko.
 3. Kai baigsit savo darba:
 
    3.1 Pushinkit savo branch
