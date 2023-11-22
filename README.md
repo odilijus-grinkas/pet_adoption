@@ -22,6 +22,6 @@
    
    3.4 Spausti Create pull Request ir laukti kol priims/atsisakys jusu branch-o.
    
-        3.4.1 Jei priims bus sumergintas jusu branch su main ir pats branch bus istrintas is repositorijos (istorija jo liks)
+    3.4.1 Jei priims bus sumergintas jusu branch su main ir pats branch bus istrintas is repositorijos (istorija jo liks)
    
-        3.4.1 Jei atsisakys bus jum parasytas review per github kokiu pakeitimu reikia (arba per teams chat padiskutuos). Ivedus pakeitimus pushinkit ir sukurkit nauja pull request
+    3.4.1 Jei atsisakys bus jum parasytas review per github kokiu pakeitimu reikia (arba per teams chat padiskutuos). Ivedus pakeitimus pushinkit ir sukurkit nauja pull request
