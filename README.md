@@ -11,7 +11,8 @@
 ### Ka daryti pradedant dirbti su sita repositorija:
 1. Atsibranchinti nuo main
 2. Susikurti nauja moduli moduliu folderyje ir jame dirbti, neliesti kitu failu nepakonsultavus failo savininko.
-3. Kai baigsit savo darba: 
+3. Kai baigsit savo darba:
+
    3.1 Pushinkit savo branch
    3.2 Per github pasirinkite savo branch ir padarykite Pull Request (zalias mygtukas)
    3.3 Desinej pusej yra "reviews", jame pasirinkite projekto administratoriu(s) kuris tures perziureti jusu branch.
