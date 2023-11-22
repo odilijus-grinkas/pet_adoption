@@ -15,6 +15,7 @@
 
    3.1 Pushinkit savo branch
    
+   
    3.2 Per github pasirinkite savo branch ir padarykite Pull Request (zalias mygtukas)
    
    3.3 Desinej pusej yra "reviews", jame pasirinkite projekto administratoriu(s) kuris tures perziureti jusu branch.
