@@ -1,0 +1,38 @@
+services:
+  server:
+    image: node:alpine
+    depends_on:
+      - db
+    volumes:
+      - ./server:/server
+    working_dir: /server
+    command: sh -c "npm i && npm run dev"
+    environment:
+      MYSQL_HOST: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: pet_adoption
+    ports:
+      - 3001:3001
+  client:
+    image: node:alpine
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./client:/client
+    working_dir: /client
+    command: sh -c "npm i && npm run dev"
+    ports:
+      - 3000:3000
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pet_adoption
+    # volumes:
+      # - ./database:/docker-entrypoint-initdb.d  #database setup scripts
+      # - persistentDatabase:/var/lib/mysql
+
+#Commented out to make deletion of volumes with each new compose unnecessary.
+# volumes:
+#   persistentDatabase:
