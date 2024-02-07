@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS db_petadoptions;
-CREATE DATABASE db_petadoptions CHARACTER SET UTF8 COLLATE utf8_unicode_ci;
-USE db_petadoptions;
+DROP DATABASE IF EXISTS pet_adoption;
+CREATE DATABASE pet_adoption CHARACTER SET UTF8 COLLATE utf8_unicode_ci;
+USE pet_adoption;
 
 DROP TABLE IF EXISTS permissions;
 CREATE TABLE IF NOT EXISTS permissions (

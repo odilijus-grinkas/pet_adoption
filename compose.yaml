@@ -29,8 +29,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: pet_adoption
-    # volumes:
-      # - ./database:/docker-entrypoint-initdb.d  #database setup scripts
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d  #database setup scripts
       # - persistentDatabase:/var/lib/mysql
 
 #Commented out to make deletion of volumes with each new compose unnecessary.
