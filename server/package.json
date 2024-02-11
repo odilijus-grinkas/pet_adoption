@@ -6,5 +6,11 @@
   },
   "scripts": {
     "dev": "nodemon --legacy-watch --polling-interval 2000  app.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "prisma": "^5.9.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }
