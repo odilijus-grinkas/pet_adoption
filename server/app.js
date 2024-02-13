@@ -20,6 +20,12 @@ app.use((req, res, next) => {
   next();
 });
 
+async function h1() {
+  results = await db.query("SELECT * FROM post");
+  console.log(results);
+}
+h1();
+
 //added to check if server works, delete later.
 app.get("/", (req, res) => {
   res.send(200);
