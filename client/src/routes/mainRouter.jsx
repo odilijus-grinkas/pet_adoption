@@ -1,22 +1,20 @@
-import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import Index from "../primary_comps/Index";
 import NotFound from "../components/NotFound";
-
-// import NotFound from "./pages/NotFound"; - butu galima sukurti
 
 function MainRouter() {
   return (
     <Router>
       <div>
-        <Switch>
+        <Routes>
+          {/* Root URL Route */}
+          <Route path="/" element={<Index />} />
           {/* Index Route */}
-          <Route path="../primary_comps/index" Component={Index} />
-          {/* Auth Route */}
-          {/* <Route path="../kazkurauth" Component={Auth} /> */}
+          <Route path="../primary_comps/index" element={<Index />} />
           {/* 404 Not Found Route */}
-          <Route path="../components/NotFound" component={NotFound} />
-        </Switch>
+          <Route path="../components/NotFound" element={<NotFound />} />
+        </Routes>
       </div>
     </Router>
   );

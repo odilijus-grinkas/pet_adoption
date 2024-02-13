@@ -1,7 +1,7 @@
-export default function Index(){
+export default function Index() {
   return (
     <>
-      <div >Working index page, give me components</div>
+      <div>Working index page, give me components</div>
     </>
-  )
+  );
 }
