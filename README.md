@@ -12,7 +12,7 @@ Individual startups:
 
 Palesti prisma:
 
-Docker destope nueiti i server conteineri ir exec parasyti sias komandas npx prisma db push ir npx prisma db seed
+Docker destope nueiti i server conteineri ir exec parasyti sias komandas `npx prisma db push` ir `npx prisma db seed`
 
 ### Pagrindines taisykles
 

@@ -1,5 +1,7 @@
 const express = require("express");
 const db = require("./config/mysql.js");
+// const { PrismaClient } = require("@prisma/client");
+// const prisma = new PrismaClient();
 
 const app = express();
 
@@ -21,7 +23,13 @@ app.use((req, res, next) => {
 });
 
 async function h1() {
-  results = await db.query("SELECT * FROM post");
+  // const results = await prisma.post.findMany();
+  const results = await prisma.post.findMany({
+    include: {
+      user: true,
+      city: true,
+    },
+  });
   console.log(results);
 }
 h1();
