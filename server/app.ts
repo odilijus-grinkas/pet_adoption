@@ -1,12 +1,15 @@
 //const db = require("./config/mysql.js");
 import express from "express";
 import postsRoute from "./src/routes/PostRouter";
+import bodyParser from "body-parser";
 //const express = require("express");
 // const { PrismaClient } = require("@prisma/client");
 // const prisma = new PrismaClient();
 //import postsRouter from "./src/routes/PostRouter"
 
 const app = express();
+
+app.use(bodyParser.json());
 
 const port = process.env.PORT || 3001;
 
