@@ -10,9 +10,13 @@ Individual startups:
 
 - Start client: Go to client folder > `npm run dev`
 
-Palesti prisma:
+Using prisma:
 
-Docker destope nueiti i server conteineri ir exec parasyti sias komandas `npx prisma db push` ir `npx prisma db seed`
+- Add all the tables with command `npx prisma migrate dev`, also use this command if make any changes to the database in schema.prisma file
+
+- Add data to tables with command `npx prisma db seed`
+
+- When you change data in seed.ts use command `npx prisma migrate reset`
 
 ### Pagrindines taisykles
 

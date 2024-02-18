@@ -1,6 +1,5 @@
 import express from "express"
-import { parse } from "path";
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from '@prisma/client'
 const PostClient = new PrismaClient().post
 
 export const getAllPosts = async (req: express.Request, res: express.Response) => {

@@ -68,6 +68,15 @@ async function main() {
                 status: 'Inactive',
                 valid: 'No'
             },
+            {
+                user_id: 1,
+                city_id: 1,
+                pet_name: 'Amsis',
+                description: 'Description of the second post',
+                created: new Date(),
+                status: 'Inactive',
+                valid: 'No'
+            }
         ]
     });
 
