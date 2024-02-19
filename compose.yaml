@@ -6,7 +6,9 @@ services:
     volumes:
       - ./server:/server
     working_dir: /server
-    command: sh -c "/server/wait-for-db.sh && npm i && npx prisma migrate dev && npx prisma db seed && npm run dev"
+    command: sh -c "/server/wait-for-db.sh && npm i && npx prisma migrate dev && npm run dev"
+    # command: sh -c "npm i && npx prisma migrate dev && npx prisma db seed && npm run dev"
+    # command: sh -c "npm i && npx prisma migrate dev && npm run dev"
     environment:
       MYSQL_HOST: db
       MYSQL_USER: root
@@ -26,13 +28,19 @@ services:
       - 3000:3000
   db:
     image: mysql
+    restart: always
+    cap_add: 
+      - SYS_NICE
     environment:
+      MYSQL_HOST: localhost
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: pet_adoption
-    # volumes:
+    ports:
+      - 9906:3306
+    volumes:
     #   - ./database:/docker-entrypoint-initdb.d  #database setup scripts
-    #   # - persistentDatabase:/var/lib/mysql
+      - persistentDatabase:/var/lib/mysql
 
 #Commented out to make deletion of volumes with each new compose unnecessary.
-# volumes:
-#   persistentDatabase:
+volumes:
+  persistentDatabase:
