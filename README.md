@@ -10,14 +10,6 @@ Individual startups:
 
 - Start client: Go to client folder > `npm run dev`
 
-Using prisma:
-
-- Add all the tables with command `npx prisma migrate dev`, also use this command if make any changes to the database in schema.prisma file
-
-- Add data to tables with command `npx prisma db seed`
-
-- When you change data in seed.ts use command `npx prisma migrate reset`
-
 ### Pagrindines taisykles
 
 1. Niekada neliesti MAIN (origin/Main) - **nepushinti nieko i ji**. Jis skirtas tik atsibranchinimams ir merginimams su **savo** branch-u.
