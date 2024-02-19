@@ -6,7 +6,7 @@ services:
     volumes:
       - ./server:/server
     working_dir: /server
-    command: sh -c "npm i && npx prisma migrate dev && npx prisma db seed && npm run dev"
+    command: sh -c "/server/wait-for-db.sh && npm i && npx prisma migrate dev && npx prisma db seed && npm run dev"
     environment:
       MYSQL_HOST: db
       MYSQL_USER: root
