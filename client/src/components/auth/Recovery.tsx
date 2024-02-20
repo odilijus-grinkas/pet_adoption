@@ -1,13 +1,12 @@
 import './auth.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import sidedog from './assets/loginpic.jpg';
+import recovery from './assets/recovery.jpg';
 import logo from './assets/logo.png';
-import { faLock } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
-const Login = () => {
+const Recovery = () => {
     return (
     <section className="vh-100">
     <div className="container py-5 h-100">
@@ -16,7 +15,7 @@ const Login = () => {
                  <div className="card ">
                       <div className="row g-0">
                       <div className="col-md-6 col-lg-5 d-none d-md-block">
-                          <img src={sidedog} alt="Login Forma" className="sidedog img-fluid" />
+                          <img src={recovery} width={500} height={500} alt="Login Forma" className="sidedog img-fluid" />
                           </div>
                              <div className="col-md-6 col-lg-7 d-flex mb-5 align-items-center">
                              <div className="card-body p-4 p-lg-5 text-white">
@@ -26,24 +25,14 @@ const Login = () => {
                                 </div>
                                     
                                 <div className="form-outline mb-4 d-flex align-items-center">
-                                <FontAwesomeIcon icon={faUser} className='text-black icon me-2' />
-                                    <input type="text" placeholder="Naudotojo Vardas" className="form-control form-control-lg" />
+                                <FontAwesomeIcon icon={faEnvelope} className='text-black icon me-2' />
+                                    <input type="text" placeholder="El. Paštas" className="form-control form-control-lg" />
                                 </div>
-
-                                <div className="form-outline mb-4 d-flex align-items-center">
-                                <FontAwesomeIcon icon={faLock} className='text-black icon me-2' />
-                                    <input className="form-control form-control-lg" placeholder="Slaptažodis" />
-                                 </div>
                                     
                                  <div className="pt-1 mb-4">
-                                    <input type="submit" className="button" value="Prisijungti"/>
+                                    <input type="submit" className="button" value="Priminti"/>
                                  </div>
                                  <div className="container">
-                                        <div className="row">
-                                        <div className="col p-1">
-                                         <Link className="link" to="/Recovery">Pamiršote prisijungimo duomenis?</Link>
-                                    </div>
-                                    </div>
                                         <div className="row">
                                         <div className="col p-1">
                                         <Link className="link" to="/Register">Registruokis</Link>
@@ -61,5 +50,4 @@ const Login = () => {
 </section>
     )
 }
-export default Login;
-
+export default Recovery;
