@@ -13,7 +13,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Uncomment once database is added.
 // Passing database connection, so that there's only 1 open pool on the whole server
 app.use((req, res, next) => {
   req.db = db;
