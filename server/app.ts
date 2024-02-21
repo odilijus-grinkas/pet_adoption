@@ -7,6 +7,22 @@ const app = express();
 
 const port = process.env.PORT || 3001;
 
+//test prisma
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+async function main() {
+  await prisma.test.create({
+    data: {name:"HELLO"}
+  })
+  const cool = await prisma.test.findMany()
+  console.log(cool)
+}
+main().then(async()=>{await prisma.$disconnect()}).catch(async (e) => {
+  console.error(e)
+  await prisma.$disconnect()
+  process.exit(1)
+});
+
 // Enable CORS (to allow localhost:3000 to use APIs)
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
