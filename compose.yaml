@@ -17,7 +17,7 @@ services:
     volumes:
       - ./server:/server
     working_dir: /server
-    command: sh -c "npm i && npx prisma generate && npx prisma migrate deploy && npm run dev"
+    command: sh -c "npm i && npx prisma migrate dev --name init && npm run dev"
     environment:
       MYSQL_HOST: db
       MYSQL_USER: root
