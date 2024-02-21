@@ -20,7 +20,7 @@ if (!HOST) {
   HOST = "localhost";
   USER = "root";
   PASSWORD = "root";
-  DB = "finance";
+  DB = "pet_adoption"
 };
 
 if (!HOST || !USER || !PASSWORD || !DB) {
