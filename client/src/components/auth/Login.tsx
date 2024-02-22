@@ -6,9 +6,13 @@ import logo from './assets/logo.png';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import Header from '../Header';
 
 const Login = () => {
     return (
+    <header>
+            <Header/>
+        
     <section className="vh-100">
     <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
@@ -59,6 +63,7 @@ const Login = () => {
         </div>
     </div> 
 </section>
+</header>
     )
 }
 export default Login;
