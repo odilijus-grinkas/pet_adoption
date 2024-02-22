@@ -1,19 +1,4 @@
 services:
-  server:
-    image: node:alpine
-    depends_on:
-      - db
-    volumes:
-      - ./server:/server
-    working_dir: /server
-    command: sh -c "npm i && npm run dev"
-    environment:
-      MYSQL_HOST: db
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_DATABASE: pet_adoption
-    ports:
-      - 3001:3001
   client:
     image: node:alpine
     environment:
@@ -24,13 +9,34 @@ services:
     command: sh -c "npm i && npm run dev"
     ports:
       - 3000:3000
+  server:
+    image: node:alpine
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./server:/server
+    working_dir: /server
+    command: sh -c "npm i && npx prisma migrate dev --name init && npx prisma db seed && npm run dev"
+    environment:
+      MYSQL_HOST: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: pet_adoption
+    ports:
+      - 3001:3001
   db:
     image: mysql
+    cap_add: 
+      - SYS_NICE
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: pet_adoption
-    volumes:
-      - ./database:/docker-entrypoint-initdb.d  #database setup scripts
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      retries: 10
+    # volumes:
       # - persistentDatabase:/var/lib/mysql
 
 #Commented out to make deletion of volumes with each new compose unnecessary.
