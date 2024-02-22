@@ -2,8 +2,10 @@ import express from "express";
 import db from "./config/mysql";
 import { Pool } from "mysql2/promise";
 import postsRouter from "./routes/PostRouter";
+import bodyParser from "body-parser";
 
 const app = express();
+app.use(bodyParser.json());
 
 const port = process.env.PORT || 3001;
 
