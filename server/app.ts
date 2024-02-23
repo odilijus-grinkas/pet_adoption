@@ -19,12 +19,6 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
   next();
 });
 
-// declare module 'express-serve-static-core' {
-//   interface Request {
-//     db: Pool;
-//   }
-// }
-
 app.use("/api", postsRouter)
 app.use("/api", userRouter);
 
