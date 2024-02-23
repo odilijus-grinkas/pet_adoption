@@ -1,9 +1,12 @@
 import express from "express";
-import { Pool } from "mysql2/promise";
-import postsRouter from "./routes/PostRouter";
 import bodyParser from "body-parser";
+import postsRouter from "./routes/PostRouter";
+import userRouter from "./routes/UserRouter";
 
 const app = express();
+
+// Body parser
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const port = process.env.PORT || 3001;
@@ -16,13 +19,14 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
   next();
 });
 
-declare module 'express-serve-static-core' {
-  interface Request {
-    db: Pool;
-  }
-}
+// declare module 'express-serve-static-core' {
+//   interface Request {
+//     db: Pool;
+//   }
+// }
 
-app.use("/", postsRouter)
+app.use("/", postsRouter);
+app.use("/api", userRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on: http://localhost:${port}`);
