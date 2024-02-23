@@ -1,5 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import _ from "underscore";
 const prisma = new PrismaClient();
 
 /**
@@ -16,6 +17,7 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
 };
 /**
  * Fetches 1 user based on id parameter.
+ * Body requires: id
  */
 const getOneUser = async (req: express.Request, res: express.Response) => {
   const id = req.params.id;
@@ -31,6 +33,7 @@ const getOneUser = async (req: express.Request, res: express.Response) => {
 };
 /**
  * Creates new user while assigning them role id 1.
+ * Body requires: username, password, email
  */
 const createRegularUser = async (
   req: express.Request,
@@ -38,12 +41,9 @@ const createRegularUser = async (
 ) => {
   try {
     const postData = req.body;
-    console.log("HIII");
-    console.log(req.body);
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
-        // id: postData.id,
-        username: postData.name,
+        username: postData.username,
         password: postData.password,
         email: postData.email,
       },
@@ -51,18 +51,23 @@ const createRegularUser = async (
     // assign level 1 role
     await prisma.user_role.create({
       data: {
-        user_id: postData.user_id,
+        user_id: newUser.id,
         role_id: 1,
       },
     });
     res.status(200).json({ status: "OK" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Serverio klaida." });
+  } catch (err: any) {
+    if (err.code == "P2002") {
+      res.status(403).json({ message: "User already exists." });
+    } else {
+      console.log(err);
+      res.status(500).json({ message: "Serverio klaida." });
+    }
   }
 };
 /**
  * Updates user based on id.
+ * Body requires: id, username, email, password
  */
 const updateUser = async (req: express.Request, res: express.Response) => {
   const id = req.params.id;
@@ -79,13 +84,18 @@ const updateUser = async (req: express.Request, res: express.Response) => {
       },
     });
     res.status(200).json({ status: "OK" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Serverio klaida." });
+  } catch (err: any) {
+    if (err.code == "P2002") {
+      res.status(403).json({ message: "Username or Email already exists." });
+    } else {
+      console.log(err);
+      res.status(500).json({ message: "Serverio klaida." });
+    }
   }
 };
 /**
  * Deletes user based on id
+ * Body requires: id
  */
 const deleteUser = async (req: express.Request, res: express.Response) => {
   const postData = req.body;
@@ -101,7 +111,39 @@ const deleteUser = async (req: express.Request, res: express.Response) => {
     res.status(500).json({ message: "Serverio klaida." });
   }
 };
+/**
+ * Returns user id if credentials are correct (will be token later)
+ * Body requires: username, password
+ */
 const loginUser = async (req: express.Request, res: express.Response) => {
   const username = req.body.username;
-}
-export { getAllUsers, getOneUser, createRegularUser, updateUser, deleteUser, loginUser };
+  const password = req.body.password;
+  try {
+    const user: any = await prisma.user.findFirst({
+      where: {
+        username: username,
+      },
+    });
+    if (_.isEmpty(user)) {
+      res.status(403).json({ message: "User does not exist." });
+    } else {
+      if (password == user.password) {
+        res.status(200).json({ id: user.id });
+      } else {
+        res.status(403).json({ message: "Wrong password." });
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Serverio klaida." });
+  }
+};
+
+export {
+  getAllUsers,
+  getOneUser,
+  createRegularUser,
+  updateUser,
+  deleteUser,
+  loginUser,
+};
