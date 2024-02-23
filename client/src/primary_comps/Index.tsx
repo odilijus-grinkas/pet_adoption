@@ -28,7 +28,7 @@ export default function Index() {
     // run our fetch method to try and setData in it
     fetchAndSetData();
     // re-renders page every time setData changes the data variable in useState.
-  },[data]);
+  },[]);
   
   return (
     <>
