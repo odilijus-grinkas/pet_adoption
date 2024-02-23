@@ -106,9 +106,13 @@ const deleteUser = async (req: express.Request, res: express.Response) => {
       },
     });
     res.status(200).json({ status: "OK" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Serverio klaida." });
+  } catch (err: any) {
+    if (err.code == "P2025") {
+      res.status(500).json({ message: "User does not exist." });
+    } else {
+      console.log(err);
+      res.status(500).json({ message: "Serverio klaida." });
+    }
   }
 };
 /**
