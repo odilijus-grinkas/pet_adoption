@@ -1,13 +1,16 @@
 # Instructions
 Start Docker:
+1. Read instructions in server > .env file
+2. In terminal, be in project folder (pet_adoption), write `docker compose up -d`
 
-In terminal, be in project folder (pet_adoption), write `docker compose up -d`
+# Individual startups:
 
-Individual startups:
+## Start server: 
+1. Read instructions in server > .env file
+2. Go to server folder > `npm run dev`
 
-- Start server: Go to server folder > `npm run dev`
-
-- Start client: Go to client folder > `npm run dev`
+## Start client: 
+1. Go to client folder > `npm run dev`
 
 ### Pagrindines taisykles
 1. Niekada neliesti MAIN (origin/Main) - **nepushinti nieko i ji**. Jis skirtas tik atsibranchinimams ir merginimams su **savo** branch-u.

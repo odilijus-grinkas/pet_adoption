@@ -42,9 +42,9 @@ model role {
 
 model user {
   id        Int         @id @default(autoincrement()) @db.UnsignedInt
-  username  String      @db.VarChar(30)
+  username  String      @db.VarChar(30) @unique
   password  String      @db.VarChar(255)
-  email     String      @db.VarChar(40)
+  email     String      @db.VarChar(40) @unique
   post      post[]
   user_role user_role[]
 }
