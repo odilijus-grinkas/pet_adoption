@@ -1,5 +1,3 @@
-import mysql, { Pool } from "mysql2/promise";
-
 interface DatabaseConfig {
   connectionLimit: number;
   waitForConnections: boolean;
@@ -35,8 +33,3 @@ const dbConfig: DatabaseConfig = {
   password: PASSWORD,
   database: DB,
 };
-
-// Database connection
-const db: Pool = mysql.createPool(dbConfig);
-
-export default db;
