@@ -4,10 +4,10 @@ import { getAllPosts, getOnePost, createPost, updatePost, deletePost } from "../
 
 const postsRouter = Router()
 
-postsRouter.get("/", getAllPosts)
-postsRouter.get("/:id", getOnePost)
-postsRouter.post("/", createPost)
-postsRouter.put("/:id", updatePost)
-postsRouter.delete("/:id", deletePost)
+postsRouter.get("/post/all", getAllPosts)
+postsRouter.get("/post/:id", getOnePost)
+postsRouter.post("/post/create", createPost)
+postsRouter.put("post/:id", updatePost)
+postsRouter.delete("post/:id", deletePost)
 
 export default postsRouter

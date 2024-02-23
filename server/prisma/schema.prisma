@@ -42,9 +42,9 @@ model role {
 
 model user {
   id        Int         @id @default(autoincrement()) @db.UnsignedInt
-  username  String      @db.VarChar(30)
+  username  String      @db.VarChar(30) @unique
   password  String      @db.VarChar(255)
-  email     String      @db.VarChar(40)
+  email     String      @db.VarChar(40) @unique
   post      post[]
   user_role user_role[]
 }
@@ -55,9 +55,9 @@ model post {
   city_id     Int           @db.UnsignedInt
   pet_name    String        @db.VarChar(30)
   description String        @db.Text
-  created     DateTime      @db.Date
+  created     DateTime      @db.Timestamp()
   status      String        @db.VarChar(10)
-  valid       String        @db.VarChar(10)
+  valid_until DateTime      @db.Timestamp()
   contact     contact[]
   photo       photo[]
   user        user          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "post_ibfk_1")

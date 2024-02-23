@@ -17,7 +17,7 @@ services:
     volumes:
       - ./server:/server
     working_dir: /server
-    command: sh -c "npm i && npx prisma migrate dev --name init && npx prisma db seed && npm run dev"
+    command: sh -c "npm i && npm run dev"
     environment:
       MYSQL_HOST: db
       MYSQL_USER: root
@@ -26,7 +26,7 @@ services:
     ports:
       - 3001:3001
   db:
-    image: mysql
+    image: mysql:latest
     cap_add: 
       - SYS_NICE
     environment:
@@ -37,7 +37,7 @@ services:
       interval: 10s
       retries: 10
     # volumes:
-      # - persistentDatabase:/var/lib/mysql
+    #   - persistentDatabase:/var/lib/mysql
 
 #Commented out to make deletion of volumes with each new compose unnecessary.
 # volumes:

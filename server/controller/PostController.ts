@@ -1,6 +1,15 @@
 import express from "express"
 import { PrismaClient } from '@prisma/client'
 const PostClient = new PrismaClient().post
+
+function validDate() {
+    const currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() + 2);
+    return currentDate.toISOString();
+}
+
+let ValidDate = validDate();
+
 export const getAllPosts = async (req: express.Request, res: express.Response) => {
     try {
         const AllPosts = await PostClient.findMany({
@@ -43,7 +52,7 @@ export const createPost = async (req: express.Request, res: express.Response) =>
                 description: postData.description,
                 created: new Date(),
                 status: postData.status,
-                valid: postData.valid
+                valid_until: ValidDate
             }
         })
         res.status(200).json({ data: CreatedPost });
@@ -61,7 +70,6 @@ export const updatePost = async (req: express.Request, res: express.Response) =>
         const newPetName = req.body.pet_name
         const newDescription = req.body.description
         const newStatus = req.body.status
-        const newValid = req.body.valid
 
         const UpdatedPost = await PostClient.update({
             where: {
@@ -72,8 +80,7 @@ export const updatePost = async (req: express.Request, res: express.Response) =>
                 city_id: newCityID,
                 pet_name: newPetName,
                 description: newDescription,
-                status: newStatus,
-                valid: newValid
+                status: newStatus
             }
         })
         res.status(200).json({ data: UpdatedPost });
