@@ -2,6 +2,14 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 async function main() {
 
+    function validDate() {
+        const currentDate = new Date();
+        currentDate.setMonth(currentDate.getMonth() + 2);
+        return currentDate.toISOString();
+    }
+
+    let ValidDate = validDate();
+
     const newUser = await prisma.user.createMany({
         data: [{
             id: 1,
@@ -111,7 +119,7 @@ async function main() {
                 description: 'Description of the first post',
                 created: new Date(),
                 status: 'Active',
-                valid: 'Yes'
+                valid_until: ValidDate
             },
             {
                 id: 2,
@@ -121,7 +129,7 @@ async function main() {
                 description: 'Description of the second post',
                 created: new Date(),
                 status: 'Inactive',
-                valid: 'No'
+                valid_until: ValidDate
             },
             {
                 id: 3,
@@ -131,7 +139,7 @@ async function main() {
                 description: 'Description of the third post',
                 created: new Date(),
                 status: 'Inactive',
-                valid: 'No'
+                valid_until: ValidDate
             },
             {
                 id: 4,
@@ -141,7 +149,7 @@ async function main() {
                 description: 'Description of the fourth post',
                 created: new Date(),
                 status: 'Inactive',
-                valid: 'No'
+                valid_until: ValidDate
             }
         ],
         skipDuplicates: true

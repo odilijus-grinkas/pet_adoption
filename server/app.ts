@@ -25,7 +25,7 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
 //   }
 // }
 
-app.use("/", postsRouter);
+app.use("/api", postsRouter)
 app.use("/api", userRouter);
 
 app.listen(port, () => {
