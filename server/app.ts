@@ -1,5 +1,4 @@
 import express from "express";
-import db from "./config/mysql";
 import { Pool } from "mysql2/promise";
 import postsRouter from "./routes/PostRouter";
 import bodyParser from "body-parser";
@@ -8,10 +7,6 @@ const app = express();
 app.use(bodyParser.json());
 
 const port = process.env.PORT || 3001;
-
-//test prisma 👇 delete this
-// import testPrisma from "./prisma-test-query";
-// testPrisma();
 
 // Enable CORS (to allow localhost:3000 to use APIs)
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -26,17 +21,6 @@ declare module 'express-serve-static-core' {
     db: Pool;
   }
 }
-
-// Passing database connection, so that there's only 1 open pool on the whole server
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-  req.db = db;
-  next();
-});
-
-//added to check if server works, delete later.
-// app.get("/", (req: express.Request, res: express.Response) => {
-//   res.sendStatus(200);
-// });
 
 app.use("/", postsRouter)
 
