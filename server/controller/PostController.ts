@@ -1,6 +1,7 @@
 import express from "express"
 import { PrismaClient } from '@prisma/client'
 const PostClient = new PrismaClient().post
+import { postValidation } from "../requests/PostRequest";
 
 function validDate() {
     const currentDate = new Date();
@@ -51,23 +52,31 @@ export const getOnePost = async (req: express.Request, res: express.Response) =>
  * Body requires: user_id,city_id,pet_name,description,status
  */
 export const createPost = async (req: express.Request, res: express.Response) => {
-    try {
-        let postData = req.body
-        const CreatedPost = await PostClient.create({
-            data: {
-                user_id: postData.user_id,
-                city_id: postData.city_id,
-                pet_name: postData.pet_name,
-                description: postData.description,
-                created: new Date(),
-                status: postData.status,
-                valid_until: ValidDate
-            }
-        })
-        res.status(200).json({ data: CreatedPost });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ status: "error", message: "Serverio klaida" });
+    const [post, valid, messages] = postValidation(req);
+    if (valid) {
+        try {
+            const CreatedPost = await PostClient.create({
+                data: {
+                    user_id: post.user_id,
+                    city_id: post.city_id,
+                    pet_name: post.pet_name,
+                    description: post.description,
+                    created: new Date(),
+                    status: post.status,
+                    valid_until: ValidDate
+                }
+            })
+            res.status(200).json({ data: CreatedPost });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ status: "error", message: "Serverio klaida" });
+        }
+    } else {
+        res.status(400).json({
+            status: "fail",
+            message: "Validacijos klaida",
+            error_messages: messages,
+        });
     }
 };
 /**
@@ -75,30 +84,33 @@ export const createPost = async (req: express.Request, res: express.Response) =>
  * Body requires: id, user_id,city_id,pet_name,description,status
  */
 export const updatePost = async (req: express.Request, res: express.Response) => {
-    try {
-        const Id = req.params.id
-        const newUserID = req.body.user_id
-        const newCityID = req.body.city_id
-        const newPetName = req.body.pet_name
-        const newDescription = req.body.description
-        const newStatus = req.body.status
-
-        const UpdatedPost = await PostClient.update({
-            where: {
-                id: parseInt(Id)
-            },
-            data: {
-                user_id: newUserID,
-                city_id: newCityID,
-                pet_name: newPetName,
-                description: newDescription,
-                status: newStatus
-            }
-        })
-        res.status(200).json({ data: UpdatedPost });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ status: "error", message: "Serverio klaida" });
+    const [post, valid, messages] = postValidation(req);
+    const Id = req.params.id
+    if (valid) {
+        try {
+            const UpdatedPost = await PostClient.update({
+                where: {
+                    id: parseInt(Id)
+                },
+                data: {
+                    user_id: post.user_id,
+                    city_id: post.city_id,
+                    pet_name: post.pet_name,
+                    description: post.description,
+                    status: post.status
+                }
+            })
+            res.status(200).json({ data: UpdatedPost });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ status: "error", message: "Serverio klaida" });
+        }
+    } else {
+        res.status(400).json({
+            status: "fail",
+            message: "Validacijos klaida",
+            error_messages: messages,
+        });
     }
 };
 /**
