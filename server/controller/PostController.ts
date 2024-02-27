@@ -57,8 +57,8 @@ export const createPost = async (req: express.Request, res: express.Response) =>
         try {
             const CreatedPost = await PostClient.create({
                 data: {
-                    user_id: post.user_id,
-                    city_id: post.city_id,
+                    user_id: parseInt(post.user_id),
+                    city_id: parseInt(post.city_id),
                     pet_name: post.pet_name,
                     description: post.description,
                     created: new Date(),
@@ -93,8 +93,8 @@ export const updatePost = async (req: express.Request, res: express.Response) =>
                     id: parseInt(Id)
                 },
                 data: {
-                    user_id: post.user_id,
-                    city_id: post.city_id,
+                    user_id: parseInt(post.user_id),
+                    city_id: parseInt(post.city_id),
                     pet_name: post.pet_name,
                     description: post.description,
                     status: post.status
