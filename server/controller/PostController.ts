@@ -10,6 +10,9 @@ function validDate() {
 
 let ValidDate = validDate();
 
+/**
+ * Fetches full data of every post.
+ */
 export const getAllPosts = async (req: express.Request, res: express.Response) => {
     try {
         const AllPosts = await PostClient.findMany({
@@ -20,7 +23,10 @@ export const getAllPosts = async (req: express.Request, res: express.Response) =
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
-
+/**
+ * Fetches 1 post based on id parameter.
+ * Body requires: id
+ */
 export const getOnePost = async (req: express.Request, res: express.Response) => {
     try {
         const id = req.params.id;
@@ -40,7 +46,10 @@ export const getOnePost = async (req: express.Request, res: express.Response) =>
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
-
+/**
+ * Creates new post while assigning them incremented id
+ * Body requires: user_id,city_id,pet_name,description,status
+ */
 export const createPost = async (req: express.Request, res: express.Response) => {
     try {
         let postData = req.body
@@ -61,7 +70,10 @@ export const createPost = async (req: express.Request, res: express.Response) =>
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
-
+/**
+ * Updates post based on id
+ * Body requires: id, user_id,city_id,pet_name,description,status
+ */
 export const updatePost = async (req: express.Request, res: express.Response) => {
     try {
         const Id = req.params.id
@@ -89,18 +101,25 @@ export const updatePost = async (req: express.Request, res: express.Response) =>
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
-
+/**
+ * Deletes post based on id
+ * Body requires: id
+ */
 export const deletePost = async (req: express.Request, res: express.Response) => {
     try {
-        const Id = req.params.id
+        const postId = parseInt(req.params.id);
         const deletedPost = await PostClient.delete({
             where: {
-                id: parseInt(Id)
+                id: postId
             }
-        })
-        res.status(200).json({ data: deletedPost });
+        });
+        if (deletedPost) {
+            res.status(200).json({ data: deletedPost });
+        } else {
+            res.status(404).json({ status: "error", message: "Post not found" });
+        }
     } catch (err) {
-        console.log(err);
+        console.error(err); // Log the error for debugging purposes
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
