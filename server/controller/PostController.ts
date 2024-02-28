@@ -35,6 +35,11 @@ export const getOnePost = async (req: express.Request, res: express.Response) =>
         const OnePost = await PostClient.findUnique({
             where: {
                 id: parseInt(id)
+            },
+            include: {
+                user: true,
+                city: true,
+                species: true
             }
         })
         if (OnePost) {

@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
-async function main() {
+async function consistentDataSeed() {
     const newRole = await prisma.role.createMany({
         data: [
             {
@@ -32,6 +32,14 @@ async function main() {
                 id: 2,
                 name: 'Katinas'
             },
+            {
+                id: 3,
+                name: 'Triušiai'
+            },
+            {
+                id: 4,
+                name: 'Žuvytės'
+            },
         ], skipDuplicates: true
     });
 
@@ -53,12 +61,32 @@ async function main() {
             {
                 id: 1,
                 characteristic_id: 1,
-                value: "20kg",
+                value: "mažas",
             },
             {
                 id: 2,
+                characteristic_id: 1,
+                value: "vidutinis",
+            },
+            {
+                id: 3,
+                characteristic_id: 1,
+                value: "didelis",
+            },
+            {
+                id: 4,
                 characteristic_id: 2,
                 value: "juoda",
+            },
+            {
+                id: 5,
+                characteristic_id: 2,
+                value: "ruda",
+            },
+            {
+                id: 6,
+                characteristic_id: 2,
+                value: "balta",
             }
         ], skipDuplicates: true
     });
@@ -69,14 +97,23 @@ async function main() {
                 species_id: 1,
                 characteristic_id: 1
             }, {
+                species_id: 1,
+                characteristic_id: 2
+            },
+            {
                 species_id: 2,
                 characteristic_id: 2
+            },
+            {
+                species_id: 1,
+                characteristic_id: 1
             }
+
         ], skipDuplicates: true
     })
 }
 
-main()
+consistentDataSeed()
     .then(async () => {
         await prisma.$disconnect()
     })
@@ -85,3 +122,5 @@ main()
         await prisma.$disconnect()
         process.exit(1)
     })
+
+export default consistentDataSeed
