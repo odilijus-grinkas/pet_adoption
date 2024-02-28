@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 
-// import sass
-// su fetch api
-
-export default function userList() {
+export default function UserList() {
   const [data, setData] = useState();
 
-  // Fetch function
+  // User fetch function
   const userFetch = async () => {
     try {
       // Uses get method on this specific link
@@ -26,28 +23,58 @@ export default function userList() {
     }
   };
 
+  // Delete fetch function
+  const deleteFetch = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/user/delete/");
+      if (response.ok) {
+        const setting = await response.json();
+        setData(setting.data);
+      } else {
+        setData("");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   useEffect(() => {
-    // Re-renders page every time setData changes the data variable in useState.
+    // Re-renders page every time setUsers changes the data variable in useState.
     userFetch();
   }, []);
+
+  // question if they really wanna delete
+  // refresh after deleting
+
+  // Delete confirmation handler
+  const handleDelete = (users.id) => {
+    // Prompt the user to confirm deletion
+    // ar su message?
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      // If user confirms, call deleteFetch to delete the user
+      deleteFetch(users.id);
+    }
+  };
+  
+  // user by id display username + delete func
+  return (
+    <>
+      <div>
+        <h2>User List</h2>
+        <ul>
+          {users.map((user) => (
+            <li key={users.id}>
+              {users.username}
+              <button onClick={() => handleDelete(users.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
 }
 
-// FC - Function Component is a generic type provided by React
-// to define the type of functional components.
-// Generic type comes from TypeScript
-// const UserList: React.FC<UserListProps> = ({ users }) => {
-//   return (
-//     <div className="user-list-container">
-//       {/* Display users */}
-//       <ul>
-//         {users.map((user) => (
-//           <li key={user.id}>{user.username}</li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
+// Admin | Moderator
 // interface CreatingRolesProps {
 //   handleCreateUser: (permission_id: number) => void;
 //   // Void - doesn't return
