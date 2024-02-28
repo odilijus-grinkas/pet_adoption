@@ -49,7 +49,7 @@ export const getOnePost = async (req: express.Request, res: express.Response) =>
 };
 /**
  * Creates new post while assigning them incremented id
- * Body requires: user_id,city_id,pet_name,description,status
+ * Body requires: user_id,city_id,species_id,pet_name,description,status
  */
 export const createPost = async (req: express.Request, res: express.Response) => {
     const [post, valid, messages] = postValidation(req);
@@ -59,6 +59,7 @@ export const createPost = async (req: express.Request, res: express.Response) =>
                 data: {
                     user_id: parseInt(post.user_id),
                     city_id: parseInt(post.city_id),
+                    species_id: parseInt(post.species_id),
                     pet_name: post.pet_name,
                     description: post.description,
                     created: new Date(),
@@ -81,7 +82,7 @@ export const createPost = async (req: express.Request, res: express.Response) =>
 };
 /**
  * Updates post based on id
- * Body requires: id, user_id,city_id,pet_name,description,status
+ * Body requires: id, user_id,city_id,species_id,pet_name,description,status
  */
 export const updatePost = async (req: express.Request, res: express.Response) => {
     const [post, valid, messages] = postValidation(req);
@@ -95,6 +96,7 @@ export const updatePost = async (req: express.Request, res: express.Response) =>
                 data: {
                     user_id: parseInt(post.user_id),
                     city_id: parseInt(post.city_id),
+                    species_id: parseInt(post.species_id),
                     pet_name: post.pet_name,
                     description: post.description,
                     status: post.status

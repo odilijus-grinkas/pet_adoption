@@ -39,32 +39,6 @@ async function main() {
         ],
         skipDuplicates: true
     });
-    const newRole = await prisma.role.createMany({
-        data: [
-            {
-                id: 1,
-                title: 'Admin'
-            },
-            {
-                id: 1,
-                title: 'Moderatorius'
-            }
-        ], skipDuplicates: true
-    });
-
-    const newFilter = await prisma.filter.createMany({
-        data: [
-            {
-                id: 1,
-                title: 'Filter 1'
-            },
-            {
-                id: 2,
-                title: 'Filter 1'
-            }
-        ],
-        skipDuplicates: true
-    });
 
     const newPermission = await prisma.permission.createMany({
         data: [
@@ -115,6 +89,7 @@ async function main() {
                 id: 1,
                 user_id: 1,
                 city_id: 1,
+                species_id: 1,
                 pet_name: 'Buddy',
                 description: 'Description of the first post',
                 created: new Date(),
@@ -125,6 +100,7 @@ async function main() {
                 id: 2,
                 user_id: 2,
                 city_id: 1,
+                species_id: 2,
                 pet_name: 'Max',
                 description: 'Description of the second post',
                 created: new Date(),
@@ -135,6 +111,7 @@ async function main() {
                 id: 3,
                 user_id: 1,
                 city_id: 2,
+                species_id: 1,
                 pet_name: 'Amsis',
                 description: 'Description of the third post',
                 created: new Date(),
@@ -145,7 +122,8 @@ async function main() {
                 id: 4,
                 user_id: 2,
                 city_id: 2,
-                pet_name: 'Zuika',
+                species_id: 2,
+                pet_name: 'Megatronas',
                 description: 'Description of the fourth post',
                 created: new Date(),
                 status: 'Inactive',
@@ -189,15 +167,15 @@ async function main() {
         skipDuplicates: true
     });
 
-    const newPostFilter = await prisma.post_filter.createMany({
+    const newPostOption = await prisma.post_option.createMany({
         data: [
             {
                 post_id: 1,
-                filter_id: 1
+                option_id: 1
             },
             {
                 post_id: 2,
-                filter_id: 2
+                option_id: 2
             }
         ],
         skipDuplicates: true
@@ -216,3 +194,5 @@ main()
         await prisma.$disconnect()
         process.exit(1)
     })
+
+export default main;
