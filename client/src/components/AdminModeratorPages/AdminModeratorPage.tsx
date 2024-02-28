@@ -1,92 +1,109 @@
-import { useEffect, useState } from "react";
-// panaudoti naujus user filtravimui is maino
-export default function UserList() {
-  const [users, setUsers] = useState([]);
+import "./assets/AdMod.scss";
 
-  // User fetch function
+import { useEffect, useState } from "react";
+
+// Define the User type
+interface User {
+  id: string;
+  username: string;
+}
+
+export default function UserList() {
+  // State to hold the list of users
+  const [users, setUsers] = useState<User[]>([]);
+
+  // Function to fetch user data from the API
   const userFetch = async () => {
     try {
-      // Uses get method on this specific link
-      const response = await fetch("http://localhost:3001/api/user/:id/");
+      const response = await fetch("http://localhost:3001/api/user/1");
       if (response.ok) {
         const setting = await response.json();
-        // Set data in useState so it can be rendered in div
-        setUsers(setting.data);
+        // Log the data received from the API for debugging
+        console.log("Fetched data:", setting.data);
+        // Check if the data is an array or an object
+        if (Array.isArray(setting.data)) {
+          // If it's an array, set it directly
+          setUsers(setting.data as User[]);
+        } else if (typeof setting.data === "object") {
+          // If it's an object, convert it to an array of one element
+          setUsers([setting.data as User]);
+        } else {
+          console.error("Data is not in a valid format:", setting.data);
+        }
       } else {
-        // Clear if error
-        setUsers("");
+        // Handle non-OK responses
+        setUsers([]);
       }
     } catch (error) {
       console.error("Error:", error);
-      // Basic use
-      // throw new Error(`Harbinger of misfortune, our requests are thwarted: ${response.statusText}`);
     }
   };
-  
+
+  // useEffect hook to fetch user data when the component mounts - excludes repetition
   useEffect(() => {
-    // Re-renders page every time setUsers changes the data variable in useState.
     userFetch();
   }, []);
 
- // Delete fetch function
- const deleteFetch = async () => {
-  try {
-    const response = await fetch("http://localhost:3001/api/user/delete/", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    // If the response is successful
-    if (response.ok) {
-      // Parse the response body as JSON
-      const setting = await response.json();
-      // Update the data with the retrieved setting
-      setUsers(setting.data);
+  // Function to delete a user by ID
+  const deleteFetch = async (id: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/user/delete/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        const setting = await response.json();
+        // Update users state after successful deletion
+        setUsers(setting.data as User[]);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
-  } catch (error) {
-    // Handle any errors that occur during the fetch or processing
-    console.error("Error:", error);
-  }
-};
+  };
 
-  // Delete confirmation handler
-  const handleDelete = (users.id, users.username) => {
-    // Prompt the user to confirm deletion
+  // Event handler for delete button click
+  const handleDelete = (id: string, username: string) => {
     if (
-      window.confirm(`Are you sure you want to delete the user ${users.username}?`)
+      window.confirm(`Are you sure you want to delete the user ${username}?`)
     ) {
-      // If user confirms, call deleteFetch to delete the user
-      deleteFetch(users.id)
+      deleteFetch(id)
         .then(() => {
-          // Update the user list after successful deletion
-          setUsers((users) =>
-            users.filter((users) => user.id !== users.id)
-          );
+          // Filter out the deleted user from the users array
+          setUsers(users.filter((user) => user.id !== id));
         })
         .catch((error) => {
           console.error("Error deleting user:", error);
-          // Handle error if necessary
         });
     }
   };
 
-  // user by id display username + delete func
+  // Render the component
   return (
     <>
-      <div>
-        <h2>User List</h2>
-        <ul>
-          {users.map((users.id) => (
-            <li key={users.id}>
-              {users.username}
-              <button onClick={() => handleDelete(users.id, users.username)}>
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <section>
+        <div className="card">
+          <h2>User List</h2>
+          <ul>
+            {/* Render user list */}
+            {users.map((user) => (
+              <li key={user.id}>
+                <p>{user.username}</p>
+                <button
+                  className="button"
+                  onClick={() => handleDelete(user.id, user.username)}
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
     </>
   );
 }
