@@ -43,10 +43,18 @@ async function main() {
         data: [
             {
                 id: 1,
+                title: 'Regular_User'
+            },
+            {
+                id: 2,
+                title: 'Regular+'
+            },
+            {
+                id: 3,
                 title: 'Admin'
             },
             {
-                id: 1,
+                id: 4,
                 title: 'Moderatorius'
             }
         ], skipDuplicates: true
