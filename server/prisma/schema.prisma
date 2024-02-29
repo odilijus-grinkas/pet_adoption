@@ -20,12 +20,6 @@ model city {
   post post[]
 }
 
-model filter {
-  id          Int           @id @default(autoincrement()) @db.UnsignedInt
-  title       String        @db.VarChar(30)
-  post_filter post_filter[]
-}
-
 model permission {
   id              Int               @id @default(autoincrement()) @db.UnsignedInt
   title           String            @db.VarChar(10)
@@ -42,17 +36,50 @@ model role {
 
 model user {
   id        Int         @id @default(autoincrement()) @db.UnsignedInt
-  username  String      @db.VarChar(30) @unique
+  username  String      @unique @db.VarChar(30)
   password  String      @db.VarChar(255)
-  email     String      @db.VarChar(40) @unique
+  email     String      @unique @db.VarChar(40)
   post      post[]
   user_role user_role[]
+}
+
+model species {
+  id                     Int                      @id @default(autoincrement()) @db.UnsignedInt
+  name                   String                   @db.VarChar(30)
+  post                   post[]
+  species_characteristic species_characteristic[]
+}
+
+model characteristic {
+  id                     Int                      @id @default(autoincrement()) @db.UnsignedInt
+  name                   String                   @db.VarChar(30)
+  option                 option[]
+  species_characteristic species_characteristic[]
+}
+
+model option {
+  id                Int            @id @default(autoincrement()) @db.UnsignedInt
+  characteristic_id Int            @db.UnsignedInt
+  value             String         @db.VarChar(255)
+  characteristic    characteristic @relation(fields: [characteristic_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "option_ibfk_1")
+  post_option       post_option[]
+}
+
+model species_characteristic {
+  species_id        Int            @db.UnsignedInt
+  characteristic_id Int            @db.UnsignedInt
+  species           species        @relation(fields: [species_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "species_characteristic_ibfk_1")
+  characteristic    characteristic @relation(fields: [characteristic_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "species_characteristic_ibfk_2")
+
+  @@id([species_id, characteristic_id])
+  @@index([characteristic_id], map: "characteristic_id")
 }
 
 model post {
   id          Int           @id @default(autoincrement()) @db.UnsignedInt
   user_id     Int           @db.UnsignedInt
   city_id     Int           @db.UnsignedInt
+  species_id  Int           @db.UnsignedInt
   pet_name    String        @db.VarChar(30)
   description String        @db.Text
   created     DateTime      @default(now())
@@ -62,7 +89,8 @@ model post {
   photo       photo[]
   user        user          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "post_ibfk_1")
   city        city          @relation(fields: [city_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "post_ibfk_2")
-  post_filter post_filter[]
+  species     species       @relation(fields: [species_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "post_ibfk_3")
+  post_option post_option[]
 
   @@index([city_id], map: "city_id")
   @@index([user_id], map: "user_id")
@@ -87,14 +115,14 @@ model photo {
   @@index([post_id], map: "post_id")
 }
 
-model post_filter {
+model post_option {
   post_id   Int    @db.UnsignedInt
-  filter_id Int    @db.UnsignedInt
+  option_id Int    @db.UnsignedInt
   post      post   @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "post_filter_ibfk_1")
-  filter    filter @relation(fields: [filter_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "post_filter_ibfk_2")
+  option    option @relation(fields: [option_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "post_filter_ibfk_2")
 
-  @@id([post_id, filter_id])
-  @@index([filter_id], map: "filter_id")
+  @@id([post_id, option_id])
+  @@index([option_id], map: "filter_id")
 }
 
 model role_permission {

@@ -16,6 +16,13 @@ export const createValidation = [
         .withMessage("city_id laukelis negali būti tuščias")
         .isInt().
         withMessage("city_id turi būti skaičius"),
+    body("species_id")
+        .trim()
+        .escape()
+        .notEmpty()
+        .withMessage("species_id laukelis negali būti tuščias")
+        .isInt().
+        withMessage("species_id turi būti skaičius"),
     body("pet_name")
         .trim()
         .escape()
@@ -52,6 +59,12 @@ export const updateValidation = [
         .optional()
         .isInt().
         withMessage("city_id turi būti skaičius"),
+    body("species_id")
+        .trim()
+        .escape()
+        .optional()
+        .isInt().
+        withMessage("species_id turi būti skaičius"),
     body("pet_name")
         .trim()
         .escape()
@@ -81,6 +94,7 @@ export const postValidation = (req: express.Request) => {
     const validacija = validationResult(req);
 
     const post = req.body;
+    console.log(post)
 
     if (!validacija.isEmpty()) {
         for (let i of validacija.array()) {
