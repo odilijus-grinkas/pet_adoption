@@ -10,11 +10,16 @@ const getUserPermissions = async (id:any) => {
   })
 }
 /**
- * Fetches full data of every user.
+ * Fetches full data of every user INCLUDING user_role object that contains role_id parameter.
+ * role_id can be either: 1 (regular user), 2 (userPlus), 3 (moderator), 4 (admin)
  */
 const getAllUsers = async (req: express.Request, res: express.Response) => {
   try {
-    const users = await prisma.user.findMany({});
+    const users = await prisma.user.findMany({
+      include: {
+        user_role: true
+      }
+    });
     res.status(200).json({ data: users });
   } catch (err) {
     console.log(err);
@@ -41,16 +46,17 @@ const getOneUser = async (req: express.Request, res: express.Response) => {
  * Creates new user while assigning them role id 1.
  * Body requires: username, password, email
  */
-const createRegularUser = async (
+const createUser = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
+  roleLevel: number
 ) => {
   try {
     const postData = req.body;
     const newUser = await prisma.user.create({
       data: {
         username: postData.username,
-        password: postData.password,
+        password: String(postData.password),
         email: postData.email,
       },
     });
@@ -58,7 +64,7 @@ const createRegularUser = async (
     await prisma.user_role.create({
       data: {
         user_id: newUser.id,
-        role_id: 1,
+        role_id: roleLevel,
       },
     });
     res.status(200).json({ status: "OK" });
@@ -154,7 +160,7 @@ const loginUser = async (req: express.Request, res: express.Response) => {
 export {
   getAllUsers,
   getOneUser,
-  createRegularUser,
+  createUser,
   updateUser,
   deleteUser,
   loginUser,

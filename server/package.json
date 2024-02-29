@@ -4,6 +4,8 @@
     "@types/underscore": "^1.11.15",
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "htmlspecialchars": "^1.0.5",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.1",
     "nodemon": "^3.0.3",
