@@ -1,34 +1,37 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import _ from "underscore";
+import _, { take } from "underscore";
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 /**
  * Returns permission id: 1=regular, 2=userPlus, 3=mod, 4=admin
  * @param id:number
  */
 const getUserPermissions = async (id: any) => {
-  const user:any = await prisma.user.findFirst({
+  const user: any = await prisma.user.findFirst({
     where: { id: parseInt(id) },
     include: { user_role: true },
   });
-  if (user==null){
-    return -1
+  if (user == null) {
+    return -1;
   } else {
-    return user.user_role[0].role_id
+    return user.user_role[0].role_id;
   }
 };
 /**
- * Fetches full data of every user INCLUDING user_role object that contains role_id parameter.
+ * Fetches id, username & roles of every user INCLUDING user_role object that contains role_id parameter.
  * role_id can be either: 1 (regular user), 2 (userPlus), 3 (moderator), 4 (admin)
  */
 const getAllUsers = async (req: express.Request, res: express.Response) => {
   try {
     const users = await prisma.user.findMany({
-      include: {
-        user_role: true,
-      },
+      select: {
+        id: true,
+        username: true,
+        user_role: true
+      }
     });
     res.status(200).json({ data: users });
   } catch (err) {
@@ -37,7 +40,7 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
   }
 };
 /**
- * Fetches 1 user based on id parameter.
+ * Fetches 1 user's id and username based on id parameter.
  * Body requires: id
  */
 const getOneUser = async (req: express.Request, res: express.Response) => {
@@ -45,6 +48,11 @@ const getOneUser = async (req: express.Request, res: express.Response) => {
   try {
     const users = await prisma.user.findUnique({
       where: { id: parseInt(id) },
+      select: {
+        id: true,
+        username: true,
+        user_role: true
+      }
     });
     res.status(200).json({ data: users });
   } catch (err) {
@@ -63,10 +71,13 @@ const createUser = async (
 ) => {
   try {
     const postData = req.body;
+    const username = String(postData.username);
+    const password = String(postData.password);
+    const passwordHash = await bcrypt.hash(password, 5)
     const newUser = await prisma.user.create({
       data: {
-        username: postData.username,
-        password: String(postData.password),
+        username: username,
+        password: passwordHash,
         email: postData.email,
       },
     });
@@ -94,6 +105,7 @@ const createUser = async (
 const updateUser = async (req: express.Request, res: express.Response) => {
   const id = req.params.id;
   const postData = req.body;
+  const newPasswordHash = await bcrypt.hash(String(postData.password), 5)
   try {
     const users = await prisma.user.update({
       where: {
@@ -101,7 +113,7 @@ const updateUser = async (req: express.Request, res: express.Response) => {
       },
       data: {
         username: postData.username,
-        password: postData.password,
+        password: newPasswordHash,
         email: postData.email,
       },
     });
@@ -144,20 +156,33 @@ const deleteUser = async (req: express.Request, res: express.Response) => {
 const loginUser = async (req: express.Request, res: express.Response) => {
   const username = req.body.username;
   const password = req.body.password;
+  // Check if username/password doesn't exist
+  if (!username || !password){
+    res.status(403).json({message: "Username or Password absent."})
+    return
+  }
   try {
     const user: any = await prisma.user.findFirst({
       where: {
         username: username,
       },
+      include: {
+        user_role: true,
+      }
     });
     if (_.isEmpty(user)) {
       res.status(403).json({ message: "User does not exist." });
     } else {
-      if (password == user.password) {
+      const correctPassword = await bcrypt.compare(String(password), user.password)
+      if (correctPassword) {
         // If login successful, sends id & token
-        let token = jwt.sign({ user: 2 }, process.env.TOKEN_SECRET, {
-          expiresIn: "10m",
-        });
+        let token = jwt.sign(
+          { id: user.id, role: user },
+          process.env.TOKEN_SECRET,
+          {
+            expiresIn: "10m",
+          }
+        );
         res.status(200).json({ id: user.id, token: token });
       } else {
         res.status(403).json({ message: "Wrong password." });
@@ -176,5 +201,5 @@ export {
   updateUser,
   deleteUser,
   loginUser,
-  getUserPermissions
+  getUserPermissions,
 };
