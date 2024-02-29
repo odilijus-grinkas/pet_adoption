@@ -2,7 +2,13 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import _ from "underscore";
 const prisma = new PrismaClient();
+const jwt = require("jsonwebtoken");
 
+const getUserPermissions = async (id:any) => {
+  prisma.user.findFirst({
+    where: {id: parseInt(id)}
+  })
+}
 /**
  * Fetches full data of every user.
  */
@@ -116,7 +122,7 @@ const deleteUser = async (req: express.Request, res: express.Response) => {
   }
 };
 /**
- * Returns user id if credentials are correct (will be token later)
+ * Returns user's id and token if credentials are correct
  * Body requires: username, password
  */
 const loginUser = async (req: express.Request, res: express.Response) => {
@@ -132,7 +138,9 @@ const loginUser = async (req: express.Request, res: express.Response) => {
       res.status(403).json({ message: "User does not exist." });
     } else {
       if (password == user.password) {
-        res.status(200).json({ id: user.id });
+        // If login successful, sends id & token
+        let token = jwt.sign({ user: 2 }, process.env.TOKEN_SECRET, { expiresIn: "10m" });
+        res.status(200).json({ id: user.id, token: token });
       } else {
         res.status(403).json({ message: "Wrong password." });
       }
