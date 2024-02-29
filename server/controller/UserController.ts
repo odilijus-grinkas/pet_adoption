@@ -4,11 +4,21 @@ import _ from "underscore";
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 
-const getUserPermissions = async (id:any) => {
-  prisma.user.findFirst({
-    where: {id: parseInt(id)}
-  })
-}
+/**
+ * Returns permission id: 1=regular, 2=userPlus, 3=mod, 4=admin
+ * @param id:number
+ */
+const getUserPermissions = async (id: any) => {
+  const user:any = await prisma.user.findFirst({
+    where: { id: parseInt(id) },
+    include: { user_role: true },
+  });
+  if (user==null){
+    return -1
+  } else {
+    return user.user_role[0].role_id
+  }
+};
 /**
  * Fetches full data of every user INCLUDING user_role object that contains role_id parameter.
  * role_id can be either: 1 (regular user), 2 (userPlus), 3 (moderator), 4 (admin)
@@ -17,8 +27,8 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
   try {
     const users = await prisma.user.findMany({
       include: {
-        user_role: true
-      }
+        user_role: true,
+      },
     });
     res.status(200).json({ data: users });
   } catch (err) {
@@ -145,7 +155,9 @@ const loginUser = async (req: express.Request, res: express.Response) => {
     } else {
       if (password == user.password) {
         // If login successful, sends id & token
-        let token = jwt.sign({ user: 2 }, process.env.TOKEN_SECRET, { expiresIn: "10m" });
+        let token = jwt.sign({ user: 2 }, process.env.TOKEN_SECRET, {
+          expiresIn: "10m",
+        });
         res.status(200).json({ id: user.id, token: token });
       } else {
         res.status(403).json({ message: "Wrong password." });
@@ -164,4 +176,5 @@ export {
   updateUser,
   deleteUser,
   loginUser,
+  getUserPermissions
 };
