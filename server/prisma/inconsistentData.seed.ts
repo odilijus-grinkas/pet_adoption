@@ -13,9 +13,10 @@ async function inconsistentDataSeed() {
     const newUser = await prisma.user.createMany({
         data: [{
             id: 1,
-            username: 'johndoe',
-            password: 'password123',
-            email: 'johndoe@example.com'
+            username: 'admin',
+            // admin
+            password: '$2a$05$NjunGCGHLSNm1s066dWt6eXbFsF50ly4pYpbCXbCcN68Rgtt.v84u',
+            email: 'admin'
         },
         {
             id: 2,
@@ -60,7 +61,7 @@ async function inconsistentDataSeed() {
         data: [
             {
                 user_id: 1,
-                role_id: 1
+                role_id: 4
             },
             {
                 user_id: 2,
