@@ -23,8 +23,10 @@ const getUserPermissions = async (id: number) => {
 /**
  * Fetches id, username & roles of every user INCLUDING user_role object that contains role_id parameter.
  * role_id can be either: 1 (regular user), 2 (userPlus), 3 (moderator), 4 (admin)
+ * Can only be used by mod/admin roles
  */
-const getAllUsers = async (req: express.Request, res: express.Response) => {
+const getAllUsers = async (req: any, res: express.Response) => {
+  if (req.tokenInfo.role_id <3) return res.status(403).json({message: "Access denied."})
   try {
     const users = await prisma.user.findMany({
       select: {
@@ -42,12 +44,14 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
 /**
  * Fetches 1 user's id and username based on id parameter.
  * Body requires: id
+ * Can only be used by user to whom data belongs or mod/admin
  */
-const getOneUser = async (req: express.Request, res: express.Response) => {
-  const id = req.params.id;
+const getOneUser = async (req: any, res: express.Response) => {
+  const id = parseInt(req.params.id);
+  if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != id) return res.status(403).json({message: "Access denied."})
   try {
     const users = await prisma.user.findUnique({
-      where: { id: parseInt(id) },
+      where: { id },
       select: {
         id: true,
         username: true,
@@ -65,10 +69,20 @@ const getOneUser = async (req: express.Request, res: express.Response) => {
  * Body requires: username, password, email
  */
 const createUser = async (
-  req: express.Request,
+  req: any,
   res: express.Response,
   roleLevel: number
 ) => {
+  if (req.tokenInfo){
+    const routePath = req.originalUrl
+    // Doesn't allow non-admins to create mods/admins
+    if (routePath == "/api/user/create/mod" || routePath == "/api/user/create/admin") {
+      if (req.tokenInfo.role_id < 4 ) return res.status(403).json({message: "Access denied."})
+    } else {
+    // Doesn't allow non-admins/mods to create user plus
+    if (req.tokenInfo.role_id < 3) return res.status(403).json({message: "Access denied."})
+    }
+  }
   try {
     const postData = req.body;
     const username = String(postData.username);
@@ -101,15 +115,17 @@ const createUser = async (
 /**
  * Updates user based on id.
  * Body requires: id, username, email, password
+ * Only user to whom data belongs or admin/mod can update user.
  */
-const updateUser = async (req: express.Request, res: express.Response) => {
-  const id = req.params.id;
+const updateUser = async (req: any, res: express.Response) => {
+  const id = parseInt(req.params.id);
   const postData = req.body;
+  if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != id) return res.status(403).json({message: "Access denied."})
   const newPasswordHash = await bcrypt.hash(String(postData.password), 5)
   try {
     const users = await prisma.user.update({
       where: {
-        id: parseInt(id),
+        id: id,
       },
       data: {
         username: postData.username,
@@ -130,13 +146,15 @@ const updateUser = async (req: express.Request, res: express.Response) => {
 /**
  * Deletes user based on id
  * Body requires: id
+ * Only user to whom account belongs or admin/mod can delete user.
  */
-const deleteUser = async (req: express.Request, res: express.Response) => {
-  const postData = req.body;
+const deleteUser = async (req: any, res: express.Response) => {
+  const id = parseInt(req.params.id);
+  if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != id) return res.status(403).json({message: "Access denied."})
   try {
     const users = await prisma.user.delete({
       where: {
-        id: parseInt(postData.id),
+        id: id,
       },
     });
     res.status(200).json({ status: "OK" });
@@ -175,12 +193,12 @@ const loginUser = async (req: express.Request, res: express.Response) => {
     } else {
       const correctPassword = await bcrypt.compare(String(password), user.password)
       if (correctPassword) {
-        // If login successful, sends id & token
+        // If login successful, sends id & token containing id & role_id
         let token = jwt.sign(
-          { id: user.id, role: user },
+          { id: user.id, role_id: user.user_role[0].role_id },
           process.env.TOKEN_SECRET,
           {
-            expiresIn: "10m",
+            expiresIn: "1d", // Specify how long until token expires.
           }
         );
         res.status(200).json({ id: user.id, token: token });
