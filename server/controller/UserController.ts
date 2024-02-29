@@ -9,9 +9,9 @@ const bcrypt = require("bcryptjs");
  * Returns permission id: 1=regular, 2=userPlus, 3=mod, 4=admin
  * @param id:number
  */
-const getUserPermissions = async (id: any) => {
+const getUserPermissions = async (id: number) => {
   const user: any = await prisma.user.findFirst({
-    where: { id: parseInt(id) },
+    where: { id: id },
     include: { user_role: true },
   });
   if (user == null) {
