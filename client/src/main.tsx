@@ -4,9 +4,12 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import MainRouter from "./routes/MainRouter.tsx"
 import React from "react";
 import ReactDOM from "react-dom/client";
+import Layout from "./components/Layout/Layout.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <MainRouter />
+    <Layout>
+      <MainRouter />
+    </Layout>
   </React.StrictMode>
 );
