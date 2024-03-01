@@ -6,7 +6,7 @@ const userRouter = Router();
 
 userRouter.get("/user/all", authToken, UserController.getAllUsers);
 userRouter.get("/user/:id", authToken, UserController.getOneUser);
-userRouter.get("/login", UserController.loginUser);
+userRouter.post("/login", UserController.loginUser);
 
 // post methods for creating a new user with different roles (only admin creates mods/admins, both admin & mod create plus)
 userRouter.post("/user/create/regular", async (req, res) => {
