@@ -173,28 +173,31 @@ export const updatePost = async (req: any, res: express.Response) => {
  * Only user to whom data belongs or admin/mod can delete post.
  */
 export const deletePost = async (req: any, res: express.Response) => {
-    const Id = req.params.id
-    const onepost = await PostClient.findUnique({
-        where: { id: parseInt(Id) },
-    });
-    if (onepost) {
-        const userId = onepost.user_id;
-        if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) return res.status(401).json({ message: "Access denied." })
-    }
     try {
+        const Id = req.params.id;
+        const onepost = await PostClient.findUnique({
+            where: { id: parseInt(Id) },
+        });
+
+        if (!onepost) {
+            return res.status(404).json({ status: "error", message: "Post not found" });
+        }
+
+        const userId = onepost.user_id;
+        if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) {
+            return res.status(401).json({ message: "Access denied." });
+        }
+
         const postId = parseInt(req.params.id);
         const deletedPost = await PostClient.delete({
-            where: {
-                id: postId
-            }
+            where: { id: postId }
         });
+
         if (deletedPost) {
-            res.status(200).json({ data: deletedPost });
-        } else {
-            res.status(404).json({ status: "error", message: "Post not found" });
+            return res.status(200).json({ data: deletedPost });
         }
     } catch (err) {
-        console.error(err); // Log the error for debugging purposes
-        res.status(500).json({ status: "error", message: "Serverio klaida" });
+        console.error(err);
+        return res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
