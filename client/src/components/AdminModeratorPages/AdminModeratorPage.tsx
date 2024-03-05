@@ -2,7 +2,6 @@ import "./assets/AdMod.scss";
 
 import { useEffect, useState } from "react";
 
-// Define the User type
 interface User {
   id: string;
   username: string;
@@ -109,22 +108,104 @@ export default function UserList() {
 }
 
 // Admin | Moderator
-// interface CreatingRolesProps {
-//   handleCreateUser: (permission_id: number) => void;
-//   // Void - doesn't return
-// }
+// Admin fetch model
+// Define User interface
+interface User {
+  id: string;
+  username: string;
+  email: string;
+}
 
-// const CreatingRoles: React.FC<CreatingRolesProps> = ({ handleCreateUser }) => {
-//   return (
-//     <div className="user-list-container">
-//       {/* Button to create admin user */}
-//       <button onClick={() => handleCreateUser(permission_id.Admin)}>
-//         Admin
-//       </button>
-//       {/* Button to create moderator user */}
-//       <button onClick={() => handleCreateUser(permission_id.Moderator)}>
-//         Moderator
-//       </button>
-//     </div>
-//   );
-// };
+export function AdminModerator() {
+  // State for Admin role
+  const [adminRole, setAdminRole] = useState<User[]>([]);
+  // State for Moderator role
+  const [moderatorRole, setModeratorRole] = useState<User[]>([]);
+
+  // Function to fetch Admin data
+  const adminFetch = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/api/user/create/admin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        const setting = await response.json();
+        // Log the data received from the API
+        console.log("Fetched data:", setting.data);
+        // Check if the data is an array or an object
+        if (Array.isArray(setting.data)) {
+          // If it's an array, set it directly
+          setAdminRole(setting.data as User[]);
+        } else if (typeof setting.data === "object") {
+          // If it's an object, convert it to an array of one element
+          setAdminRole([setting.data as User]);
+        } else {
+          console.error("Data is not in a valid format:", setting.data);
+        }
+      } else {
+        // Handle non-OK responses
+        setAdminRole([]);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  // Function to fetch Moderator data
+  const moderatorFetch = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/api/user/create/moderator",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        const setting = await response.json();
+        // Log the data received from the API
+        console.log("Fetched data:", setting.data);
+        // Check if the data is an array or an object
+        if (Array.isArray(setting.data)) {
+          // If it's an array, set it directly
+          setModeratorRole(setting.data as User[]);
+        } else if (typeof setting.data === "object") {
+          // If it's an object, convert it to an array of one element
+          setModeratorRole([setting.data as User]);
+        } else {
+          console.error("Data is not in a valid format:", setting.data);
+        }
+      } else {
+        // Handle non-OK responses
+        setModeratorRole([]);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  // useEffect hook to fetch user data when the component mounts - excludes repetition
+  useEffect(() => {
+    adminFetch();
+    moderatorFetch();
+  }, []);
+
+  return (
+    <>
+      <div className="user-list-container">
+        {/* Button to fetch Admin user */}
+        <button onClick={adminFetch}>Admin</button>
+        {/* Button to fetch Moderator user */}
+        <button onClick={moderatorFetch}>Moderator</button>
+      </div>
+    </>
+  );
+}
