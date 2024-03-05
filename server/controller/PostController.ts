@@ -57,7 +57,8 @@ export const getOnePost = async (req: express.Request, res: express.Response) =>
 };
 /**
  * Creates new post while assigning them incremented id
- * Body requires: user_id,city_id,species_id,pet_name,description,status
+ * Body requires: city_id,species_id,pet_name,description
+ * Normal user can create 3 posts. Admins, mods and plus users can create unlimited posts.
  */
 export const createPost = async (
     req: any,
@@ -80,7 +81,7 @@ export const createPost = async (
             where: { user_id: userId },
         });
 
-        if (routePath === "/api/post/create/mod" || routePath === "/api/post/create/admin" || routePath === "/api/post/create/plus") {
+        if (routePath === "/api/post/create/plus") {
             if (req.tokenInfo.role_id === 1) {
                 return res.status(403).json({ message: "Access denied." });
             }
@@ -91,6 +92,12 @@ export const createPost = async (
                 status: "fail",
                 message: "You have reached the maximum number of posts allowed.",
             });
+        }
+
+        if (req.tokenInfo.role_id === 1) {
+            post.status === 0
+        } else {
+            post.status === 1
         }
 
         const CreatedPost = await PostClient.create({
@@ -112,7 +119,11 @@ export const createPost = async (
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
-
+/**
+ * Updates post based on id
+ * Body requires: id, city_id, species_id, pet_name, description
+ * Only user to whom data belongs or admin/mod can update post.
+ */
 export const updatePost = async (req: any, res: express.Response) => {
     const postId = parseInt(req.params.id);
     const [post, valid, messages] = postValidation(req);
@@ -126,7 +137,6 @@ export const updatePost = async (req: any, res: express.Response) => {
     }
 
     try {
-        // Find the post
         const existingPost = await PostClient.findUnique({
             where: { id: postId },
             select: { user_id: true }
@@ -136,22 +146,17 @@ export const updatePost = async (req: any, res: express.Response) => {
             return res.status(404).json({ message: "Post not found." });
         }
 
-        // Check if the current user is the post creator or has sufficient privileges
         const userId = existingPost.user_id;
-        // const userRoleId = req.tokenInfo.role_id;
-        // const currentUserId = req.tokenInfo.id;
 
         if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) return res.status(401).json({ message: "Access denied." })
 
-        // Update the post
         const updatedPost = await PostClient.update({
             where: { id: postId },
             data: {
                 city_id: parseInt(post.city_id),
                 species_id: parseInt(post.species_id),
                 pet_name: post.pet_name,
-                description: post.description,
-                status: post.status
+                description: post.description
             }
         });
 
@@ -165,6 +170,7 @@ export const updatePost = async (req: any, res: express.Response) => {
 /**
  * Deletes post based on id
  * Body requires: id
+ * Only user to whom data belongs or admin/mod can delete post.
  */
 export const deletePost = async (req: any, res: express.Response) => {
     const Id = req.params.id

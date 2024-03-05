@@ -18,14 +18,6 @@ postsRouter.post("/post/create/plus", authToken, createValidation, async (req: a
     createPost(req, res, 3)
 })
 
-postsRouter.post("/post/create/mod", authToken, createValidation, async (req: any, res: any) => {
-    createPost(req, res, 2)
-})
-
-postsRouter.post("/post/create/admin", authToken, createValidation, async (req: any, res: any) => {
-    createPost(req, res, 1)
-})
-
 postsRouter.put("/post/:id", authToken, updateValidation, updatePost)
 
 postsRouter.delete("/post/:id", authToken, deletePost)

@@ -29,14 +29,7 @@ export const createValidation = [
         .trim()
         .escape()
         .notEmpty()
-        .withMessage("description laukelis negali būti tuščias"),
-    body("status")
-        .trim()
-        .escape()
-        .notEmpty()
-        .withMessage("status laukelis negali būti tuščias")
-        .isLength({ max: 10 })
-        .withMessage("status yra perilgas"),
+        .withMessage("description laukelis negali būti tuščias")
 ];
 
 export const updateValidation = [
@@ -64,13 +57,6 @@ export const updateValidation = [
         .trim()
         .escape()
         .optional()
-        .notEmpty().withMessage("status negali būti tuščias"),
-    body("status")
-        .trim()
-        .escape()
-        .optional()
-        .isLength({ max: 10 })
-        .withMessage("status yra perilgas")
         .notEmpty().withMessage("status negali būti tuščias")
 ];
 
