@@ -165,6 +165,45 @@ export function AdminModerator() {
 
   return (
     <div className="user-list-container">
+      <style>
+        {`
+          body {
+            font-family: "BioRhyme", serif;
+          }
+          section {
+            background-color: #eea990;
+          }
+          .card {
+            border: 3px solid #ece4d3;
+            border-radius: 2em;
+            background-color: #ece4d3;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4),
+              0 8px 20px 0 rgba(0, 0, 0, 0.4), 0 12px 40px 0 rgba(0, 0, 0, 0.38);
+          }
+          .side {
+            border-radius: 1.8em 0% 0% 1.8em;
+          }
+          .form-control:focus {
+            border-color: rgba(238, 169, 144, 1);
+            box-shadow: 0 0 0 0.25rem rgba(238, 169, 144, 0.4);
+          }
+          .button {
+            border-radius: 2em;
+            border: 0px;
+            background-color: rgba(238, 169, 144, 0.4);
+            box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.4), 0 3px 5px 0 rgba(0, 0, 0, 0.38);
+          }
+          .button:hover {
+            background-color: rgba(238, 169, 144, 1);
+          }
+          .link:hover {
+            color: rgba(238, 169, 144, 1);
+          }
+          .link {
+            color: black;
+          }
+        `}
+      </style>
       <input
         type="text"
         value={username}
@@ -183,10 +222,18 @@ export function AdminModerator() {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Create a password"
       />
-      <button onClick={() => handleCreateUser("regular")}>Regular User</button>
-      <button onClick={() => handleCreateUser("plus")}>Plus User</button>
-      <button onClick={() => handleCreateUser("mod")}>Moderator</button>
-      <button onClick={() => handleCreateUser("admin")}>Admin</button>
+      <button className="button" onClick={() => handleCreateUser("regular")}>
+        Regular User
+      </button>
+      <button className="button" onClick={() => handleCreateUser("plus")}>
+        Plus User
+      </button>
+      <button className="button" onClick={() => handleCreateUser("mod")}>
+        Moderator
+      </button>
+      <button className="button" onClick={() => handleCreateUser("admin")}>
+        Admin
+      </button>
     </div>
   );
 }
