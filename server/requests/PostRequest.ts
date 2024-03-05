@@ -2,13 +2,6 @@ const { body, validationResult } = require("express-validator");
 import express from "express"
 
 export const createValidation = [
-    body("user_id")
-        .trim()
-        .escape()
-        .notEmpty()
-        .withMessage("user_id laukelis negali būti tuščias")
-        .isInt().
-        withMessage("user_id turi būti skaičius"),
     body("city_id")
         .trim()
         .escape()
@@ -47,12 +40,6 @@ export const createValidation = [
 ];
 
 export const updateValidation = [
-    body("user_id")
-        .trim()
-        .escape()
-        .optional()
-        .isInt().
-        withMessage("user_id turi būti skaičius"),
     body("city_id")
         .trim()
         .escape()
@@ -94,7 +81,6 @@ export const postValidation = (req: express.Request) => {
     const validacija = validationResult(req);
 
     const post = req.body;
-    console.log(post)
 
     if (!validacija.isEmpty()) {
         for (let i of validacija.array()) {
