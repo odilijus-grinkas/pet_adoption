@@ -6,6 +6,8 @@ import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import Validation from '../Inputs/Validation'; // Import Validation from its file
+import Header from './header/Header';
+import Footer from './header/Footer';
 
 type FormValues = {
     userName: string;
@@ -22,7 +24,10 @@ const Login = () => {
     const onSubmit = handleSubmit((data) => console.log(data));
 
     return (
-        <section className="vh-100">
+        <header>
+        <Header/>
+    
+        <section className="vh-120">
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                     <div className="col col-xl-10">
@@ -75,6 +80,8 @@ const Login = () => {
                 </div>
             </div>
         </section>
+        <Footer/>
+        </header>
     );
 };
 
