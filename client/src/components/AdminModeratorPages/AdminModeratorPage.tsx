@@ -108,8 +108,6 @@ export default function UserList() {
 }
 
 // Admin | Moderator
-// Admin fetch model
-// Define User interface
 interface User {
   id: string;
   username: string;
@@ -117,95 +115,78 @@ interface User {
 }
 
 export function AdminModerator() {
-  // State for Admin role
-  const [adminRole, setAdminRole] = useState<User[]>([]);
-  // State for Moderator role
-  const [moderatorRole, setModeratorRole] = useState<User[]>([]);
+  const [formData, setFormData] = useState<User[]>([]);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  // Function to fetch Admin data
-  const adminFetch = async () => {
+  const createUser = async (role: string, authToken: string) => {
     try {
-      const response = await fetch(
-        "http://localhost:3001/api/user/create/admin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.ok) {
-        const setting = await response.json();
-        // Log the data received from the API
-        console.log("Fetched data:", setting.data);
-        // Check if the data is an array or an object
-        if (Array.isArray(setting.data)) {
-          // If it's an array, set it directly
-          setAdminRole(setting.data as User[]);
-        } else if (typeof setting.data === "object") {
-          // If it's an object, convert it to an array of one element
-          setAdminRole([setting.data as User]);
-        } else {
-          console.error("Data is not in a valid format:", setting.data);
-        }
-      } else {
-        // Handle non-OK responses
-        setAdminRole([]);
+      const endpointUrls: { [key: string]: string } = {
+        regular: "http://localhost:3001/api/user/create/regular",
+        plus: "http://localhost:3001/api/user/create/plus",
+        mod: "http://localhost:3001/api/user/create/mod",
+        admin: "http://localhost:3001/api/user/create/admin",
+      };
+
+      if (!endpointUrls[role]) {
+        throw new Error("Invalid role");
       }
+
+      const url = endpointUrls[role];
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create user");
+      }
+
+      const responseData = await response.json();
+      const newUser = Array.isArray(responseData.data)
+        ? responseData.data[0]
+        : responseData.data;
+      setFormData((prevState) => [...prevState, newUser]);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  // Function to fetch Moderator data
-  const moderatorFetch = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:3001/api/user/create/moderator",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.ok) {
-        const setting = await response.json();
-        // Log the data received from the API
-        console.log("Fetched data:", setting.data);
-        // Check if the data is an array or an object
-        if (Array.isArray(setting.data)) {
-          // If it's an array, set it directly
-          setModeratorRole(setting.data as User[]);
-        } else if (typeof setting.data === "object") {
-          // If it's an object, convert it to an array of one element
-          setModeratorRole([setting.data as User]);
-        } else {
-          console.error("Data is not in a valid format:", setting.data);
-        }
-      } else {
-        // Handle non-OK responses
-        setModeratorRole([]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+  // Goes through auth process
+  const handleCreateUser = (role: string) => {
+    const authToken = "authorization";
+    createUser(role, authToken);
   };
-
-  // useEffect hook to fetch user data when the component mounts - excludes repetition
-  useEffect(() => {
-    adminFetch();
-    moderatorFetch();
-  }, []);
 
   return (
-    <>
-      <div className="user-list-container">
-        {/* Button to fetch Admin user */}
-        <button onClick={adminFetch}>Admin</button>
-        {/* Button to fetch Moderator user */}
-        <button onClick={moderatorFetch}>Moderator</button>
-      </div>
-    </>
+    <div className="user-list-container">
+      <input
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Create a username"
+      />
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter your email address"
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Create a password"
+      />
+      <button onClick={() => handleCreateUser("regular")}>Regular User</button>
+      <button onClick={() => handleCreateUser("plus")}>Plus User</button>
+      <button onClick={() => handleCreateUser("mod")}>Moderator</button>
+      <button onClick={() => handleCreateUser("admin")}>Admin</button>
+    </div>
   );
 }
