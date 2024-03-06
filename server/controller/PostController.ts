@@ -2,8 +2,6 @@ import express from "express"
 import { PrismaClient } from '@prisma/client'
 const PostClient = new PrismaClient().post
 import { postValidation } from "../requests/PostRequest";
-import { parse } from "path";
-const jwt = require("jsonwebtoken");
 
 function validDate() {
     const currentDate = new Date();
@@ -61,43 +59,48 @@ export const getOnePost = async (req: express.Request, res: express.Response) =>
  * Normal user can create 3 posts. Admins, mods and plus users can create unlimited posts.
  */
 export const createPost = async (
-    req: any,
-    res: any,
+    req: express.Request,
+    res: express.Response,
     roleLevel: number
 ) => {
     try {
         const [post, valid, messages] = postValidation(req);
         if (!valid) {
             return res.status(400).json({
-                status: "fail",
                 message: "Validacijos klaida",
                 error_messages: messages,
             });
         }
 
         const routePath = req.originalUrl;
-        const userId = parseInt(req.tokenInfo.id);
+        let userId: number;
+
+        if (req.tokenInfo !== undefined) {
+            userId = req.tokenInfo.id;
+        } else {
+            return
+        }
+
         const userPostCount = await PostClient.count({
             where: { user_id: userId },
         });
 
         if (routePath === "/api/post/create/plus") {
-            if (req.tokenInfo.role_id === 1) {
+            if (req.tokenInfo !== undefined && req.tokenInfo.role_id === 1) {
                 return res.status(403).json({ message: "Access denied." });
             }
         }
 
         if (routePath === "/api/post/create/regular" && userPostCount >= 3) {
             return res.status(400).json({
-                status: "fail",
                 message: "You have reached the maximum number of posts allowed.",
             });
         }
 
-        if (req.tokenInfo.role_id === 1) {
-            post.status === 0
+        if (req.tokenInfo !== undefined && req.tokenInfo.role_id === 1) {
+            post.status = 0;
         } else {
-            post.status === 1
+            post.status = 1;
         }
 
         const CreatedPost = await PostClient.create({
@@ -124,13 +127,12 @@ export const createPost = async (
  * Body requires: id, city_id, species_id, pet_name, description
  * Only user to whom data belongs or admin/mod can update post.
  */
-export const updatePost = async (req: any, res: express.Response) => {
+export const updatePost = async (req: express.Request, res: express.Response) => {
     const postId = parseInt(req.params.id);
     const [post, valid, messages] = postValidation(req);
 
     if (!valid) {
         return res.status(400).json({
-            status: "fail",
             message: "Validacijos klaida",
             error_messages: messages,
         });
@@ -148,7 +150,7 @@ export const updatePost = async (req: any, res: express.Response) => {
 
         const userId = existingPost.user_id;
 
-        if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) return res.status(401).json({ message: "Access denied." })
+        if (req.tokenInfo !== undefined && req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) return res.status(401).json({ message: "Access denied." })
 
         const updatedPost = await PostClient.update({
             where: { id: postId },
@@ -172,7 +174,7 @@ export const updatePost = async (req: any, res: express.Response) => {
  * Body requires: id
  * Only user to whom data belongs or admin/mod can delete post.
  */
-export const deletePost = async (req: any, res: express.Response) => {
+export const deletePost = async (req: express.Request, res: express.Response) => {
     try {
         const Id = req.params.id;
         const onepost = await PostClient.findUnique({
@@ -184,7 +186,7 @@ export const deletePost = async (req: any, res: express.Response) => {
         }
 
         const userId = onepost.user_id;
-        if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) {
+        if (req.tokenInfo !== undefined && req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) {
             return res.status(401).json({ message: "Access denied." });
         }
 
