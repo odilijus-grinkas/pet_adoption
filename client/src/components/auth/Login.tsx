@@ -8,7 +8,6 @@ import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Login = () => {
     const [errorMessage, setErrorMessage] = useState("");
-    const [setUserData] = useState(null);
     const [formDataLogin, setFormData] = useState({
       username: "",
       password: ""
@@ -43,7 +42,6 @@ const Login = () => {
   
         if (response.ok) {
           const parsedResponse = await response.json();
-          setUserData(parsedResponse);
           setErrorMessage(""); 
 
           
