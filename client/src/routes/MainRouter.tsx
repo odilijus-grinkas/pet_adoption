@@ -5,6 +5,7 @@ import Login from "../components/auth/Login";
 import NotFound from "../components/NotFound";
 import Recovery from "../components/auth/Recovery";
 import Register from "../components/auth/Register";
+import TokenDisplay from "../components/auth/TokenTest";
 
 // import {allComps} from "../components/AdminModeratorPages/AdminModeratorPage";
 
@@ -19,6 +20,7 @@ function MainRouter() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/Recovery" element={<Recovery />} />
+          <Route path="/Token" element={<TokenDisplay />} />
           {/* 404 Not Found Route */}
           <Route path="*" element={<NotFound />} />
           {/* Admin | Moderator Page Route */}

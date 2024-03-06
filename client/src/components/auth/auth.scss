@@ -10,7 +10,6 @@ section{
 
 
 .card{
-
     width: 400px;
     padding: 20px;
     border:none;
@@ -19,13 +18,11 @@ section{
 
 
 .account{
-
-        font-weight: 500;
+    font-weight: 500;
     font-size: 17px;
 }
 
 .contact{
-
         font-size: 13px;
 }
 
@@ -91,6 +88,11 @@ section{
     background-color: #4A148C;
     border-color: #4A148C;
 }
+.icon {
+    color: #4A148C; 
+    text-shadow: 0 0 20px rgba(74, 20, 140, 0.8); 
+}
+
 
 .errorMessage {
     font-weight: 900;
