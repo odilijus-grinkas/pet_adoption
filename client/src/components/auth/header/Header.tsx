@@ -1,6 +1,7 @@
 import '../auth.scss'
 import logo from '../assets/logo.png';
 import './header.scss';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
     return (
@@ -14,8 +15,7 @@ const Header = () => {
           <a  className="nav" href="#">Gyvuneliai</a>
           <a className="nav" href="#">Naujas Gyvunas</a>
             <a className="nav" href="#">Nustatymai</a>
-            <a className="nav" href="#">Profilis</a>
-            <a className="nav" href="#">Prisijungti</a>
+            <Link to="/login" className="nav">Prisijungti</Link>
         </div>
     </div>
   </header>
