@@ -56,8 +56,6 @@ export const ValdiationLogin = (formData: FormData): Errors => {
   
   if (!formData.password) {
     errors.password = "Reikalingas Slaptažodis.";
-  } else if (formData.password.length < 8) { 
-    errors.password = "Slaptažodis turi turėti bent 8 simbolius.";
   }
   
   
