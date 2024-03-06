@@ -38,27 +38,6 @@ async function inconsistentDataSeed() {
         ],
         skipDuplicates: true
     });
-    const newCity = await prisma.city.createMany({
-        data: [
-            {
-                id: 1,
-                city: 'New York'
-            },
-            {
-                id: 2,
-                city: 'Vilnius'
-            },
-            {
-                id: 3,
-                city: 'Klaipeda'
-            },
-            {
-                id: 4,
-                city: 'Kaunas'
-            }
-        ],
-        skipDuplicates: true
-    });
 
     const newPermission = await prisma.permission.createMany({
         data: [
@@ -121,7 +100,7 @@ async function inconsistentDataSeed() {
                 pet_name: 'Buddy',
                 description: 'Description of the first post',
                 created: new Date(),
-                status: 'Active',
+                status: 1,
                 valid_until: ValidDate
             },
             {
@@ -132,7 +111,7 @@ async function inconsistentDataSeed() {
                 pet_name: 'Max',
                 description: 'Description of the second post',
                 created: new Date(),
-                status: 'Inactive',
+                status: 1,
                 valid_until: ValidDate
             },
             {
@@ -143,7 +122,7 @@ async function inconsistentDataSeed() {
                 pet_name: 'Amsis',
                 description: 'Description of the third post',
                 created: new Date(),
-                status: 'Inactive',
+                status: 1,
                 valid_until: ValidDate
             },
             {
@@ -154,7 +133,7 @@ async function inconsistentDataSeed() {
                 pet_name: 'Megatronas',
                 description: 'Description of the fourth post',
                 created: new Date(),
-                status: 'Inactive',
+                status: 1,
                 valid_until: ValidDate
             }
         ],
