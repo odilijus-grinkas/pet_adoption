@@ -2,13 +2,6 @@ const { body, validationResult } = require("express-validator");
 import express from "express"
 
 export const createValidation = [
-    body("user_id")
-        .trim()
-        .escape()
-        .notEmpty()
-        .withMessage("user_id laukelis negali būti tuščias")
-        .isInt().
-        withMessage("user_id turi būti skaičius"),
     body("city_id")
         .trim()
         .escape()
@@ -36,23 +29,10 @@ export const createValidation = [
         .trim()
         .escape()
         .notEmpty()
-        .withMessage("description laukelis negali būti tuščias"),
-    body("status")
-        .trim()
-        .escape()
-        .notEmpty()
-        .withMessage("status laukelis negali būti tuščias")
-        .isLength({ max: 10 })
-        .withMessage("status yra perilgas"),
+        .withMessage("description laukelis negali būti tuščias")
 ];
 
 export const updateValidation = [
-    body("user_id")
-        .trim()
-        .escape()
-        .optional()
-        .isInt().
-        withMessage("user_id turi būti skaičius"),
     body("city_id")
         .trim()
         .escape()
@@ -77,13 +57,6 @@ export const updateValidation = [
         .trim()
         .escape()
         .optional()
-        .notEmpty().withMessage("status negali būti tuščias"),
-    body("status")
-        .trim()
-        .escape()
-        .optional()
-        .isLength({ max: 10 })
-        .withMessage("status yra perilgas")
         .notEmpty().withMessage("status negali būti tuščias")
 ];
 
@@ -94,7 +67,6 @@ export const postValidation = (req: express.Request) => {
     const validacija = validationResult(req);
 
     const post = req.body;
-    console.log(post)
 
     if (!validacija.isEmpty()) {
         for (let i of validacija.array()) {

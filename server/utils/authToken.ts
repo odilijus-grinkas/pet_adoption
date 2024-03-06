@@ -1,6 +1,15 @@
 import express from "express";
 const jwt = require("jsonwebtoken");
 
+// Defines tokenInfo in TS
+declare global {
+  namespace Express {
+    interface Request {
+      tokenInfo?: { role_id: number; id: number };
+    }
+  }
+}
+
 /**
  * Place inside of routes that require authentication i.e: router.post('/create/admin', authToken, controllerFunction...);
  * If token is expired or invalid, will end HTTP request with 401 status response.
