@@ -14,7 +14,7 @@ export default function UserList() {
   // Function to fetch user data from the API
   const userFetch = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/user/1");
+      const response = await fetch("http://localhost:3001/api/user/all");
       if (response.ok) {
         const setting = await response.json();
         // Log the data received from the API for debugging
@@ -159,7 +159,8 @@ export function AdminModerator() {
 
   // Goes through auth process
   const handleCreateUser = (role: string) => {
-    const authToken = "authorization";
+    const authToken =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6NCwiaWF0IjoxNzA5MjE0MTQyLCJleHAiOjE3MzUxMzQxNDJ9.Y0NFpP090iZgLDf4mTZ4SesH8Ogj9aKUS7V1xRTKl7A";
     createUser(role, authToken);
   };
 
