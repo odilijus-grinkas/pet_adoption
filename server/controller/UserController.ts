@@ -25,15 +25,16 @@ const getUserPermissions = async (id: number) => {
  * role_id can be either: 1 (regular user), 2 (userPlus), 3 (moderator), 4 (admin)
  * Can only be used by mod/admin roles
  */
-const getAllUsers = async (req: any, res: express.Response) => {
-  if (req.tokenInfo.role_id <3) return res.status(403).json({message: "Access denied."})
+const getAllUsers = async (req: express.Request, res: express.Response) => {
+  if (req.tokenInfo !== undefined && req.tokenInfo.role_id < 3)
+    return res.status(403).json({ message: "Access denied." });
   try {
     const users = await prisma.user.findMany({
       select: {
         id: true,
         username: true,
-        user_role: true
-      }
+        user_role: true,
+      },
     });
     res.status(200).json({ data: users });
   } catch (err) {
@@ -46,17 +47,22 @@ const getAllUsers = async (req: any, res: express.Response) => {
  * Body requires: id
  * Can only be used by user to whom data belongs or mod/admin
  */
-const getOneUser = async (req: any, res: express.Response) => {
+const getOneUser = async (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.id);
-  if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != id) return res.status(403).json({message: "Access denied."})
+  if (
+    req.tokenInfo !== undefined &&
+    req.tokenInfo.role_id <= 2 &&
+    req.tokenInfo.id != id
+  )
+    return res.status(403).json({ message: "Access denied." });
   try {
     const users = await prisma.user.findUnique({
       where: { id },
       select: {
         id: true,
         username: true,
-        user_role: true
-      }
+        user_role: true,
+      },
     });
     res.status(200).json({ data: users });
   } catch (err) {
@@ -69,25 +75,30 @@ const getOneUser = async (req: any, res: express.Response) => {
  * Body requires: username, password, email
  */
 const createUser = async (
-  req: any,
+  req: express.Request,
   res: express.Response,
   roleLevel: number
 ) => {
-  if (req.tokenInfo){
-    const routePath = req.originalUrl
+  if (req.tokenInfo) {
+    const routePath = req.originalUrl;
     // Doesn't allow non-admins to create mods/admins
-    if (routePath == "/api/user/create/mod" || routePath == "/api/user/create/admin") {
-      if (req.tokenInfo.role_id < 4 ) return res.status(403).json({message: "Access denied."})
+    if (
+      routePath == "/api/user/create/mod" ||
+      routePath == "/api/user/create/admin"
+    ) {
+      if (req.tokenInfo.role_id < 4)
+        return res.status(403).json({ message: "Access denied." });
     } else {
-    // Doesn't allow non-admins/mods to create user plus
-    if (req.tokenInfo.role_id < 3) return res.status(403).json({message: "Access denied."})
+      // Doesn't allow non-admins/mods to create user plus
+      if (req.tokenInfo.role_id < 3)
+        return res.status(403).json({ message: "Access denied." });
     }
   }
   try {
     const postData = req.body;
     const username = String(postData.username);
     const password = String(postData.password);
-    const passwordHash = await bcrypt.hash(password, 5)
+    const passwordHash = await bcrypt.hash(password, 5);
     const newUser = await prisma.user.create({
       data: {
         username: username,
@@ -117,11 +128,16 @@ const createUser = async (
  * Body requires: id, username, email, password
  * Only user to whom data belongs or admin/mod can update user.
  */
-const updateUser = async (req: any, res: express.Response) => {
+const updateUser = async (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.id);
   const postData = req.body;
-  if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != id) return res.status(403).json({message: "Access denied."})
-  const newPasswordHash = await bcrypt.hash(String(postData.password), 5)
+  if (
+    req.tokenInfo !== undefined &&
+    req.tokenInfo.role_id <= 2 &&
+    req.tokenInfo.id != id
+  )
+    return res.status(403).json({ message: "Access denied." });
+  const newPasswordHash = await bcrypt.hash(String(postData.password), 5);
   try {
     const users = await prisma.user.update({
       where: {
@@ -148,9 +164,14 @@ const updateUser = async (req: any, res: express.Response) => {
  * Body requires: id
  * Only user to whom account belongs or admin/mod can delete user.
  */
-const deleteUser = async (req: any, res: express.Response) => {
+const deleteUser = async (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.id);
-  if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != id) return res.status(403).json({message: "Access denied."})
+  if (
+    req.tokenInfo !== undefined &&
+    req.tokenInfo.role_id <= 2 &&
+    req.tokenInfo.id != id
+  )
+    return res.status(403).json({ message: "Access denied." });
   try {
     const users = await prisma.user.delete({
       where: {
@@ -175,9 +196,9 @@ const loginUser = async (req: express.Request, res: express.Response) => {
   const username = req.body.username;
   const password = req.body.password;
   // Check if username/password doesn't exist
-  if (!username || !password){
-    res.status(403).json({message: "Username or Password absent."})
-    return
+  if (!username || !password) {
+    res.status(403).json({ message: "Username or Password absent." });
+    return;
   }
   try {
     const user: any = await prisma.user.findFirst({
@@ -186,12 +207,15 @@ const loginUser = async (req: express.Request, res: express.Response) => {
       },
       include: {
         user_role: true,
-      }
+      },
     });
     if (_.isEmpty(user)) {
       res.status(403).json({ message: "User does not exist." });
     } else {
-      const correctPassword = await bcrypt.compare(String(password), user.password)
+      const correctPassword = await bcrypt.compare(
+        String(password),
+        user.password
+      );
       if (correctPassword) {
         // If login successful, sends id & token containing id & role_id
         let token = jwt.sign(
