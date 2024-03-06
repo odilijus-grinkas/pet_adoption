@@ -1,90 +1,67 @@
-type FormValues = {
-  userName: string;
+interface FormData {
   email: string;
+  username: string;
   password: string;
-  repeatPassword: string;
-};
+  confirmPassword: string;
+}
 
-type ValidationResult<T> = {
-  values: T;
-  errors: Record<keyof T, { type: string; message: string }>;
-};
+interface Errors {
+  email?: string;
+  username?: string;
+  password?: string;
+  confirmPassword?: string;
+}
 
-const Validation: (values: FormValues) => Promise<ValidationResult<FormValues>> = async (values) => {
-  const errors: Record<keyof FormValues, { type: string; message: string }> = {
-    userName: { type: '', message: '' },
-    email: { type: '', message: '' },
-    password: { type: '', message: '' },
-    repeatPassword: { type: '', message: '' },
-  };
+export const ValidationRegister = (formData: FormData): Errors => {
+  const errors: Errors = {};
 
-  // Tikrina ar userName Tuščias
-  if (!values.userName) {
-    errors.userName = {
-      type: "required",
-      message: "Prašau pateikti Vartotojo Vardą.",
-    };
-  } else if (values.userName.includes(' ')) {
-    errors.userName = {
-      type: "format",
-      message: "Vartotojo vardas negali turėti tarpų.",
-    };
-  } else if (values.userName.length > 20) {
-    errors.userName = {
-      type: "format",
-      message: "Per daug simboliu Maksimalus kiekis 20.",
-    };
-  }
-
-  // Tikrina paštą ar tučias ir ar teisingos formos
-  if (!values.email) {
-    errors.email = {
-      type: "required",
-      message: "Prašau pateikti El. Paštą.",
-    };
-  } else if (values.email.includes(' ')) {
-    errors.email = {
-      type: "format",
-      message: "El. Paštas negali turėti tarpų.",
-    };
-  } else if (!/^\S+@\S+\.\S+$/.test(values.email)) {
-    errors.email = {
-      type: "format",
-      message: "Netinkamas Formatas El. Pašto.",
-    };
-  }
-
-  // Tikrina ar slaptažodis tučias
-  if (!values.password) {
-    errors.password = {
-      type: "required",
-      message: "Prašau pateikti Slaptažodį.",
-    };
-  } else if (values.password.includes(' ')) {
-      errors.password = {
-        type: "format",
-        message: "Slaptažodis negali turėti tarpų.",
-      };
-  } else if (values.password.length < 8) {
-    errors.password = {
-      type: "format",
-      message: "Slaptažodis turi turėti bent jau 8 simbolius.",
-    };
+  if (!formData.email) {
+    errors.email = "Reikalingas El. Paštas.";
+  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    errors.email = "Neteisingas El. Pašto formatas.";
   }
   
-
-  // Tikrina ar slaptažodis sutampa
-  if (values.password !== values.repeatPassword) {
-    errors.repeatPassword = {
-      type: "mismatch",
-      message: "Slaptažodžiai nesutampa.",
-    };
+  if (!formData.username) {
+    errors.username = "Reikalingas Vartotojo Vardas.";
+  } else if (/\s/.test(formData.username)) {
+    errors.username = "Vartotojo Vardas negali turėti tarpų.";
+  }
+  
+  if (!formData.password) {
+    errors.password = "Reikalingas Slaptažodis.";
+  } else if (formData.password.length < 8) { 
+    errors.password = "Slaptažodis turi turėti bent 8 simbolius.";
+  }
+  
+  
+  if (!formData.confirmPassword) {
+    errors.confirmPassword = "Reikia patvirtinti Slaptažodį.";
+  } else if (formData.password !== formData.confirmPassword) {
+    errors.confirmPassword = "Slaptažodžiai nesutampa.";
   }
 
-  return {
-    values,
-    errors,
-  };
+  return errors;
 };
 
-export default Validation;
+export const ValdiationLogin = (formData: FormData): Errors => {
+  const errors: Errors = {};
+
+
+  
+  if (!formData.username) {
+    errors.username = "Reikalingas Vartotojo Vardas.";
+  } else if (/\s/.test(formData.username)) {
+    errors.username = "Vartotojo Vardas negali turėti tarpų.";
+  }
+  
+  if (!formData.password) {
+    errors.password = "Reikalingas Slaptažodis.";
+  } else if (formData.password.length < 8) { 
+    errors.password = "Slaptažodis turi turėti bent 8 simbolius.";
+  }
+  
+  
+
+
+  return errors;
+};
