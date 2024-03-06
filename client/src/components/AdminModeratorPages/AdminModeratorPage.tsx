@@ -1,5 +1,6 @@
 import "./assets/AdMod.scss";
 
+import { ValdiationLogin, ValidationRegister } from "../Inputs/Validation";
 import { useEffect, useState } from "react";
 
 interface User {
@@ -96,7 +97,7 @@ export default function UserList() {
                   className="button"
                   onClick={() => handleDelete(user.id, user.username)}
                 >
-                  Delete
+                  Delete | Trinti
                 </button>
               </li>
             ))}
@@ -114,16 +115,41 @@ interface User {
   email: string;
 }
 
+interface FormData {
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+}
+
+// To handle each error
+interface Errors {
+  email?: string;
+  username?: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
 export function AdminModerator() {
-  const [formData, setFormData] = useState<User[]>([]);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState<Errors>({});
+  const [loginUsername, setLoginUsername] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
 
   const createUser = async (role: string, authToken: string) => {
+    const validationErrors = ValidationRegister(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     try {
       const endpointUrls: { [key: string]: string } = {
-        regular: "http://localhost:3001/api/user/create/regular",
         plus: "http://localhost:3001/api/user/create/plus",
         mod: "http://localhost:3001/api/user/create/mod",
         admin: "http://localhost:3001/api/user/create/admin",
@@ -140,7 +166,7 @@ export function AdminModerator() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -151,7 +177,7 @@ export function AdminModerator() {
       const newUser = Array.isArray(responseData.data)
         ? responseData.data[0]
         : responseData.data;
-      setFormData((prevState) => [...prevState, newUser]);
+      setFormData((prevState) => ({ ...prevState, newUser }));
     } catch (error) {
       console.error("Error:", error);
     }
@@ -163,77 +189,115 @@ export function AdminModerator() {
     createUser(role, authToken);
   };
 
+  const handleFormSubmit = (
+    e: React.FormEvent<HTMLFormElement>,
+    formType: string
+  ) => {
+    e.preventDefault();
+    if (formType === "createUser") {
+      setErrors({});
+      handleCreateUser("plus"); // Example role
+    } else if (formType === "login") {
+      const validationErrors = ValdiationLogin(formData);
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
+      setLoginUsername("");
+      setLoginPassword("");
+    }
+  };
+
+  const roles = ["plus", "mod", "admin"];
+
   return (
     <div className="user-list-container">
-      <style>
-        {`
-          body {
-            font-family: "BioRhyme", serif;
+      <h2>Create special user</h2>
+      {roles.map((role) => (
+        <button
+          key={role}
+          className="button"
+          onClick={() => handleCreateUser(role)}
+        >
+          {role.charAt(0).toUpperCase() + role.slice(1)}
+        </button>
+      ))}
+      <form onSubmit={(e) => handleFormSubmit(e, "createUser")}>
+        <input
+          type="text"
+          value={formData.username}
+          onChange={(e) =>
+            setFormData({ ...formData, username: e.target.value })
           }
-          section {
-            background-color: #eea990;
+          placeholder="Create a username | Susikurkite vartotojo vardą"
+          className="form-control"
+        />
+        <input
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          placeholder="Enter your email address | Įrašykite savo el.pašto adresą"
+          className="form-control"
+        />
+        <input
+          type="password"
+          value={formData.password}
+          onChange={(e) =>
+            setFormData({ ...formData, password: e.target.value })
           }
-          .card {
-            border: 3px solid #ece4d3;
-            border-radius: 2em;
-            background-color: #ece4d3;
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4),
-              0 8px 20px 0 rgba(0, 0, 0, 0.4), 0 12px 40px 0 rgba(0, 0, 0, 0.38);
+          placeholder="Create a password | Susikurkite slaptažodį"
+          className="form-control"
+        />
+        <input
+          type="password"
+          value={formData.confirmPassword}
+          onChange={(e) =>
+            setFormData({ ...formData, confirmPassword: e.target.value })
           }
-          .side {
-            border-radius: 1.8em 0% 0% 1.8em;
-          }
-          .form-control:focus {
-            border-color: rgba(238, 169, 144, 1);
-            box-shadow: 0 0 0 0.25rem rgba(238, 169, 144, 0.4);
-          }
-          .button {
-            border-radius: 2em;
-            border: 0px;
-            background-color: rgba(238, 169, 144, 0.4);
-            box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.4), 0 3px 5px 0 rgba(0, 0, 0, 0.38);
-          }
-          .button:hover {
-            background-color: rgba(238, 169, 144, 1);
-          }
-          .link:hover {
-            color: rgba(238, 169, 144, 1);
-          }
-          .link {
-            color: black;
-          }
-        `}
-      </style>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Create a username"
-      />
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email address"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Create a password"
-      />
-      <button className="button" onClick={() => handleCreateUser("regular")}>
-        Regular User
-      </button>
-      <button className="button" onClick={() => handleCreateUser("plus")}>
-        Plus User
-      </button>
-      <button className="button" onClick={() => handleCreateUser("mod")}>
-        Moderator
-      </button>
-      <button className="button" onClick={() => handleCreateUser("admin")}>
-        Admin
-      </button>
+          placeholder="Confirm password | Patvirtinkite slaptažodį"
+          className="form-control"
+        />
+        <button type="submit" className="submit-button">
+          Submit | Pateikti
+        </button>
+      </form>
+      <form onSubmit={(e) => handleFormSubmit(e, "login")}>
+        <input
+          type="text"
+          value={loginUsername}
+          onChange={(e) => setLoginUsername(e.target.value)}
+          placeholder="Enter your username"
+          className="form-control"
+        />
+        <input
+          type="password"
+          value={loginPassword}
+          onChange={(e) => setLoginPassword(e.target.value)}
+          placeholder="Enter your password"
+          className="form-control"
+        />
+        <button type="submit" className="submit-button">
+          Log In | Prisijungti
+        </button>
+      </form>
+      {Object.keys(errors).length > 0 && (
+        <div className="error-messages">
+          {Object.values(errors).map((error, index) => (
+            <p key={index} className="error-message">
+              {error}
+            </p>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
+
+// Admin
+// function adminRole = (handleCreateUser("mod")) => {
+// Redaguoti postus
+// Pasalinti vartotojus
+// User plus pridejimas
+// }
+
+// Moderator
