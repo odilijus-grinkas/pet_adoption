@@ -8,8 +8,8 @@ import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Login = () => {
     const [errorMessage, setErrorMessage] = useState("");
-    const [userData, setUserData] = useState(null);
-    const [formData, setFormData] = useState({
+    const [setUserData] = useState(null);
+    const [formDataLogin, setFormData] = useState({
       username: "",
       password: ""
     });
@@ -25,7 +25,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       
-      const errors = ValdiationLogin(formData);
+      const errors = ValdiationLogin(formDataLogin);
   
       if (Object.keys(errors).length > 0) {
         setErrorMessage(errors); 
@@ -38,7 +38,7 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(formDataLogin),
         });
   
         if (response.ok) {
@@ -47,7 +47,7 @@ const Login = () => {
           setErrorMessage(""); 
 
           
-          localStorage.setItem('token', parsedResponse.token); // TOKEN!!!
+          localStorage.setItem('user', JSON.stringify(parsedResponse)); // token!
         } else {
           const errorData = await response.json();
           setErrorMessage(errorData.message);
@@ -74,7 +74,6 @@ const Login = () => {
             <FontAwesomeIcon icon={faLock} className='icon  me-2' />
               <input placeholder="Slaptažodis" className="form-control" name="password" type="password" onChange={handleChange} />
             </div>
-            {userData ? Object.keys(userData).map((key, index) => ( <div key={index}>{key}: {userData[key]}</div>  )) : null}      
             {errorMessage && <div className='errorMessage'>{errorMessage.username}</div>}
             {errorMessage && <div className='errorMessage'>{errorMessage.password}</div>}
             <div className="text-center p-1">

@@ -12,6 +12,16 @@ interface Errors {
   confirmPassword?: string;
 }
 
+interface FormDataLogin {
+  username: string;
+  password: string;
+}
+
+interface ErrorsLogin {
+  username?: string;
+  password?: string;
+}
+
 export const ValidationRegister = (formData: FormData): Errors => {
   const errors: Errors = {};
 
@@ -43,8 +53,8 @@ export const ValidationRegister = (formData: FormData): Errors => {
   return errors;
 };
 
-export const ValdiationLogin = (formData: FormData): Errors => {
-  const errors: Errors = {};
+export const ValdiationLogin = (formData: FormDataLogin): ErrorsLogin => {
+  const errors: ErrorsLogin = {};
 
 
   
