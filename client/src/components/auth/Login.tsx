@@ -3,11 +3,12 @@ import logo from './assets/logo.png';
 import { Link } from 'react-router-dom';
 import { useState } from "react";
 import { ValdiationLogin } from '../Inputs/Validation'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Login = () => {
     const [errorMessage, setErrorMessage] = useState("");
-    const [userData, setUserData] = useState(null);
-    const [formData, setFormData] = useState({
+    const [formDataLogin, setFormData] = useState({
       username: "",
       password: ""
     });
@@ -23,7 +24,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       
-      const errors = ValdiationLogin(formData);
+      const errors = ValdiationLogin(formDataLogin);
   
       if (Object.keys(errors).length > 0) {
         setErrorMessage(errors); 
@@ -36,13 +37,15 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(formDataLogin),
         });
   
         if (response.ok) {
           const parsedResponse = await response.json();
-          setUserData(parsedResponse);
           setErrorMessage(""); 
+
+          
+          localStorage.setItem('user', JSON.stringify(parsedResponse)); // token!
         } else {
           const errorData = await response.json();
           setErrorMessage(errorData.message);
@@ -60,20 +63,21 @@ const Login = () => {
             <img src={logo} alt="Logo" width="100" height="100" />
           </div>
           <form onSubmit={handleSubmit}>
-            <h4 className="text-center">Prisijungti</h4>
-            <div className="mt-3 text-center">
-              <input placeholder="Naudotojo Vardas" className="form-control" name="username" onChange={handleChange} />            
+            <h4 className="text-center p-2">Prisijungti</h4>
+            <div className="form-outline mb-4 d-flex align-items-center">
+            <FontAwesomeIcon icon={faUser} className='icon  me-2' />
+              <input placeholder="Naudotojo Vardas" className="form-control" name="username" onChange={handleChange} />
             </div>
-            <div className="mt-3 text-center">
+            <div className="form-outline mb-4 d-flex align-items-center">
+            <FontAwesomeIcon icon={faLock} className='icon  me-2' />
               <input placeholder="Slaptažodis" className="form-control" name="password" type="password" onChange={handleChange} />
             </div>
-            <div>
-            {userData ? Object.keys(userData).map((key, index) => ( <div key={index}>{key}: {userData[key]}</div>  )) : null}      
             {errorMessage && <div className='errorMessage'>{errorMessage.username}</div>}
             {errorMessage && <div className='errorMessage'>{errorMessage.password}</div>}
-            </div>
-            <div className="text-center">
-              <Link className="forgot" to="/Register">Neturi paskyros? Registruokis</Link>
+            <div className="text-center p-1">
+              <Link className="forgot" to="/Register">Neturi paskyros? Registruokis</Link> <br />
+
+              <Link className="forgot" to="/Recovery">Priminti slaptažodį</Link>
             </div>
             <div className="mt-2 text-center">
               <button className="btn btn-primary btn-block">Prisijungti</button>
