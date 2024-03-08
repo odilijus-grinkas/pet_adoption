@@ -18,6 +18,10 @@ let ValidDate = validDate();
 export const getAllPosts = async (req: express.Request, res: express.Response) => {
     try {
         const AllPosts = await PostClient.findMany({
+            include: {
+                species: true,
+                city: true
+            }
         })
         res.status(200).json({ data: AllPosts });
     } catch (err) {
