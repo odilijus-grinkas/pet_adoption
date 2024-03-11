@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import FilterSelector from "../components/Posts/FilterSelector";
+import FilterSelector from "../components/Posts/FilterComponents/FilterSelector";
 export default function Index() {
   // const [data, setData] = useState([]);
   const [data, setData] = useState();
