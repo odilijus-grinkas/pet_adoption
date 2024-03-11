@@ -293,6 +293,9 @@ export function AdminModerator() {
   );
 }
 
+// Add styling
+// Vis tiek neaisku del pasalinimo ar ji mato tik adminai ir useriai ar visi
+
 // Admin
 // function adminRole = (handleCreateUser("mod")) => {
 // Redaguoti postus
@@ -301,3 +304,5 @@ export function AdminModerator() {
 // }
 
 // Moderator
+// Prideda moderatorius, admin
+// Ta pati daro ka Moderator
