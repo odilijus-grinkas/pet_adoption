@@ -36,6 +36,8 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       retries: 10
+    ports:
+      - 3306:3306
     # volumes:
     #   - persistentDatabase:/var/lib/mysql
 
