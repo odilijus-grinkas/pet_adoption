@@ -15,7 +15,11 @@ export default function UserList() {
   // Function to fetch user data from the API
   const userFetch = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/user/all");
+      const response = await fetch("http://localhost:3001/api/user/all", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (response.ok) {
         const setting = await response.json();
         // Log the data received from the API for debugging
