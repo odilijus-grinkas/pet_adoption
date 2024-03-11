@@ -14,29 +14,27 @@ async function inconsistentDataSeed() {
         data: [{
             id: 1,
             username: 'admin',
-            // admin
-            password: '$2a$05$NjunGCGHLSNm1s066dWt6eXbFsF50ly4pYpbCXbCcN68Rgtt.v84u',
-            email: 'admin'
+            password: '$2a$05$NjunGCGHLSNm1s066dWt6eXbFsF50ly4pYpbCXbCcN68Rgtt.v84u', //admin
+            email: 'admin@admin.admin'
         },
         {
             id: 2,
-            username: 'plikius',
-            password: 'slaptazodis',
-            email: 'plikius@example.com'
-        }
-        ],
-        skipDuplicates: true
-    });
-    const newCity = await prisma.city.createMany({
-        data: [
-            {
-                id: 1,
-                city: 'New York'
-            },
-            {
-                id: 2,
-                city: 'Vilnius'
-            }
+            username: 'mod',
+            password: '$2a$05$nMc.47bzZXrye7P5radssOZFcoxYo/3B.Qc56ywYIpY4NjoKPY.TG', //mod
+            email: 'mod@mod.mod'
+        },
+        {
+            id: 3,
+            username: 'plus',
+            password: '$2a$05$iG.Bdhq3zdQy0/Q5/eEUf.0NHG8ztZMA3jn7jyeEivYX3gjOKVogq', //plus
+            email: 'plus@plus.plus'
+        },
+        {
+            id: 4,
+            username: 'regular',
+            password: '$2a$05$feoTdkiabLVZuRNmSd9KsOhqBLEcVTXPik9LArKdrC2/.DiozUpe.', //regular
+            email: 'regular@regular.regular'
+        },
         ],
         skipDuplicates: true
     });
@@ -65,8 +63,16 @@ async function inconsistentDataSeed() {
             },
             {
                 user_id: 2,
+                role_id: 3
+            },
+            {
+                user_id: 3,
                 role_id: 2
-            }
+            },
+            {
+                user_id: 4,
+                role_id: 1
+            },
         ], skipDuplicates: true
     });
 
@@ -94,7 +100,7 @@ async function inconsistentDataSeed() {
                 pet_name: 'Buddy',
                 description: 'Description of the first post',
                 created: new Date(),
-                status: 'Active',
+                status: 1,
                 valid_until: ValidDate
             },
             {
@@ -105,7 +111,7 @@ async function inconsistentDataSeed() {
                 pet_name: 'Max',
                 description: 'Description of the second post',
                 created: new Date(),
-                status: 'Inactive',
+                status: 1,
                 valid_until: ValidDate
             },
             {
@@ -116,7 +122,7 @@ async function inconsistentDataSeed() {
                 pet_name: 'Amsis',
                 description: 'Description of the third post',
                 created: new Date(),
-                status: 'Inactive',
+                status: 1,
                 valid_until: ValidDate
             },
             {
@@ -127,7 +133,7 @@ async function inconsistentDataSeed() {
                 pet_name: 'Megatronas',
                 description: 'Description of the fourth post',
                 created: new Date(),
-                status: 'Inactive',
+                status: 1,
                 valid_until: ValidDate
             }
         ],

@@ -1,90 +1,101 @@
-import './auth.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import sidedog from './assets/loginpic.jpg';
+import './auth.scss'; // Import SCSS file
 import logo from './assets/logo.png';
-import { faLock, faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { useForm } from "react-hook-form";
-import Validation from '../Inputs/Validation';
-
-type FormValues = {
-  userName: string;
-  email: string;
-  password: string;
-  repeatPassword: string;
-};
+import { useState } from "react";
+import { ValidationRegister } from '../Inputs/Validation'; 
 
 const Register = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>({ resolver: Validation });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [userData, setUserData] = useState(null);
+  const [formData, setFormData] = useState({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: ""
+  });
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { 
+    e.preventDefault();
+  
+    const errors = ValidationRegister(formData);
+  
+    if (Object.keys(errors).length > 0) {
+      setErrorMessage(errors); 
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:3001/api/user/create/regular", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        const parsedResponse = await response.json();
+        setUserData(parsedResponse);
+        setErrorMessage(""); 
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setErrorMessage("An error occurred. Please try again later.");
+    }
+  };
 
   return (
-    <section className="vh-100">
-      <div className="container py-5 h-100">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-          <div className="col col-xl-10">
-            <div className="card ">
-              <div className="row g-0">
-                <div className="col-md-6 col-lg-5 d-none d-md-block">
-                  <img src={sidedog} alt="Login Forma" className="sidedog img-fluid" />
-                </div>
-                <div className="col-md-6 col-lg-7 d-flex mb-5 align-items-center">
-                  <div className="card-body p-4 p-lg-5 text-white">
-                    <div className="d-flex align-items-center mb-3 pb-1">
-                      <span className="h1 fw-bold mb-0">
-                        <img src={logo} alt="Logo" width="100" height="100"/>
-                      </span>
-                    </div>
-                    <form onSubmit={onSubmit}>
-                      <div className="form-outline mb-4 d-flex align-items-center">
-                        <FontAwesomeIcon icon={faEnvelope} className='text-black icon me-2' />
-                        <input {...register("email")} placeholder="El. Paštas" className="form-control form-control-lg" />
-                        
-                      </div>
-                      <div className="form-outline mb-4 d-flex align-items-center">
-                        <FontAwesomeIcon icon={faUser} className='text-black icon me-2' />
-                        <input {...register("userName")} placeholder="Naudotojo Vardas"  className="form-control form-control-lg" />
-                        
-                      </div>
-                      <div className="form-outline mb-4 d-flex align-items-center">
-                        <FontAwesomeIcon icon={faLock} className='text-black icon me-2' />
-                        <input {...register("password")} type="password" placeholder="Slaptažodis" className="form-control form-control-lg" />
-                       
-                      </div>
-                      <div className="form-outline mb-4 d-flex align-items-center">
-                        <FontAwesomeIcon icon={faLock} className='text-black icon me-2' />
-                        <input {...register("repeatPassword")} type="password" placeholder="Pakartokite Slaptažodį" className="form-control form-control-lg" />
-                        
-                      </div>
-                      <div>
-                      {errors?.email && <p className='error'>{errors.email.message}</p>}
-                      {errors?.userName && <p className='error'>{errors.userName.message}</p>}
-                      {errors?.password && <p className='error'>{errors.password.message}</p>}
-                      {errors?.repeatPassword && <p className='error'>{errors.repeatPassword.message}</p>}
-                      </div>
-                      <div className="pt-1 mb-4">
-                        <input type="submit" className="button" value="Registruotis"/>
-                      </div>
-                    </form>
-                    <div className="container">
-                      <div className="row">
-                        <div className="col p-1">
-                          <Link className="link" to="/Login">Jau turi Paskyra? Prisijungti</Link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <section>
+      <div className="card">
+        <div className="text-center intro">
+          <img src={logo} alt="Logo" width="100" height="100" />
         </div>
-      </div> 
+        <form onSubmit={handleSubmit}>
+          <h4 className="text-center">Registracija</h4>
+          <div className="mt-3">
+            <div className="inputbox position-relative">
+              <input placeholder="El. Paštas" className="form-control pl-5"  name="email" onChange={handleChange} />
+            </div>
+            
+          </div>
+          <div className="mt-3 text-center">
+            <input placeholder="Naudotojo Vardas" className="form-control" name="username" onChange={handleChange} />            
+          </div>
+          <div className="mt-3 text-center">
+            <input placeholder="Slaptažodis" className="form-control" name="password" type="password" onChange={handleChange} />
+            
+          </div>
+          <div className="mt-3 text-center">
+            <input type="password" placeholder="Pakartokite Slaptažodį" className="form-control" name="confirmPassword" onChange={handleChange} />
+            
+          </div>
+          <div>
+            {userData ? Object.keys(userData).map((key, index) => (<div key={index}>{key}: {userData[key]}</div>)) : null}
+            {errorMessage && <div className='errorMessage'>{errorMessage.email}</div>} 
+            {errorMessage && <div className='errorMessage'>{errorMessage.username}</div>}
+            {errorMessage && <div className='errorMessage'>{errorMessage.password}</div>} 
+            {errorMessage && <div className='errorMessage'>{errorMessage.confirmPassword}</div>} 
+          </div>
+          <div className="text-center">
+            <Link className="forgot" to="/Login">Jau turi Paskyra? Prisijungti</Link>
+          </div>
+          <div className="mt-2 text-center">
+            <button className="btn btn-primary btn-block">Registruotis</button>
+          </div>
+        </form>
+        <div className="d-flex justify-content-between"></div>
+      </div>
     </section>
   );
 };

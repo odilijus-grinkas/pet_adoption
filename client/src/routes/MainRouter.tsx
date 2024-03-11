@@ -5,8 +5,7 @@ import Login from "../components/auth/Login";
 import NotFound from "../components/NotFound";
 import Recovery from "../components/auth/Recovery";
 import Register from "../components/auth/Register";
-
-// import {allComps} from "../components/AdminModeratorPages/AdminModeratorPage";
+import UserList from "../components/AdminModeratorPages/AdminModeratorPage";
 
 function MainRouter() {
   return (
@@ -22,7 +21,7 @@ function MainRouter() {
           {/* 404 Not Found Route */}
           <Route path="*" element={<NotFound />} />
           {/* Admin | Moderator Page Route */}
-          {/* <Route path="/AdMod" element={<allComps />} /> */}
+          <Route path="/AdMod" element={<UserList />} />
         </Routes>
       </div>
     </Router>
