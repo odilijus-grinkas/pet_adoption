@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-
+import FilterSelector from "../components/Posts/FilterSelector";
 export default function Index() {
   // const [data, setData] = useState([]);
   const [data, setData] = useState();
   const [userData, setUserData] = useState();
   const [formData, setFormData] = useState({});
+  const [selection, setSelection] = useState("");
   // function that fetches stuff
   const fetchAndSetData = async () => {
     try {
@@ -53,7 +54,9 @@ export default function Index() {
     fetchAndSetData();
     // re-renders page every time setData changes the data variable in useState.
   }, []);
-
+  useEffect(()=>{
+    console.log(selection);
+  }, [selection])
   return (
     <>
       <h1>Working index page, give me components</h1>
@@ -91,6 +94,11 @@ export default function Index() {
         />
         <input type="submit" />
       </form>
+
+      {/* Test code */}
+      <FilterSelector inputLabel="City" datalist={["Vilnius", "Vilnius Nevilnius", "Klaipeda Klaipeda", "Klaipeda Gargzdai"]} setSelection={setSelection}/>
+
+      <FilterSelector inputLabel="Another Filter" datalist={["Cat","Dog","Rat","Fish"]} setSelection={setSelection}/>
       {userData
         ? Object.keys(userData).map((key, index) => (
             <div key={index}>{key}: {userData[key]}</div>
