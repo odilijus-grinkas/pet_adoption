@@ -7,14 +7,18 @@ interface User {
   username: string;
 }
 
+// admin panel
 export default function UserList() {
   // State to hold the list of users
   const [users, setUsers] = useState<User[]>([]);
-
+  // CHANGE TOKEN TO LOG IN TOKEN
+  const [authToken, setAuthToken] = useState(`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6NCwiaWF0IjoxNzA5MjE0MTQyLCJleHAiOjE3MzUxMzQxNDJ9.Y0NFpP090iZgLDf4mTZ4SesH8Ogj9aKUS7V1xRTKl7A`);
   // Function to fetch user data from the API
   const userFetch = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/user/all");
+      const response = await fetch("http://localhost:3001/api/user/all", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
       if (response.ok) {
         const setting = await response.json();
         // Log the data received from the API for debugging
