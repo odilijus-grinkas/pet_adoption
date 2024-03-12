@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=BioRhyme");
 
+$primary-color: #4a148c;
+
 .section {
   font-family: "BioRhyme", serif;
   background-color: #d4d3d3;
@@ -31,7 +33,7 @@
 .form-control:focus {
   color: #495057;
   background-color: #fff;
-  border-color: #4a148c;
+  border-color: $primary-color;
   outline: 0;
   box-shadow: none;
 }
@@ -61,11 +63,11 @@
 .forgot {
   font-size: 14px;
   text-decoration: none;
-  color: #4a148c;
+  color: $primary-color;
 }
 
 .mail {
-  color: #4a148c;
+  color: $primary-color;
   text-decoration: none;
 }
 
@@ -75,12 +77,12 @@
 
 .btn-primary {
   color: #fff;
-  background-color: #4a148c;
-  border-color: #4a148c;
+  background-color: $primary-color;
+  border-color: $primary-color;
 }
 
 .icon {
-  color: #4a148c;
+  color: $primary-color;
   text-shadow: 0 0 20px rgba(74, 20, 140, 0.8);
 }
 
@@ -121,11 +123,15 @@
 
 .admin-moderator-button {
   color: #fff;
-  background-color: #4a148c;
+  background-color: $primary-color;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+
+  &.selected {
+    background-color: darken($primary-color, 10%);
+  }
 }
 
 .admin-moderator-input {
@@ -138,7 +144,7 @@
 
 .submit-button {
   color: #fff;
-  background-color: #4a148c;
+  background-color: $primary-color;
   border: none;
   padding: 10px 20px;
   font-size: 16px;

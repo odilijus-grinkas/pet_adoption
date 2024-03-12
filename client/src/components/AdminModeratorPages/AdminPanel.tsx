@@ -134,12 +134,6 @@ function UserList() {
 }
 
 // Admin | Moderator
-interface User {
-  id: string;
-  username: string;
-  email: string;
-}
-
 interface FormData {
   email: string;
   username: string;
@@ -157,56 +151,56 @@ interface Errors {
 
 // refresh after creating
 function AdminModerator() {
-  // const [authToken, setAuthToken] = useState(``);
   const [formData, setFormData] = useState<FormData>({
-    email: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
   });
   const [errors, setErrors] = useState<Errors>({});
-  const [loginUsername, setLoginUsername] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
   const createUser = async (role: string, authToken: string) => {
-    const validationErrors = ValidationRegister(formData);
+    const validationErrors = ValidationRegister(formData); // assuming you have a ValidationRegister function
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
     try {
       const endpointUrls: { [key: string]: string } = {
-        plus: "http://localhost:3001/api/user/create/plus",
-        mod: "http://localhost:3001/api/user/create/mod",
-        admin: "http://localhost:3001/api/user/create/admin",
+        plus: 'http://localhost:3001/api/user/create/plus',
+        mod: 'http://localhost:3001/api/user/create/mod',
+        admin: 'http://localhost:3001/api/user/create/admin',
       };
 
       if (!endpointUrls[role]) {
-        throw new Error("Invalid role");
+        throw new Error('Invalid role');
       }
 
       const url = endpointUrls[role];
       const response = await fetch(url, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify(formData),
       });
       if (!response.ok) {
-        throw new Error("Failed to create user");
+        throw new Error('Failed to create user');
       }
       // Refresh the page after successfully creating the user
       window.location.reload();
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
 
   const handleCreateUser = (role: string) => {
     const authToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6NCwiaWF0IjoxNzA5MjE0MTQyLCJleHAiOjE3MzUxMzQxNDJ9.Y0NFpP090iZgLDf4mTZ4SesH8Ogj9aKUS7V1xRTKl7A";
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6NCwiaWF0IjoxNzA5MjE0MTQyLCJleHAiOjE3MzUxMzQxNDJ9.Y0NFpP090iZgLDf4mTZ4SesH8Ogj9aKUS7V1xRTKl7A';
     createUser(role, authToken);
   };
 
@@ -215,21 +209,25 @@ function AdminModerator() {
     formType: string
   ) => {
     e.preventDefault();
-    if (formType === "createUser") {
+    if (formType === 'createUser') {
+      if (!selectedRole) {
+        console.error('Please select a role');
+        return;
+      }
       setErrors({});
-      handleCreateUser("plus"); // Example role
-    } else if (formType === "login") {
-      const validationErrors = ValdiationLogin(formData);
+      handleCreateUser(selectedRole);
+    } else if (formType === 'login') {
+      const validationErrors = ValidationLogin(formData); // assuming you have a ValidationLogin function
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
         return;
       }
-      setLoginUsername("");
-      setLoginPassword("");
+      setLoginUsername('');
+      setLoginPassword('');
     }
   };
 
-  const roles = ["plus", "mod", "admin"];
+  const roles = ['plus', 'mod', 'admin'];
 
   return (
     <div className="admin-moderator-container">
@@ -238,30 +236,14 @@ function AdminModerator() {
         {roles.map((role) => (
           <button
             key={role}
-            className="admin-moderator-button"
-            onClick={() => handleCreateUser(role)}
-            style={{
-              backgroundColor: "#4A148C",
-              color: "white",
-              cursor: "pointer",
-              padding: "8px 16px",
-              border: "none",
-              borderRadius: "4px",
-              margin: "4px",
-              transition: "background-color 0.3s",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = "#7B1FA2";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = "#4A148C";
-            }}
+            className={`admin-moderator-button ${selectedRole === role ? 'selected' : ''}`}
+            onClick={() => setSelectedRole(role)}
           >
             {role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
         ))}
       </div>
-      <form onSubmit={(e) => handleFormSubmit(e, "createUser")}>
+      <form onSubmit={(e) => handleFormSubmit(e, 'createUser')}>
         <input
           type="text"
           value={formData.username}
@@ -300,7 +282,7 @@ function AdminModerator() {
           Submit | Pateikti
         </button>
       </form>
-      <form onSubmit={(e) => handleFormSubmit(e, "login")}>
+      <form onSubmit={(e) => handleFormSubmit(e, 'login')}>
         <input
           type="text"
           value={loginUsername}
