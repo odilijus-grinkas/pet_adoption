@@ -2,10 +2,10 @@ import '../auth.scss'
 import logo from '../assets/logo.png';
 import './Footer.scss';
 
-function Footer() {
+function DeinoroFooter() {
   return (
 <footer className="footerbackground py-3">
-    <p className="logospace text-center text-body-secondary"><img className="logo" src={logo} alt="Logo" /></p>
+    <p className="text-center text-body-secondary"><img className="logo" src={logo} alt="Logo" /></p>
       <div className='FooterlinkNav'>
 <a className= "FooterLink" href="#">Galimybes</a>
 <a className= "FooterLink" href="#">Klausimai ir Atsakos</a>
@@ -14,4 +14,4 @@ function Footer() {
   </footer>
   )
 }
-export default Footer
+export default DeinoroFooter

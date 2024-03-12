@@ -2,7 +2,7 @@ import '../auth.scss'
 import logo from '../assets/logo.png';
 import './header.scss';
 
-const LoginHeader = () => {
+const DeinoroHeader = () => {
     return (
 
             <header className="headerbackground p-3  border-bottom">
@@ -22,4 +22,4 @@ const LoginHeader = () => {
 
     )
 }
-export default LoginHeader;
+export default DeinoroHeader;

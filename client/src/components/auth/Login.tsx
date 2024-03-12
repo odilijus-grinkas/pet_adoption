@@ -2,8 +2,8 @@ import './auth.scss';
 import logo from './assets/logo.png';
 import { Link } from 'react-router-dom';
 import { useState } from "react";
-import LoginHeader from './header/LoginHeader'
-import LoginFooter from './header/LoginFooter'
+import DeinoroHeader from './header/DeinoroHeader'
+import DeinoroFooter from './header/DeinoroFooter'
 import { ValdiationLogin } from '../Inputs/Validation'; 
 
 const Login = () => {
@@ -59,7 +59,7 @@ const Login = () => {
 
     return (
       <section>
-        <LoginHeader/>
+        <DeinoroHeader/>
       <section className='Loginsection'>
         <div className="card">
           <div className="text-center intro">
@@ -89,7 +89,7 @@ const Login = () => {
           </div>
         </div>
       </section>
-      <LoginFooter/>
+      <DeinoroFooter/>
     </section>
     );    
 };
