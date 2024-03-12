@@ -240,6 +240,22 @@ function AdminModerator() {
             key={role}
             className="admin-moderator-button"
             onClick={() => handleCreateUser(role)}
+            style={{
+              backgroundColor: "#4A148C",
+              color: "white",
+              cursor: "pointer",
+              padding: "8px 16px",
+              border: "none",
+              borderRadius: "4px",
+              margin: "4px",
+              transition: "background-color 0.3s",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "#7B1FA2";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "#4A148C";
+            }}
           >
             {role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
