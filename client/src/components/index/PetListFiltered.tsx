@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function PetList() {
+function PetListFiltered() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(8);
@@ -18,11 +18,14 @@ function PetList() {
   }
 
   const fetchData = async () => {
-    const response = await fetch(`http://localhost:3001/api/post/all`);
+    const response = await fetch(
+      `http://localhost:3001/api/post/all/vidutinis`
+    );
     if (response.ok) {
       const parsed = await response.json();
-      setPosts(parsed.data);
-      console.log(parsed.data);
+      const array = [];
+      array.push(parsed.data[0].post);
+      setPosts(array);
     }
   };
 
@@ -79,4 +82,4 @@ function PetList() {
   );
 }
 
-export default PetList;
+export default PetListFiltered;

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function FilterList() {
   return (
     <>
@@ -20,9 +21,9 @@ function FilterList() {
             </a>
           </li>
           <li>
-            <a className="dropdown-item" href="#">
+            <Link className="dropdown-item" to="/vidutinis">
               Vidutinis
-            </a>
+            </Link>
           </li>
           <li>
             <a className="dropdown-item" href="#">

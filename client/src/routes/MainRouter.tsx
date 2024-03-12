@@ -6,6 +6,7 @@ import NotFound from "../components/NotFound";
 import Recovery from "../components/auth/Recovery";
 import Register from "../components/auth/Register";
 import UserList from "../components/AdminModeratorPages/AdminModeratorPage";
+import IndexFiltered from "../primary_comps/IndexFiltered";
 
 function MainRouter() {
   return (
@@ -14,6 +15,7 @@ function MainRouter() {
         <Routes>
           {/* Root URL Route */}
           <Route path="/" element={<Index />} />
+          <Route path="/vidutinis" element={<IndexFiltered />} />
           {/* Auth Route */}
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />

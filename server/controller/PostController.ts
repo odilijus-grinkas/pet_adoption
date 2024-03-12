@@ -1,6 +1,7 @@
 import express from "express"
 import { PrismaClient } from '@prisma/client'
 const PostClient = new PrismaClient().post
+const FilterClient = new PrismaClient().post_option
 import { postValidation } from "../requests/PostRequest";
 
 function validDate() {
@@ -26,6 +27,34 @@ export const getAllPosts = async (req: express.Request, res: express.Response) =
         res.status(200).json({ data: AllPosts });
     } catch (err) {
         console.log(err);
+        res.status(500).json({ status: "error", message: "Serverio klaida" });
+    }
+};
+export const getFilteredPosts = async (req: express.Request, res: express.Response) => {
+    try {
+        const param = req.params;
+        const filtered = param.filter.split('&');
+
+
+        // Query the database using the extracted filter value
+        const FilteredPosts = await FilterClient.findMany({
+            include: {
+                post: { include: { species: true, city: true } },
+                option: true
+            },
+            where: {
+                option: {
+                    value: {
+                        in: filtered
+                    }
+                }
+            }
+        });
+
+        // Send the filtered posts in the response
+        res.status(200).json({ data: FilteredPosts });
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
