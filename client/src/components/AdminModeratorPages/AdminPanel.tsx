@@ -217,7 +217,7 @@ function AdminModerator() {
       setErrors({});
       handleCreateUser(selectedRole);
     } else if (formType === 'login') {
-      const validationErrors = ValidationLogin(formData); // assuming you have a ValidationLogin function
+      const validationErrors = ValdiationLogin(formData);
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
         return;
