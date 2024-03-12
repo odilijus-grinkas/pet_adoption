@@ -57,7 +57,6 @@ function UserList() {
     parsedUser.id; // duos ID pvz 1
     parsedUser.token; // duos token, pvz: "asuidsaiu.aisdjiasd.asidjasid"
     setAuthToken(parsedUser.token);
-    // useEffect hook to fetch user data when the component mounts - excludes repetition
   }, []);
 
   useEffect(() => {
@@ -104,9 +103,9 @@ function UserList() {
   return (
     <>
       {authToken ? (
-        <section>
+        <section className="section">
           <div className="card">
-            <h2>User List</h2>
+            <h2 className="account">User List</h2>
             <ul>
               {/* Render user list */}
               {users.map((user) => (
@@ -159,7 +158,7 @@ interface Errors {
 
 // refresh after creating
 function AdminModerator() {
-  const [authToken, setAuthToken] = useState(``);
+  // const [authToken, setAuthToken] = useState(``);
   const [formData, setFormData] = useState<FormData>({
     email: "",
     username: "",
@@ -199,30 +198,12 @@ function AdminModerator() {
       if (!response.ok) {
         throw new Error("Failed to create user");
       }
-      const responseData = await response.json();
-      const newUser = Array.isArray(responseData.data)
-        ? responseData.data[0]
-        : responseData.data;
-      setFormData((prevState) => ({ ...prevState, newUser }));
+      // Refresh the page after successfully creating the user
+      window.location.reload();
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
-  // useEffect(() => {
-  //   const user = localStorage.getItem("user") ?? ""; // patikrina ar yra patalpintas user i localStorage, vietoj "" rasykit ka jam daryti jei user nera prisilogines, jei toks dalykas svarbus.
-  //   const parsedUser = JSON.parse(user); // konvertuoja JSON i object
-  //   parsedUser.id; // duos ID pvz 1
-  //   parsedUser.token; // duos token, pvz: "asuidsaiu.aisdjiasd.asidjasid"
-  //   setAuthToken(parsedUser.token);
-  //   // useEffect hook to fetch user data when the component mounts - excludes repetition
-  // }, []);
-  
-  // useEffect(() => {
-  //   if (authToken) {
-  //     AdminModerator();
-  //   }
-  // }, [authToken]);
 
   const handleCreateUser = (role: string) => {
     const authToken =
@@ -252,17 +233,19 @@ function AdminModerator() {
   const roles = ["plus", "mod", "admin"];
 
   return (
-    <div className="user-list-container">
-      <h2>Create special user</h2>
-      {roles.map((role) => (
-        <button
-          key={role}
-          className="button"
-          onClick={() => handleCreateUser(role)}
-        >
-          {role.charAt(0).toUpperCase() + role.slice(1)}
-        </button>
-      ))}
+    <div className="admin-moderator-container">
+      <h2 className="admin-moderator-heading">Create special user</h2>
+      <div className="admin-moderator-buttons">
+        {roles.map((role) => (
+          <button
+            key={role}
+            className="admin-moderator-button"
+            onClick={() => handleCreateUser(role)}
+          >
+            {role.charAt(0).toUpperCase() + role.slice(1)}
+          </button>
+        ))}
+      </div>
       <form onSubmit={(e) => handleFormSubmit(e, "createUser")}>
         <input
           type="text"
@@ -271,14 +254,14 @@ function AdminModerator() {
             setFormData({ ...formData, username: e.target.value })
           }
           placeholder="Create a username | Susikurkite vartotojo vardą"
-          className="form-control"
+          className="admin-moderator-input"
         />
         <input
           type="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           placeholder="Enter your email address | Įrašykite savo el.pašto adresą"
-          className="form-control"
+          className="admin-moderator-input"
         />
         <input
           type="password"
@@ -287,7 +270,7 @@ function AdminModerator() {
             setFormData({ ...formData, password: e.target.value })
           }
           placeholder="Create a password | Susikurkite slaptažodį"
-          className="form-control"
+          className="admin-moderator-input"
         />
         <input
           type="password"
@@ -296,7 +279,7 @@ function AdminModerator() {
             setFormData({ ...formData, confirmPassword: e.target.value })
           }
           placeholder="Confirm password | Patvirtinkite slaptažodį"
-          className="form-control"
+          className="admin-moderator-input"
         />
         <button type="submit" className="submit-button">
           Submit | Pateikti
@@ -308,21 +291,21 @@ function AdminModerator() {
           value={loginUsername}
           onChange={(e) => setLoginUsername(e.target.value)}
           placeholder="Enter your username"
-          className="form-control"
+          className="admin-moderator-input"
         />
         <input
           type="password"
           value={loginPassword}
           onChange={(e) => setLoginPassword(e.target.value)}
           placeholder="Enter your password"
-          className="form-control"
+          className="admin-moderator-input"
         />
         <button type="submit" className="submit-button">
           Log In | Prisijungti
         </button>
       </form>
       {Object.keys(errors).length > 0 && (
-        <div className="error-messages">
+        <div className="admin-moderator-error">
           {Object.values(errors).map((error, index) => (
             <p key={index} className="error-message">
               {error}
