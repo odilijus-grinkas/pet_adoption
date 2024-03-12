@@ -1,6 +1,11 @@
-footer{
+.footerbackground{
     width: 100%;
-    display: table;
+    background-color: #d4d3d3;
+}
+
+.logo{
+    height: 20vh;
+    width: 20vh;
 }
 
 .FooterlinkNav{
@@ -9,8 +14,8 @@ text-align: center;
 .FooterLink{
     text-decoration: none;
     color: black;
-    margin-left: 5%;
-    margin-right: 5%;
+    width: 30%;
+    margin-left: 3%;
 }
 .FooterLink:hover{
     color: darkviolet;

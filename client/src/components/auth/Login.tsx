@@ -2,9 +2,13 @@ import './auth.scss';
 import logo from './assets/logo.png';
 import { Link } from 'react-router-dom';
 import { useState } from "react";
+import LoginHeader from './header/LoginHeader'
+import LoginFooter from './header/LoginFooter'
 import { ValdiationLogin } from '../Inputs/Validation'; 
 
 const Login = () => {
+
+
     const [errorMessage, setErrorMessage] = useState("");
     const [userData, setUserData] = useState(null);
     const [formData, setFormData] = useState({
@@ -54,7 +58,9 @@ const Login = () => {
     };
 
     return (
-        <section>
+      <section>
+        <LoginHeader/>
+      <section className='Loginsection'>
         <div className="card">
           <div className="text-center intro">
             <img src={logo} alt="Logo" width="100" height="100" />
@@ -83,7 +89,9 @@ const Login = () => {
           </div>
         </div>
       </section>
-    );
+      <LoginFooter/>
+    </section>
+    );    
 };
 
 export default Login;
