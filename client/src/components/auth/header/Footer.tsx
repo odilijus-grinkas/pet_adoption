@@ -2,7 +2,7 @@ import '../auth.scss'
 import logo from '../assets/logo.png';
 import './Footer.scss';
 
-function DeinoroFooter() {
+function Footer() {
   return (
 <footer className="footerbackground py-3">
     <p className="text-center text-body-secondary"><img className="logo" src={logo} alt="Logo" /></p>
@@ -14,4 +14,4 @@ function DeinoroFooter() {
   </footer>
   )
 }
-export default DeinoroFooter
+export default Footer

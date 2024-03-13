@@ -1,8 +1,8 @@
 import './auth.scss'; // Import SCSS file
 import logo from './assets/logo.png';
 import { Link } from 'react-router-dom';
-import DeinoroHeader from './header/DeinoroHeader'
-import DeinoroFooter from './header/DeinoroFooter'
+import Header from './header/Header'
+import Footer from './header/Footer'
 import { useState } from "react";
 import { ValidationRegister } from '../Inputs/Validation'; 
 
@@ -59,7 +59,7 @@ const Register = () => {
 
   return (
     <section>
-      <DeinoroHeader/>
+      <Header/>
       <div className="card">
         <div className="text-center intro">
           <img src={logo} alt="Logo" width="100" height="100" />
@@ -99,7 +99,7 @@ const Register = () => {
         </form>
         <div className="d-flex justify-content-between"></div>
       </div>
-      <DeinoroFooter/>
+      <Footer/>
     </section>
   );
 };
