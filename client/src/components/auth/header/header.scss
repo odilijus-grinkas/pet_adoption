@@ -1,0 +1,33 @@
+.headerbackground{    
+    background-color: #d4d3d3;
+}
+.Navcontainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav {
+    text-decoration: none;
+    color: black;
+}
+
+.nav:hover {
+    color: darkviolet;
+}
+
+@media screen and (max-width: 48rem) and (min-width: 28rem) {
+    .nav {
+        margin: 5%;
+    }
+}
+
+@media screen and (max-width: 28rem) {
+    .logo-nav {
+        margin-left: 45%;
+    }
+
+    .nav {
+        margin-left: 40%;
+        width: 100%;
+    }
+}

@@ -1,0 +1,23 @@
+.footerbackground{
+    width: 100%;
+    background-color: #d4d3d3;
+    margin-top: auto;
+}
+
+.logo{
+    height: 20vh;
+    width: 20vh;
+}
+
+.FooterlinkNav{
+text-align: center;
+}
+.FooterLink{
+    text-decoration: none;
+    color: black;
+    width: 30%;
+    margin-left: 3%;
+}
+.FooterLink:hover{
+    color: darkviolet;
+}

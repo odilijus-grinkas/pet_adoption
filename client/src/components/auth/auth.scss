@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=BioRhyme");
-section {
-  font-family: "BioRhyme", serif;
-  background-color: #d4d3d3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=BioRhyme');
+.Loginsection{
+    font-family: "BioRhyme", serif;
+    background-color: #d4d3d3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .card {

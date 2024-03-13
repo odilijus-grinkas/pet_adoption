@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import DeinoroHeader from "../components/auth/header/DeinoroHeader";
+import DeinoroFooter from "../components/auth/header/DeinoroFooter";
 
 export default function Index() {
   // const [data, setData] = useState([]);
@@ -56,7 +58,8 @@ export default function Index() {
 
   return (
     <>
-      <h1>Working index page, give me components</h1>
+    <DeinoroHeader/>
+      <h1>Working index page, give me components</h1> 
       <div>
         <h3>Fetched Data:</h3>
         {data ? (
@@ -96,6 +99,7 @@ export default function Index() {
             <div key={index}>{key}: {userData[key]}</div>
           ))
         : null}
+        <DeinoroFooter/>
     </>
   );
 }

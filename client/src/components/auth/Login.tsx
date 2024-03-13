@@ -2,11 +2,15 @@ import './auth.scss';
 import logo from './assets/logo.png';
 import { Link } from 'react-router-dom';
 import { useState } from "react";
+import DeinoroHeader from './header/DeinoroHeader'
+import DeinoroFooter from './header/DeinoroFooter'
 import { ValdiationLogin } from '../Inputs/Validation'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Login = () => {
+
+
     const [errorMessage, setErrorMessage] = useState("");
     const [formDataLogin, setFormData] = useState({
       username: "",
@@ -57,7 +61,9 @@ const Login = () => {
     };
 
     return (
-        <section>
+      <section>
+        <DeinoroHeader/>
+      <section className='Loginsection'>
         <div className="card">
           <div className="text-center intro">
             <img src={logo} alt="Logo" width="100" height="100" />
@@ -87,7 +93,9 @@ const Login = () => {
           </div>
         </div>
       </section>
-    );
+      <DeinoroFooter/>
+    </section>
+    );    
 };
 
 export default Login;
