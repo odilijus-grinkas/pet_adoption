@@ -1,11 +1,11 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
+import AdminPanel from "../components/AdminModeratorPages/AdminPanel";
 import Index from "../primary_comps/Index";
 import Login from "../components/auth/Login";
 import NotFound from "../components/NotFound";
 import Recovery from "../components/auth/Recovery";
 import Register from "../components/auth/Register";
-import UserList from "../components/AdminModeratorPages/AdminModeratorPage";
 
 function MainRouter() {
   return (
@@ -21,7 +21,7 @@ function MainRouter() {
           {/* 404 Not Found Route */}
           <Route path="*" element={<NotFound />} />
           {/* Admin | Moderator Page Route */}
-          <Route path="/AdMod" element={<UserList />} />
+          <Route path="/AdminPanel" element={<AdminPanel />} />
         </Routes>
       </div>
     </Router>
