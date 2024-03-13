@@ -1,7 +1,7 @@
 import FilterList from "../components/index/FilterList";
-import PetList from "../components/index/PetList";
+import PetListFiltered from "../components/index/PetListFiltered";
 
-function Index() {
+function IndexFiltered() {
   return (
     <div className="container">
       <div className="row">
@@ -9,11 +9,11 @@ function Index() {
           <FilterList />
         </div>
         <div className="col-10">
-          <PetList />
+          <PetListFiltered />
         </div>
       </div>
     </div>
   );
 }
 
-export default Index;
+export default IndexFiltered;

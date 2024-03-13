@@ -183,6 +183,10 @@ async function inconsistentDataSeed() {
             {
                 post_id: 2,
                 option_id: 2
+            },
+            {
+                post_id: 3,
+                option_id: 3
             }
         ],
         skipDuplicates: true
