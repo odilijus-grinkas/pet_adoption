@@ -12,6 +12,7 @@ function Index() {
         <div className="row">
           <div className="col-2">
             {/* <FilterList /> */}
+            <h2>"Filtruoti"</h2>
             <FilterSelector inputLabel="Rūšis" datalist={["Arklys", "Šuo", "Katė"]} setSelection={()=>{}}/>
             <FilterSelector inputLabel="Dydis" datalist={["Mažas", "Vidutinis", "Didelis"]} setSelection={()=>{}}/>
             <FilterSelector inputLabel="Amžius" datalist={["Jaunas (iki 1 metu)", "Suauges", "Senas (>10metu)"]} setSelection={()=>{}}/>
