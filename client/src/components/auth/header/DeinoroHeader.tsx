@@ -14,7 +14,7 @@ const DeinoroHeader = () => {
           <a  className="nav" href="/">Index</a>
           {/* <a className="nav" href="#">Naujas Gyvunas</a> */}
             <a className="nav" href="/adminpanel">Admin Panel</a>
-            <a className="nav" href="#">Prisijungti</a>
+            <a className="nav" href="/login">Prisijungti</a>
         </div>
     </div>
   </header>
