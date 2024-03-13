@@ -132,7 +132,6 @@ function UserList() {
     </>
   );
 }
-
 // Admin | Moderator
 interface FormData {
   email: string;
@@ -152,55 +151,53 @@ interface Errors {
 // refresh after creating
 function AdminModerator() {
   const [formData, setFormData] = useState<FormData>({
-    email: '',
-    username: '',
-    password: '',
-    confirmPassword: '',
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
   });
   const [errors, setErrors] = useState<Errors>({});
-  const [loginUsername, setLoginUsername] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
   const createUser = async (role: string, authToken: string) => {
-    const validationErrors = ValidationRegister(formData); // assuming you have a ValidationRegister function
+    const validationErrors = ValidationRegister(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
     try {
       const endpointUrls: { [key: string]: string } = {
-        plus: 'http://localhost:3001/api/user/create/plus',
-        mod: 'http://localhost:3001/api/user/create/mod',
-        admin: 'http://localhost:3001/api/user/create/admin',
+        plus: "http://localhost:3001/api/user/create/plus",
+        mod: "http://localhost:3001/api/user/create/mod",
+        admin: "http://localhost:3001/api/user/create/admin",
       };
 
       if (!endpointUrls[role]) {
-        throw new Error('Invalid role');
+        throw new Error("Invalid role");
       }
 
       const url = endpointUrls[role];
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify(formData),
       });
       if (!response.ok) {
-        throw new Error('Failed to create user');
+        throw new Error("Failed to create user");
       }
       // Refresh the page after successfully creating the user
       window.location.reload();
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
   const handleCreateUser = (role: string) => {
     const authToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6NCwiaWF0IjoxNzA5MjE0MTQyLCJleHAiOjE3MzUxMzQxNDJ9.Y0NFpP090iZgLDf4mTZ4SesH8Ogj9aKUS7V1xRTKl7A';
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6NCwiaWF0IjoxNzA5MjE0MTQyLCJleHAiOjE3MzUxMzQxNDJ9.Y0NFpP090iZgLDf4mTZ4SesH8Ogj9aKUS7V1xRTKl7A";
     createUser(role, authToken);
   };
 
@@ -209,25 +206,17 @@ function AdminModerator() {
     formType: string
   ) => {
     e.preventDefault();
-    if (formType === 'createUser') {
+    if (formType === "createUser") {
       if (!selectedRole) {
-        console.error('Please select a role');
+        console.error("Please select a role");
         return;
       }
       setErrors({});
       handleCreateUser(selectedRole);
-    } else if (formType === 'login') {
-      const validationErrors = ValdiationLogin(formData);
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
-        return;
-      }
-      setLoginUsername('');
-      setLoginPassword('');
     }
   };
 
-  const roles = ['plus', 'mod', 'admin'];
+  const roles = ["plus", "mod", "admin"];
 
   return (
     <div className="admin-moderator-container">
@@ -236,14 +225,16 @@ function AdminModerator() {
         {roles.map((role) => (
           <button
             key={role}
-            className={`admin-moderator-button ${selectedRole === role ? 'selected' : ''}`}
+            className={`admin-moderator-button ${
+              selectedRole === role ? "selected" : ""
+            }`}
             onClick={() => setSelectedRole(role)}
           >
             {role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
         ))}
       </div>
-      <form onSubmit={(e) => handleFormSubmit(e, 'createUser')}>
+      <form onSubmit={(e) => handleFormSubmit(e, "createUser")}>
         <input
           type="text"
           value={formData.username}
@@ -280,25 +271,6 @@ function AdminModerator() {
         />
         <button type="submit" className="submit-button">
           Submit | Pateikti
-        </button>
-      </form>
-      <form onSubmit={(e) => handleFormSubmit(e, 'login')}>
-        <input
-          type="text"
-          value={loginUsername}
-          onChange={(e) => setLoginUsername(e.target.value)}
-          placeholder="Enter your username"
-          className="admin-moderator-input"
-        />
-        <input
-          type="password"
-          value={loginPassword}
-          onChange={(e) => setLoginPassword(e.target.value)}
-          placeholder="Enter your password"
-          className="admin-moderator-input"
-        />
-        <button type="submit" className="submit-button">
-          Log In | Prisijungti
         </button>
       </form>
       {Object.keys(errors).length > 0 && (
@@ -505,9 +477,7 @@ const AdminRole = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          /* data to update post */
-        }),
+        body: JSON.stringify({}),
       });
       if (response.ok) {
         const setting = await response.json();
@@ -527,9 +497,7 @@ const AdminRole = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            /* data to add user plus */
-          }),
+          body: JSON.stringify({}),
         }
       );
       if (response.ok) {
