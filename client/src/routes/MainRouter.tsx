@@ -21,7 +21,7 @@ function MainRouter() {
           {/* 404 Not Found Route */}
           <Route path="*" element={<NotFound />} />
           {/* Admin | Moderator Page Route */}
-          <Route path="/adminpanel" element={<AdminPanel />} />
+          <Route path="/AdminPanel" element={<AdminPanel />} />
         </Routes>
       </div>
     </Router>
