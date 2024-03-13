@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DatalistInput, { useComboboxControls } from "react-datalist-input";
 import "react-datalist-input/dist/styles.css";
-import './FilterSelector.scss'
+import "./FilterSelector.scss";
 
 /**
  * An input field, once selection is made it sets it via setSelection as {inputLabel: item.value}

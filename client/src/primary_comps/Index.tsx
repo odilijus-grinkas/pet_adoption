@@ -44,19 +44,19 @@ function Index() {
     <div className="container">
       <div>
         <FilterSelector
-          inputLabel="City"
-          datalist={[
-            "Vilnius",
-            "Vilnius Nevilnius",
-            "Klaipeda Klaipeda",
-            "Klaipeda Gargzdai",
-          ]}
+          inputLabel="Miestai"
+          datalist={["Vilnius", "Klaipėda"]}
           setSelection={setSelection}
         />
 
         <FilterSelector
-          inputLabel="Another Filter"
-          datalist={["Cat", "Dog", "Rat", "Fish"]}
+          inputLabel="Rūšys"
+          datalist={["Katinas", "Šuo"]}
+          setSelection={setSelection}
+        />
+        <FilterSelector
+          inputLabel="Svoris"
+          datalist={["Mažas", "Vidutinis", "Didelis"]}
           setSelection={setSelection}
         />
       </div>

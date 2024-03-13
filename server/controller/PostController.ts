@@ -37,14 +37,10 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
 
         param.forEach(item => {
             const [key, value] = item.split('=');
-            if (key === 'option') option = value;
-            if (key === 'city') city = value;
-            if (key === 'species') species = value;
+            if (key === 'option') option = + value;
+            if (key === 'city') city = + value;
+            if (key === 'species') species = + value;
         });
-
-        console.log(option);
-        console.log(city);
-        console.log(species);
 
         const whereClause: any = {};
         if (option) {
