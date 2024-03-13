@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DeinoroHeader from "../components/auth/header/DeinoroHeader";
+import FilterSelector from "../components/Posts/FilterComponents/FilterSelector";import DeinoroHeader from "../components/auth/header/DeinoroHeader";
 import DeinoroFooter from "../components/auth/header/DeinoroFooter";
 
 export default function Index() {
@@ -7,6 +7,7 @@ export default function Index() {
   const [data, setData] = useState();
   const [userData, setUserData] = useState();
   const [formData, setFormData] = useState({});
+  const [selection, setSelection] = useState("");
   // function that fetches stuff
   const fetchAndSetData = async () => {
     try {
@@ -55,7 +56,9 @@ export default function Index() {
     fetchAndSetData();
     // re-renders page every time setData changes the data variable in useState.
   }, []);
-
+  useEffect(()=>{
+    console.log(selection);
+  }, [selection])
   return (
     <>
     <DeinoroHeader/>
@@ -94,6 +97,11 @@ export default function Index() {
         />
         <input type="submit" />
       </form>
+
+      {/* Test code */}
+      <FilterSelector inputLabel="City" datalist={["Vilnius", "Vilnius Nevilnius", "Klaipeda Klaipeda", "Klaipeda Gargzdai"]} setSelection={setSelection}/>
+
+      <FilterSelector inputLabel="Another Filter" datalist={["Cat","Dog","Rat","Fish"]} setSelection={setSelection}/>
       {userData
         ? Object.keys(userData).map((key, index) => (
             <div key={index}>{key}: {userData[key]}</div>
