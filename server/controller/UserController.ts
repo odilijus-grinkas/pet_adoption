@@ -85,13 +85,14 @@ const createUser = async (
       routePath == "/api/user/create/mod" ||
       routePath == "/api/user/create/admin"
     ) {
+      console.log(req.tokenInfo.role_id)
       // Doesn't allow non-admins to create mods/admins
-      if (!(req.tokenInfo.role_id < 4)) {
+      if (req.tokenInfo.role_id < 4) {
         return res.status(403).json({ message: "Access denied." });
       }
     } else {
       // Doesn't allow non-admins/mods to create plus users
-      if (!(req.tokenInfo.role_id < 3))
+      if (req.tokenInfo.role_id < 3)
         return res.status(403).json({ message: "Access denied." });
     }
   }
