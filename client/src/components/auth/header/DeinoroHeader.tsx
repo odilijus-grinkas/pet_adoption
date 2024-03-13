@@ -11,10 +11,9 @@ const DeinoroHeader = () => {
         <a href="/" className="logo-nav">
             <img className="logo" src={logo} alt="Logo" />
         </a>
-          <a  className="nav" href="#">Gyvuneliai</a>
-          <a className="nav" href="#">Naujas Gyvunas</a>
-            <a className="nav" href="#">Nustatymai</a>
-            <a className="nav" href="#">Profilis</a>
+          <a  className="nav" href="/">Index</a>
+          {/* <a className="nav" href="#">Naujas Gyvunas</a> */}
+            <a className="nav" href="/adminpanel">Admin Panel</a>
             <a className="nav" href="#">Prisijungti</a>
         </div>
     </div>
