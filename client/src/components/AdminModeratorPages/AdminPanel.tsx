@@ -3,6 +3,7 @@ import "./assets/AdMod.scss";
 import { useEffect, useState } from "react";
 
 import { ValidationRegister } from "../Inputs/Validation";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -19,6 +20,8 @@ export default function AdminPanel() {
 }
 
 function UserList() {
+  // Regular user navigation to Index page
+  const navigate = useNavigate();
   // State to hold the list of users
   const [users, setUsers] = useState<User[]>([]);
   const [authToken, setAuthToken] = useState(``);
@@ -49,6 +52,11 @@ function UserList() {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  // Redirects to the root URL route
+  const redirectToRoot = () => {
+    navigate("/");
   };
 
   useEffect(() => {
@@ -104,6 +112,7 @@ function UserList() {
     <>
       {authToken ? (
         <section className="section">
+          <button onClick={redirectToRoot}>I'm a regular user!</button>
           <div className="card">
             <h2 className="account">User List</h2>
             <ul>
