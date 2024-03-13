@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 function PetListFiltered() {
+  const url = window.location.href;
+  const params = url.replace(/^.*localhost:3000\//, "");
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(8);
@@ -19,12 +21,15 @@ function PetListFiltered() {
 
   const fetchData = async () => {
     const response = await fetch(
-      `http://localhost:3001/api/post/all/vidutinis`
+      `http://localhost:3001/api/post/all/` + params
     );
+
     if (response.ok) {
       const parsed = await response.json();
       const array = [];
-      array.push(parsed.data[0].post);
+      for (const data in parsed.data) {
+        array.push(parsed.data[data].post);
+      }
       setPosts(array);
     }
   };
@@ -39,7 +44,7 @@ function PetListFiltered() {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  return (
+  return currentPosts ? (
     <div>
       <div className="d-flex justify-content-center align-items-center flex-wrap">
         {currentPosts.map((post) => (
@@ -78,6 +83,12 @@ function PetListFiltered() {
           )}
         </ul>
       </nav>
+    </div>
+  ) : (
+    <div className="text-center">
+      <div className="spinner-border">
+        <span className="visually-hidden">Loading...</span>
+      </div>
     </div>
   );
 }

@@ -15,7 +15,7 @@ function MainRouter() {
         <Routes>
           {/* Root URL Route */}
           <Route path="/" element={<Index />} />
-          <Route path="/vidutinis" element={<IndexFiltered />} />
+          <Route path="/:filter" element={<IndexFiltered />} />
           {/* Auth Route */}
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
