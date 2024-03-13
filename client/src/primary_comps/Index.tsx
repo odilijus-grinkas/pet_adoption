@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import FilterSelector from "../components/Posts/FilterComponents/FilterSelector";
 
 function Index() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(8);
+  const [selection, setSelection] = useState("");
 
   interface Post {
     pet_name: string;
@@ -29,6 +31,9 @@ function Index() {
   useEffect(() => {
     fetchData();
   }, []);
+  useEffect(() => {
+    console.log(selection);
+  }, [selection]);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -37,6 +42,24 @@ function Index() {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   return (
     <div className="container">
+      <div>
+        <FilterSelector
+          inputLabel="City"
+          datalist={[
+            "Vilnius",
+            "Vilnius Nevilnius",
+            "Klaipeda Klaipeda",
+            "Klaipeda Gargzdai",
+          ]}
+          setSelection={setSelection}
+        />
+
+        <FilterSelector
+          inputLabel="Another Filter"
+          datalist={["Cat", "Dog", "Rat", "Fish"]}
+          setSelection={setSelection}
+        />
+      </div>
       <div>
         <div className="d-flex justify-content-center align-items-center flex-wrap">
           {currentPosts.map((post) => (
