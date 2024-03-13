@@ -1,7 +1,8 @@
 import "./assets/AdMod.scss";
 
-import { ValdiationLogin, ValidationRegister } from "../Inputs/Validation";
 import { useEffect, useState } from "react";
+
+import { ValidationRegister } from "../Inputs/Validation";
 
 interface User {
   id: string;
@@ -286,9 +287,13 @@ function AdminModerator() {
   );
 }
 
-// // Moderator Roles View
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ModeratorRole = () => {
+// UserRoleView - Administrator & Moderator views
+interface User {
+  id: string;
+  username: string;
+}
+
+const UserRoleView = ({ isAdmin }: { isAdmin: boolean }) => {
   const [moderator, setModerator] = useState<User[]>([]);
   const [authToken, setAuthToken] = useState("");
 
@@ -298,11 +303,15 @@ const ModeratorRole = () => {
 
   const fetchModeratorData = async () => {
     try {
-      const response = await fetch("http://localhost:3001/user/create/mod", {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const endpoint = isAdmin ? "admin" : "mod";
+      const response = await fetch(
+        `http://localhost:3001/user/create/${endpoint}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setModerator(Array.isArray(data) ? data : [data]);
@@ -383,115 +392,10 @@ const ModeratorRole = () => {
     }
   };
 
-  useEffect(() => {
-    const user = localStorage.getItem("user") ?? "";
-    const parsedUser = JSON.parse(user);
-    parsedUser.id;
-    parsedUser.token;
-    setAuthToken(parsedUser.token);
-  }, []);
-
-  return (
-    <>
-      <section>
-        <button className="plus" onClick={userPlus}>
-          Add User Plus | Pridėkite Plius Narį
-        </button>
-        <button className="edit" onClick={() => editPost("postId")}>
-          Edit post | Redaguoti įrašą
-        </button>
-        {moderator.map((mod) => (
-          <div key={mod.id}>
-            <span>{mod.username}</span>
-            <button
-              className="delete"
-              onClick={() => handleDelete(mod.id, mod.username)}
-            >
-              Delete | Trinti
-            </button>
-          </div>
-        ))}
-      </section>
-    </>
-  );
-};
-
-// Admin Roles View
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const AdminRole = () => {
-  const [moderator, setModerator] = useState<User[]>([]);
-  const [authToken, setAuthToken] = useState("");
-
-  useEffect(() => {
-    fetchModeratorData();
-  }, []);
-
-  const fetchModeratorData = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/user/create/admin", {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setModerator(Array.isArray(data) ? data : [data]);
-      } else {
-        console.error("Failed to fetch moderator data");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const deleteModerator = async (id: string) => {
+  const createAdmin = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/moderators/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (response.ok) {
-        await fetchModeratorData();
-      }
-    } catch (error) {
-      console.error("Error deleting moderator:", error);
-    }
-  };
-
-  const handleDelete = (id: string, username: string) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete the moderator ${username}?`
-      )
-    ) {
-      deleteModerator(id);
-    }
-  };
-
-  const editPost = async (postId: string) => {
-    try {
-      const response = await fetch(`http://localhost:3001/api/post/${postId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
-      });
-      if (response.ok) {
-        const setting = await response.json();
-        setModerator(setting.data as User[]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const userPlus = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:3001/api/user/create/plus",
+        "http://localhost:3001/api/user/create/admin",
         {
           method: "PUT",
           headers: {
@@ -509,34 +413,9 @@ const AdminRole = () => {
     }
   };
 
-  const createAdmin = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:3001/api/user/create/admin",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            /* data to add admin */
-          }),
-        }
-      );
-      if (response.ok) {
-        const setting = await response.json();
-        setModerator(setting.data as User[]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   useEffect(() => {
     const user = localStorage.getItem("user") ?? "";
     const parsedUser = JSON.parse(user);
-    parsedUser.id;
-    parsedUser.token;
     setAuthToken(parsedUser.token);
   }, []);
 
@@ -546,9 +425,11 @@ const AdminRole = () => {
         <button className="plus" onClick={userPlus}>
           Add User Plus | Pridėkite Plius Narį
         </button>
-        <button className="create-admin" onClick={createAdmin}>
-          Create Admin | Sukurti Administratorių
-        </button>
+        {isAdmin && (
+          <button className="create-admin" onClick={createAdmin}>
+            Create Admin | Sukurti Administratorių
+          </button>
+        )}
         <button className="edit" onClick={() => editPost("postId")}>
           Edit post | Redaguoti įrašą
         </button>
