@@ -32,9 +32,47 @@ export const getAllPosts = async (req: express.Request, res: express.Response) =
 };
 export const getFilteredPosts = async (req: express.Request, res: express.Response) => {
     try {
-        const param = req.params;
-        const filtered = param.filter.split('&');
+        const param = req.params.filter.split('&');
+        let option, city, species;
 
+        param.forEach(item => {
+            const [key, value] = item.split('=');
+            if (key === 'option') option = value;
+            if (key === 'city') city = value;
+            if (key === 'species') species = value;
+        });
+
+        console.log(option);
+        console.log(city);
+        console.log(species);
+
+        const whereClause: any = {};
+        if (option) {
+            whereClause.option = {
+                value: {
+                    in: [option]
+                }
+            };
+        }
+        if (city) {
+            whereClause.post = {
+                city: {
+                    name: {
+                        in: [city]
+                    }
+                }
+            };
+        }
+        if (species) {
+            if (!whereClause.post) {
+                whereClause.post = {};
+            }
+            whereClause.post.species = {
+                name: {
+                    in: [species]
+                }
+            };
+        }
 
         // Query the database using the extracted filter value
         const FilteredPosts = await FilterClient.findMany({
@@ -42,13 +80,7 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
                 post: { include: { species: true, city: true } },
                 option: true
             },
-            where: {
-                option: {
-                    value: {
-                        in: filtered
-                    }
-                }
-            }
+            where: whereClause
         });
 
         // Send the filtered posts in the response
@@ -58,6 +90,7 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
+
 /**
  * Fetches 1 post based on id parameter.
  * Body requires: id
