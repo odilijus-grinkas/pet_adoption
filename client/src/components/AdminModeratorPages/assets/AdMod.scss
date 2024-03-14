@@ -164,3 +164,17 @@ $primary-color: #4a148c;
 button {
   margin-bottom: 20px;
 }
+
+.regular-user-button {
+  margin-bottom: 20px;
+  color: #fff;
+  background-color: #4a148c;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.regular-user-button:hover {
+  background-color: darken(#4a148c, 10%);
+}

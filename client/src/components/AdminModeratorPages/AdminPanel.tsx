@@ -112,7 +112,9 @@ function UserList() {
     <>
       {authToken ? (
         <section className="section">
-          <button onClick={redirectToRoot}>I'm a regular user!</button>
+          <button className="regular-user-button" onClick={redirectToRoot}>
+            I'm a regular user!
+          </button>
           <div className="card">
             <h2 className="account">User List</h2>
             <ul>
@@ -142,6 +144,7 @@ function UserList() {
     </>
   );
 }
+
 // Admin | Moderator
 interface FormData {
   email: string;
