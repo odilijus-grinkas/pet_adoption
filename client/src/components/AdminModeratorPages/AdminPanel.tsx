@@ -338,6 +338,9 @@ const UserRoleView = ({ isAdmin }: { isAdmin: boolean }) => {
         `http://localhost:3001/api/moderators/${id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
         }
       );
       if (response.ok) {
