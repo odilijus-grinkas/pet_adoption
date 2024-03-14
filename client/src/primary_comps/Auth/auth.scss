@@ -15,20 +15,10 @@ section{
     border:none;
 }
 
-
-
-.account{
-    font-weight: 500;
-    font-size: 17px;
-}
-
-.contact{
-        font-size: 13px;
-}
-
 .form-control{
-   text-indent: 14px;
+    text-indent: 14px;
 }
+
 
 .form-control:focus {
     color: #495057;
@@ -38,52 +28,21 @@ section{
     box-shadow: none;
 }
 
-.inputbox{
-
-    margin-bottom: 10px;
-    position: relative;
-}
-
-.inputbox i{
-
-        position: absolute;
-    left: 8px;
-    top: 12px;
-    color: #dadada;
-}
-
-
-.form-check-label{
-
-    font-size: 13px;
-}
-
 .form-check-input {
     width: 14px;
     height: 15px;
     margin-top: 5px;
 
-    }
-
-   .forgot {
-    font-size: 14px;
-    text-decoration: none;
-    color: #4A148C;
 }
-
-.mail{
-
-    color: #4a148c;
-    text-decoration: none;
+    
+.forgot {
+        font-size: 14px;
+        text-decoration: none;
+        color: #4A148C;
 }
-
-
-    .form-check{
-
-    cursor: pointer;
-    }
-
-    .btn-primary {
+    
+    
+ .btn-primary {
     color: #fff;
     background-color: #4A148C;
     border-color: #4A148C;
@@ -98,3 +57,21 @@ section{
     font-weight: 900;
     color: red;
 }
+.successMessage {
+    font-weight: 900;
+    color: green;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

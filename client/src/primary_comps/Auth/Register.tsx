@@ -2,7 +2,7 @@ import './auth.scss';
 import logo from './assets/logo.png';
 import { Link } from 'react-router-dom';
 import { useState } from "react";
-import { ValidationRegister } from '../Inputs/Validation'; 
+import { ValidationRegister } from '../../components/Inputs/Validation'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
@@ -16,7 +16,7 @@ const Register = () => {
     confirmPassword: ""
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
@@ -24,7 +24,7 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
     const errors = ValidationRegister(formData);
@@ -84,10 +84,10 @@ const Register = () => {
             <FontAwesomeIcon icon={faLock} className='icon  me-2' />
               <input type="password" placeholder="Pakartokite Slaptažodį" className="form-control" name="confirmPassword" onChange={handleChange} />
             </div>
-            {errorMessage && <div className='errorMessage'>{errorMessage.email}</div>} 
-            {errorMessage && <div className='errorMessage'>{errorMessage.username}</div>}
-            {errorMessage && <div className='errorMessage'>{errorMessage.password}</div>} 
-            {errorMessage && <div className='errorMessage'>{errorMessage.confirmPassword}</div>} 
+            {errorMessage && <div className='errorMessage text-start'>{errorMessage.email}</div>} 
+            {errorMessage && <div className='errorMessage text-start'>{errorMessage.username}</div>}
+            {errorMessage && <div className='errorMessage text-start'>{errorMessage.password}</div>} 
+            {errorMessage && <div className='errorMessage text-start'>{errorMessage.confirmPassword}</div>} 
             {errorMessage.general && <div className='errorMessage text-center'>{errorMessage.general}</div>} 
             <div className="text-center p-1">
               <Link className="forgot" to="/Login">Jau turi Paskyra? Prisijungti</Link>

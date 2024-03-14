@@ -2,19 +2,22 @@ import './auth.scss';
 import logo from './assets/logo.png';
 import { Link } from 'react-router-dom';
 import { useState } from "react";
-import { ValdiationLogin } from '../Inputs/Validation'; 
+import { ValidationLogin } from '../../components/Inputs/Validation'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
+
+
 const Login = () => {
-    const [errorMessage, setErrorMessage] = useState("");
-    const [setUserData] = useState(null);
-    const [formDataLogin, setFormData] = useState({
+    const [usernameError, setUsernameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const [formData, setFormData] = useState({
       username: "",
       password: ""
     });
   
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
       setFormData(prevState => ({
         ...prevState,
@@ -22,13 +25,14 @@ const Login = () => {
       }));
     };
   
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       
-      const errors = ValdiationLogin(formDataLogin);
+      const errors = ValidationLogin(formData);
   
       if (Object.keys(errors).length > 0) {
-        setErrorMessage(errors); 
+        setUsernameError(errors.username || "");
+        setPasswordError(errors.password || ""); 
         return;
       }
       
@@ -38,23 +42,24 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formDataLogin),
+          body: JSON.stringify(formData),
         });
   
         if (response.ok) {
           const parsedResponse = await response.json();
-          setUserData(parsedResponse);
-          setErrorMessage(""); 
-
-          
-          localStorage.setItem('user', JSON.stringify(parsedResponse)); // token!
+          setUsernameError(""); 
+          setPasswordError("");
+          setIsLoggedIn(true); // Update login status to true
+          localStorage.setItem('user', JSON.stringify(parsedResponse)); //token
         } else {
           const errorData = await response.json();
-          setErrorMessage(errorData.message);
+          setUsernameError(errorData.username || "");
+          setPasswordError(errorData.password || "");
         }
       } catch (error) {
         console.error("Error:", error);
-        setErrorMessage("An error occurred. Please try again later.");
+        setUsernameError("An error occurred. Please try again later.");
+        setPasswordError("An error occurred. Please try again later.");
       }
     };
 
@@ -70,12 +75,14 @@ const Login = () => {
             <FontAwesomeIcon icon={faUser} className='icon  me-2' />
               <input placeholder="Naudotojo Vardas" className="form-control" name="username" onChange={handleChange} />
             </div>
+            
             <div className="form-outline mb-4 d-flex align-items-center">
             <FontAwesomeIcon icon={faLock} className='icon  me-2' />
               <input placeholder="Slaptažodis" className="form-control" name="password" type="password" onChange={handleChange} />
             </div>
-            {errorMessage && <div className='errorMessage'>{errorMessage.username}</div>}
-            {errorMessage && <div className='errorMessage'>{errorMessage.password}</div>}
+            {usernameError && <div className='errorMessage'>{usernameError}</div>}
+            {passwordError && <div className='errorMessage'>{passwordError}</div>}
+            {isLoggedIn && <div className='successMessage'>Sėkmingai prisijungta!</div>} 
             <div className="text-center p-1">
               <Link className="forgot" to="/Register">Neturi paskyros? Registruokis</Link> <br />
 
