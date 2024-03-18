@@ -18,11 +18,11 @@ let ValidDate = validDate();
  */
 export const getAllPosts = async (req: express.Request, res: express.Response) => {
     try {
-        const AllPosts = await PostClient.findMany({
+        const AllPosts = await FilterClient.findMany({
             include: {
-                species: true,
-                city: true
-            }
+                post: { include: { species: true, city: true } },
+                option: true
+            },
         })
         res.status(200).json({ data: AllPosts });
     } catch (err) {

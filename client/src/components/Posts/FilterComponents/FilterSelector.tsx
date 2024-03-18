@@ -13,10 +13,12 @@ export default function FilterSelector({
   inputLabel = "No Input Label",
   datalist = ["No datalist inserted"],
   setSelection,
+  onFilterSelection,
 }: {
   inputLabel: string;
   datalist: Array<string>;
   setSelection: React.Dispatch<React.SetStateAction<string>>;
+  onFilterSelection: (section: string) => void;
 }) {
   const [isSelected, setIsSelected] = useState(false);
   const comboboxControls = useComboboxControls();
@@ -40,6 +42,7 @@ export default function FilterSelector({
             throw new Error(
               "setSelection is undefined in FilterSelector component."
             );
+          onFilterSelection(item.value);
           setIsSelected(true);
           setSelection((old: any) => {
             return { ...old, [inputLabel]: item.value };
