@@ -7,6 +7,7 @@ import Recovery from "../primary_comps/Auth/Recovery";
 import Register from "../primary_comps/Auth/Register";
 import UserList from "../components/AdminModeratorPages/AdminModeratorPage";
 import Post from "../components/Posts/Post";
+import Profile from "../components/Profile/Profile";
 
 function MainRouter() {
   return (
@@ -22,6 +23,8 @@ function MainRouter() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/Recovery" element={<Recovery />} />
+          {/* Profile */}
+          <Route path="/Profile" element={<Profile />} />
           {/* 404 Not Found Route */}
           <Route path="*" element={<NotFound />} />
           {/* Admin | Moderator Page Route */}

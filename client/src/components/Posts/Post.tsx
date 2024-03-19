@@ -7,7 +7,7 @@ import { faMapMarkerAlt,faEnvelope,faPhone } from '@fortawesome/free-solid-svg-i
 interface Post {
     pet_name: string;
     city_id: number;
-    city: { city: string };
+    city: { city: string; name: string; };
     description: string;
     user: { id: number; email: string };
     created: string;
@@ -18,11 +18,16 @@ const Post = () => {
     const { id } = useParams(); 
     const user = localStorage.getItem("user");
     const parsedUser = user ? JSON.parse(user) : null;
+    const authToken = parsedUser ? parsedUser.token : null; 
 
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/api/post/${id}`);
+                const response = await fetch(`http://localhost:3001/api/post/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
                 if (!response.ok) {
                     throw new Error('Failed to fetch');
                 }
@@ -34,7 +39,7 @@ const Post = () => {
         };
 
         fetchPost();
-    }, [id]);
+    }, [id, authToken]);
 
     const handleEdit = () => {
         setIsEditing(true);
@@ -46,6 +51,7 @@ const Post = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}` 
                 },
                 body: JSON.stringify(post), 
             });
@@ -99,7 +105,7 @@ const Post = () => {
                     <FontAwesomeIcon icon={faMapMarkerAlt} className='icon me-2' />
                 <div className="row p-2">
                     <div className="col-md-6"></div>
-                    <select className="form-control" value={post.city_id} onChange={(e) => setPost({ ...post, city_id: parseInt(e.target.value), city: { city: e.target.options[e.target.selectedIndex].text } })}>
+                    <select className="form-control" value={post.city_id} onChange={(e) => setPost({ ...post, city_id: parseInt(e.target.value), city: { city: e.target.options[e.target.selectedIndex].text, name: '' } })}>
                         <option value={1}>New York</option>
                         <option value={2}>Vilnius</option>
                         <option value={3}>Klaipėda</option>
@@ -144,7 +150,7 @@ const Post = () => {
                 <h3>{post.pet_name}</h3>
                 <div className="form-outline mb-4 d-flex align-items-center">
                     <FontAwesomeIcon icon={faMapMarkerAlt} className='icon me-2' />
-                    {post.city.city}
+                   {post.city.name}
                 </div>
                 <hr />
                 <div className="row">
