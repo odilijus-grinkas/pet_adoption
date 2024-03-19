@@ -1,0 +1,16 @@
+.header{
+  display: flex;
+  justify-content: space-between;
+}
+.header-nav {
+  width: 60%;
+}
+.header-nav-ul{
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+}
+.header-nav-ul li :nth-of-type(1){
+  color: white;
+  text-decoration: none;
+}
