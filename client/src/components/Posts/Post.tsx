@@ -100,11 +100,11 @@ const Post = () => {
                 <div className="row p-2">
                     <div className="col-md-6"></div>
                     <select className="form-control" value={post.city_id} onChange={(e) => setPost({ ...post, city_id: parseInt(e.target.value), city: { city: e.target.options[e.target.selectedIndex].text } })}>
-    <option value={1}>New York</option>
-    <option value={2}>Vilnius</option>
-    <option value={3}>Klaipėda</option>
-    <option value={4}>Kaunas</option>
-</select>
+                        <option value={1}>New York</option>
+                        <option value={2}>Vilnius</option>
+                        <option value={3}>Klaipėda</option>
+                        <option value={4}>Kaunas</option>
+                    </select>
 
                 </div>
                 
@@ -184,7 +184,6 @@ const Post = () => {
 ) : (
     <div >
         <p>Toks skelbimas neegzistuoja ...</p>
-        <img src="https://i.pinimg.com/564x/41/9a/a2/419aa2352472717c77f2ee70e8f4029e.jpg" width={300} height={300} alt="" />
     </div>
 )}
     </div>
