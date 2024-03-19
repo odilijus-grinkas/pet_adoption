@@ -1,16 +1,22 @@
 .headerbackground{    
     background-color: #d4d3d3;
+    height: 15vh;
 }
-.Navcontainer {
-    display: flex;
-    flex-direction: column;
+.navbar {
+height: 15vh!important;
+
 }
 
 .nav {
+    margin-top: -5vh;
+    padding-right: 1vh;
     text-decoration: none;
     color: black;
 }
-
+.logo{
+    height: 10vh;
+    width: 10vh;
+}
 .nav:hover {
     color: darkviolet;
 }
@@ -22,12 +28,17 @@
 }
 
 @media screen and (max-width: 28rem) {
+    .headerbackground{    
+        background-color: #d4d3d3;
+        height: 25vh;
+    }
     .logo-nav {
         margin-left: 45%;
     }
 
     .nav {
-        margin-left: 40%;
+        margin-top: 1vh;
+        margin-left: 50%;
         width: 100%;
     }
 }
