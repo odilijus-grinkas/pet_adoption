@@ -2,17 +2,18 @@ import { useState, useEffect } from "react";
 import FilterSelector from "../components/Posts/FilterComponents/FilterSelector";
 
 function Index() {
-  const [posts, setPosts] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(8);
   const [selection, setSelection] = useState("");
-  console.log(selection);
+  const [currentPosts, setCurrentPosts] = useState([]);
 
   const fetchData = async () => {
     const response = await fetch(`http://localhost:3001/api/post/all`);
     if (response.ok) {
       const parsed = await response.json();
-      setPosts(parsed.data);
+      // setPosts(parsed.data);
+      setAllPosts(parsed.data);
     }
   };
 
@@ -21,27 +22,38 @@ function Index() {
   }, []);
 
   useEffect(() => {
+    console.log("selection");
     console.log(selection);
-  }, [selection]);
+    // filtruoti
+    const posts = allPosts.filter((item) => {
+      console.log("filtras");
+      console.log(selection);
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-
-  function OnFilterSelection(section: string) {
-    setPosts((currentPosts) =>
-      currentPosts.filter((item) => {
-        const city = item.post.city.name.toLowerCase();
-        const species = item.post.species.name.toLowerCase();
-        const optionValue = item.option.value.toLowerCase();
-        return (
-          city.includes(section.toLowerCase()) ||
-          species.includes(section.toLowerCase()) ||
-          optionValue.includes(section.toLowerCase())
-        );
-      })
-    );
-  }
+      if (
+        selection["Miestai"] &&
+        item.post.city.name.toLowerCase() != selection["Miestai"].toLowerCase()
+      ) {
+        return false;
+      }
+      if (
+        selection["Rūšys"] &&
+        item.post.species.name.toLowerCase() != selection["Rūšys"].toLowerCase()
+      ) {
+        return false;
+      }
+      if (
+        selection["Svoris"] &&
+        item.option.value.toLowerCase() != selection["Svoris"].toLowerCase()
+      ) {
+        return false;
+      }
+      return true;
+    });
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    setCurrentPosts(posts.slice(indexOfFirstPost, indexOfLastPost));
+    console.log(posts);
+  }, [selection, allPosts, currentPage]);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -52,20 +64,20 @@ function Index() {
           inputLabel="Miestai"
           datalist={["Vilnius", "Klaipėda"]}
           setSelection={setSelection}
-          onFilterSelection={OnFilterSelection}
+          // onFilterSelection={OnFilterSelection}
         />
 
         <FilterSelector
           inputLabel="Rūšys"
           datalist={["Katinas", "Šuo"]}
           setSelection={setSelection}
-          onFilterSelection={OnFilterSelection}
+          // onFilterSelection={OnFilterSelection}
         />
         <FilterSelector
           inputLabel="Svoris"
           datalist={["Mažas", "Vidutinis", "Didelis"]}
           setSelection={setSelection}
-          onFilterSelection={OnFilterSelection}
+          // onFilterSelection={OnFilterSelection}
         />
       </div>
       <div>
@@ -93,7 +105,7 @@ function Index() {
         <nav>
           <ul className="pagination justify-content-center">
             {Array.from({
-              length: Math.ceil(posts.length / postsPerPage),
+              length: Math.ceil(20 / postsPerPage),
             }).map((_, index) => (
               <li key={index} className="page-item">
                 <button

@@ -13,23 +13,32 @@ export default function FilterSelector({
   inputLabel = "No Input Label",
   datalist = ["No datalist inserted"],
   setSelection,
-  onFilterSelection,
-}: {
+}: // onFilterSelection,
+// fetchData,
+{
   inputLabel: string;
   datalist: Array<string>;
   setSelection: React.Dispatch<React.SetStateAction<string>>;
-  onFilterSelection: (section: string) => void;
 }) {
   const [isSelected, setIsSelected] = useState(false);
   const comboboxControls = useComboboxControls();
 
   // Clicking X will remove the selected value in setSelection and reset the input field.
   const handleXClick = () => {
+    // fetchData();
     setIsSelected(false);
     comboboxControls.setValue("");
     setSelection((old: any) => {
+      // console.log("old");
+
+      // console.log(old);
+      // console.log(inputLabel);
+
       delete old[inputLabel];
-      return old;
+      // console.log(old);
+
+      return { ...old };
+      // return { Miestai: "Klaipėda", Rūšys: "Šuo" };
     });
   };
   return (
@@ -42,11 +51,11 @@ export default function FilterSelector({
             throw new Error(
               "setSelection is undefined in FilterSelector component."
             );
-          onFilterSelection(item.value);
           setIsSelected(true);
           setSelection((old: any) => {
             return { ...old, [inputLabel]: item.value };
           });
+          // onFilterSelection(item.value);
         }}
         items={datalist.map((item, index) => {
           return { id: index, value: item };
