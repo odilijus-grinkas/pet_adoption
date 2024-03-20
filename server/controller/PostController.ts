@@ -33,29 +33,44 @@ export const getAllPosts = async (req: express.Request, res: express.Response) =
 export const getFilteredPosts = async (req: express.Request, res: express.Response) => {
     try {
         const param = req.params.filter.split('&');
-        let option, city, species;
-
+        console.log(param)
+        let option, city, species, page
         param.forEach(item => {
             const [key, value] = item.split('=');
-            if (key === 'option') option = + value;
-            if (key === 'city') city = + value;
-            if (key === 'species') species = + value;
+            if (key === 'option') {
+                option = value;
+            }
+            if (key === 'city') {
+                city = value;
+            }
+            if (key === 'species') {
+                species = value;
+            }
+            if (key === 'page') {
+                page = parseInt(value);
+            }
         });
+
+        if (page === undefined) {
+            page = 1;
+        }
+
+        const limit = 1
+        const pages = (page - 1) * limit
+        console.log(pages)
+
+
 
         const whereClause: any = {};
         if (option) {
             whereClause.option = {
-                value: {
-                    in: [option]
-                }
+                value: option
             };
         }
         if (city) {
             whereClause.post = {
                 city: {
-                    name: {
-                        in: [city]
-                    }
+                    name: city
                 }
             };
         }
@@ -64,9 +79,8 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
                 whereClause.post = {};
             }
             whereClause.post.species = {
-                name: {
-                    in: [species]
-                }
+                name: species
+
             };
         }
 
@@ -76,7 +90,9 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
                 post: { include: { species: true, city: true } },
                 option: true
             },
-            where: whereClause
+            where: whereClause,
+            take: limit,
+            skip: pages
         });
 
         // Send the filtered posts in the response
@@ -86,6 +102,9 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
+
+
+
 
 /**
  * Fetches 1 post based on id parameter.

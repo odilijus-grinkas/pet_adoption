@@ -35,10 +35,8 @@ export default function FilterSelector({
       // console.log(inputLabel);
 
       delete old[inputLabel];
-      // console.log(old);
 
       return { ...old };
-      // return { Miestai: "Klaipėda", Rūšys: "Šuo" };
     });
   };
   return (

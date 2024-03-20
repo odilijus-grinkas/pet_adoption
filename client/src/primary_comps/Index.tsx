@@ -3,8 +3,6 @@ import FilterSelector from "../components/Posts/FilterComponents/FilterSelector"
 
 function Index() {
   const [allPosts, setAllPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(8);
   const [selection, setSelection] = useState("");
   const [currentPosts, setCurrentPosts] = useState([]);
 
@@ -12,7 +10,6 @@ function Index() {
     const response = await fetch(`http://localhost:3001/api/post/all`);
     if (response.ok) {
       const parsed = await response.json();
-      // setPosts(parsed.data);
       setAllPosts(parsed.data);
     }
   };
@@ -22,40 +19,30 @@ function Index() {
   }, []);
 
   useEffect(() => {
-    console.log("selection");
-    console.log(selection);
-    // filtruoti
     const posts = allPosts.filter((item) => {
-      console.log("filtras");
-      console.log(selection);
-
       if (
         selection["Miestai"] &&
-        item.post.city.name.toLowerCase() != selection["Miestai"].toLowerCase()
+        item.post.city.name.toLowerCase() !== selection["Miestai"].toLowerCase()
       ) {
         return false;
       }
       if (
         selection["Rūšys"] &&
-        item.post.species.name.toLowerCase() != selection["Rūšys"].toLowerCase()
+        item.post.species.name.toLowerCase() !==
+          selection["Rūšys"].toLowerCase()
       ) {
         return false;
       }
       if (
         selection["Svoris"] &&
-        item.option.value.toLowerCase() != selection["Svoris"].toLowerCase()
+        item.option.value.toLowerCase() !== selection["Svoris"].toLowerCase()
       ) {
         return false;
       }
       return true;
     });
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    setCurrentPosts(posts.slice(indexOfFirstPost, indexOfLastPost));
-    console.log(posts);
-  }, [selection, allPosts, currentPage]);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    setCurrentPosts(posts);
+  }, [selection, allPosts]);
 
   return (
     <div className="container">
@@ -64,20 +51,16 @@ function Index() {
           inputLabel="Miestai"
           datalist={["Vilnius", "Klaipėda"]}
           setSelection={setSelection}
-          // onFilterSelection={OnFilterSelection}
         />
-
         <FilterSelector
           inputLabel="Rūšys"
           datalist={["Katinas", "Šuo"]}
           setSelection={setSelection}
-          // onFilterSelection={OnFilterSelection}
         />
         <FilterSelector
           inputLabel="Svoris"
           datalist={["Mažas", "Vidutinis", "Didelis"]}
           setSelection={setSelection}
-          // onFilterSelection={OnFilterSelection}
         />
       </div>
       <div>
@@ -102,22 +85,6 @@ function Index() {
             </div>
           ))}
         </div>
-        <nav>
-          <ul className="pagination justify-content-center">
-            {Array.from({
-              length: Math.ceil(20 / postsPerPage),
-            }).map((_, index) => (
-              <li key={index} className="page-item">
-                <button
-                  onClick={() => paginate(index + 1)}
-                  className="page-link"
-                >
-                  {index + 1}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
       </div>
     </div>
   );
