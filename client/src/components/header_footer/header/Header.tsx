@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import "./Header.scss";
+import { useState } from "react";
 
 export default function Header() {
+  const [user] = useState(localStorage.getItem("user"));
   return (
     <header className="header">
       <div>Logo 🦊</div>
@@ -10,13 +12,21 @@ export default function Header() {
           <li className="btn btn-primary">
             <Link to="/">Home</Link>
           </li>
-          <li className="btn btn-primary">
-            <Link to="/AdminPanel">Admin Panel</Link>
-          </li>
-          <li className="btn btn-primary">
-            <Link to="/profile">Profile</Link>
-          </li>
-          {localStorage.getItem("user") ? (
+          {user ? ( // Profile button
+            <li className="btn btn-primary">
+              <Link to="/profile">Profile</Link>
+            </li>
+          ) : null}
+
+          {user ? ( // Admin Panel button (if admin/mod logged in)
+            JSON.parse(user).role > 2 ? (
+              <li className="btn btn-primary">
+                <Link to="/AdminPanel">Admin Panel</Link>
+              </li>
+            ) : null
+          ) : null}
+
+          {user ? ( // Login/Logout button
             <Link
               className="btn btn-danger"
               to={"/login"}
