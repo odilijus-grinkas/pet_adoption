@@ -2,9 +2,9 @@ import "./assets/AdMod.scss";
 
 import { useEffect, useState } from "react";
 
+import Header from "../header_footer/header/Header";
 import { ValidationRegister } from "../Inputs/Validation";
 import { useNavigate } from "react-router-dom";
-import Header from "../header_footer/header/Header";
 
 interface User {
   id: string;
@@ -54,11 +54,6 @@ function UserList() {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
-
-  // Redirects to the root URL route
-  const redirectToRoot = () => {
-    navigate("/");
   };
 
   useEffect(() => {
@@ -114,9 +109,6 @@ function UserList() {
     <>
       {authToken ? (
         <section className="section">
-          <button className="regular-user-button" onClick={redirectToRoot}>
-            I'm a regular user!
-          </button>
           <div className="card">
             <h2 className="account">User List</h2>
             <ul>
