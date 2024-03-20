@@ -1,7 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import Index from "../primary_comps/Index";
-import Login from "../primary_comps/Auth/Login";
+import Login from "../primary_comps/Auth/Login/Login";
 import NotFound from "../components/NotFound";
 import Recovery from "../primary_comps/Auth/Recovery";
 import Register from "../primary_comps/Auth/Register";
