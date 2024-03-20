@@ -54,11 +54,6 @@ function UserList() {
     }
   };
 
-  // Redirects to the root URL route
-  const redirectToRoot = () => {
-    navigate("/");
-  };
-
   useEffect(() => {
     const user = localStorage.getItem("user") ?? ""; // patikrina ar yra patalpintas user i localStorage, vietoj "" rasykit ka jam daryti jei user nera prisilogines, jei toks dalykas svarbus.
     const parsedUser = JSON.parse(user); // konvertuoja JSON i object
@@ -112,9 +107,6 @@ function UserList() {
     <>
       {authToken ? (
         <section className="section">
-          <button className="regular-user-button" onClick={redirectToRoot}>
-            I'm a regular user!
-          </button>
           <div className="card">
             <h2 className="account">User List</h2>
             <ul>
