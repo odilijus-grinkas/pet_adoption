@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { ValidationRegister } from "../Inputs/Validation";
 import { useNavigate } from "react-router-dom";
+import Header from "../header_footer/header/Header";
 
 interface User {
   id: string;
@@ -13,6 +14,7 @@ interface User {
 export default function AdminPanel() {
   return (
     <>
+      <Header/>
       <UserList />
       <AdminModerator />
     </>

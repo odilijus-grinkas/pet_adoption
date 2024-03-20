@@ -2,12 +2,15 @@
   display: flex;
   justify-content: space-between;
 }
-// .header-nav {
-// }
+.header-nav {
+  display: flex;
+  align-items: center;
+}
 .header-nav-ul{
   display: flex;
   justify-content: space-between;
-  list-style: none;
+  list-style: none; 
+  margin-bottom: 0;
 }
 .header-nav-ul li{
   margin: 0 10px;
