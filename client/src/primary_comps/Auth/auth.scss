@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=BioRhyme');
+section{
+    font-family: "BioRhyme", serif;
+    background-color: #d4d3d3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.card{
+    width: 400px;
+    padding: 20px;
+    border:none;
+}
+
+.form-control{
+    text-indent: 14px;
+}
+
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #4a148c;
+    outline: 0;
+    box-shadow: none;
+}
+
+.form-check-input {
+    width: 14px;
+    height: 15px;
+    margin-top: 5px;
+
+}
+    
+.forgot {
+        font-size: 14px;
+        text-decoration: none;
+        color: #4A148C;
+}
+    
+    
+ .btn-primary {
+    color: #fff;
+    background-color: #4A148C;
+    border-color: #4A148C;
+}
+.icon {
+    color: #4A148C; 
+    text-shadow: 0 0 20px rgba(74, 20, 140, 0.8); 
+}
+
+
+.errorMessage {
+    font-weight: 900;
+    color: red;
+}
+.successMessage {
+    font-weight: 900;
+    color: green;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

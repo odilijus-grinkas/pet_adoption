@@ -1,6 +1,7 @@
 import express from "express"
 import { PrismaClient } from '@prisma/client'
 const PostClient = new PrismaClient().post
+const UserClient = new PrismaClient().user
 import { postValidation } from "../requests/PostRequest";
 import { parse } from "path";
 const jwt = require("jsonwebtoken");
@@ -27,6 +28,24 @@ export const getAllPosts = async (req: express.Request, res: express.Response) =
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
+
+export const getAllUserPosts = async (req: express.Request, res: express.Response) => {
+    try {
+        const userId = req.params.id;
+        const userPosts = await PostClient.findMany({
+            where: {
+                user_id: parseInt(userId)
+            }
+        })
+        if (userPosts.length === 0) {
+            return res.status(404).json({ status: "error", message: "User doesn't exist or doesn't have posts" });
+        }
+        res.status(200).json({ data: userPosts });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ status: "error", message: "Serverio klaida" });
+    }
+}
 /**
  * Fetches 1 post based on id parameter.
  * Body requires: id
@@ -48,7 +67,7 @@ export const getOnePost = async (req: express.Request, res: express.Response) =>
         if (OnePost) {
             res.status(200).json({ data: OnePost });
         } else {
-            res.status(404).json({ status: "error" });
+            res.status(404).json({ message: "user doesn't exist or doesn't have posts" });
         }
     } catch (err) {
         console.log(err);
