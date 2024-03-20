@@ -1,11 +1,10 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import Index from "../primary_comps/Index";
-import Login from "../primary_comps/Auth/Login/Login";
+import Login from "../primary_comps/Auth/Login";
 import NotFound from "../components/NotFound";
 import Recovery from "../primary_comps/Auth/Recovery";
 import Register from "../primary_comps/Auth/Register";
-import UserList from "../components/AdminModeratorPages/AdminModeratorPage";
 import Post from "../components/Posts/Post";
 import Profile from "../components/Profile/Profile";
 
