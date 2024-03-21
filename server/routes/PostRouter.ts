@@ -1,12 +1,14 @@
 import { Router } from "express";
 
-import { getAllPosts, getOnePost, createPost, updatePost, deletePost } from "../controller/PostController";
+import { getAllPosts, getOnePost, createPost, updatePost, deletePost, getAllUserPosts } from "../controller/PostController";
 import { createValidation, updateValidation } from "../requests/PostRequest";
 import authToken from "../utils/authToken";
 
 const postsRouter = Router()
 
 postsRouter.get("/post/all", getAllPosts)
+
+postsRouter.get("/post/owned/:id", getAllUserPosts)
 
 postsRouter.get("/post/:id", getOnePost)
 
