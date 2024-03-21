@@ -4,45 +4,47 @@ import FilterSelector from "../components/Posts/FilterComponents/FilterSelector"
 function Index() {
   const [allPosts, setAllPosts] = useState([]);
   const [selection, setSelection] = useState("");
-  const [currentPosts, setCurrentPosts] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [fetchUrl, setFetchUrl] = useState(
+    `http://localhost:3001/api/post/all/page=${pageNumber}`
+  );
+  const [hasMorePets, setHasMorePets] = useState(true); // Track whether there are more pets to fetch
 
   const fetchData = async () => {
-    const response = await fetch(`http://localhost:3001/api/post/all`);
+    const response = await fetch(fetchUrl);
     if (response.ok) {
       const parsed = await response.json();
       setAllPosts(parsed.data);
+      setHasMorePets(parsed.data.length > 0); // Update hasMorePets based on fetched data
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchUrl]);
 
   useEffect(() => {
-    const posts = allPosts.filter((item) => {
-      if (
-        selection["Miestai"] &&
-        item.post.city.name.toLowerCase() !== selection["Miestai"].toLowerCase()
-      ) {
-        return false;
-      }
-      if (
-        selection["Rūšys"] &&
-        item.post.species.name.toLowerCase() !==
-          selection["Rūšys"].toLowerCase()
-      ) {
-        return false;
-      }
-      if (
-        selection["Svoris"] &&
-        item.option.value.toLowerCase() !== selection["Svoris"].toLowerCase()
-      ) {
-        return false;
-      }
-      return true;
-    });
-    setCurrentPosts(posts);
-  }, [selection, allPosts]);
+    let updatedUrl = `http://localhost:3001/api/post/all/page=${pageNumber}`;
+
+    if (selection["Miestai"]) {
+      updatedUrl += `&city=${selection["Miestai"]}`;
+    }
+    if (selection["Rūšys"]) {
+      updatedUrl += `&species=${selection["Rūšys"]}`;
+    }
+    if (selection["Svoris"]) {
+      updatedUrl += `&option=${selection["Svoris"]}`;
+    }
+
+    // Update the fetchUrl state
+    setFetchUrl(updatedUrl);
+  }, [selection, pageNumber]);
+
+  console.log(fetchUrl);
+
+  const handlePageChange = (newPageNumber) => {
+    setPageNumber(newPageNumber);
+  };
 
   return (
     <div className="container">
@@ -65,7 +67,7 @@ function Index() {
       </div>
       <div>
         <div className="d-flex justify-content-center align-items-center flex-wrap">
-          {currentPosts.map((item) => (
+          {allPosts.map((item) => (
             <div className="d-lg-flex my-3 mx-2" key={item.post.id}>
               <div className="card p-0" style={{ width: "12rem" }}>
                 <img
@@ -84,6 +86,20 @@ function Index() {
               </div>
             </div>
           ))}
+        </div>
+        {/* Pagination buttons */}
+        <div className="pagination">
+          <button
+            onClick={() => handlePageChange(pageNumber - 1)}
+            disabled={pageNumber === 1}
+          >
+            Previous
+          </button>
+          {hasMorePets && (
+            <button onClick={() => handlePageChange(pageNumber + 1)}>
+              Next
+            </button>
+          )}
         </div>
       </div>
     </div>
