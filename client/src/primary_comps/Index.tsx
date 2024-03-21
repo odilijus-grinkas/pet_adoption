@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import FilterSelector from "../components/Posts/FilterComponents/FilterSelector";
 
 function Index() {
@@ -8,14 +9,17 @@ function Index() {
   const [fetchUrl, setFetchUrl] = useState(
     `http://localhost:3001/api/post/all/page=${pageNumber}`
   );
-  const [hasMorePets, setHasMorePets] = useState(true); // Track whether there are more pets to fetch
+  const [hasMorePets, setHasMorePets] = useState(true);
+
+  const navigate = useNavigate();
+  const params = useParams();
 
   const fetchData = async () => {
     const response = await fetch(fetchUrl);
     if (response.ok) {
       const parsed = await response.json();
       setAllPosts(parsed.data);
-      setHasMorePets(parsed.data.length > 0); // Update hasMorePets based on fetched data
+      setHasMorePets(parsed.data.length > 0);
     }
   };
 
@@ -36,14 +40,23 @@ function Index() {
       updatedUrl += `&option=${selection["Svoris"]}`;
     }
 
-    // Update the fetchUrl state
     setFetchUrl(updatedUrl);
   }, [selection, pageNumber]);
 
-  console.log(fetchUrl);
+  useEffect(() => {
+    if (params.filter) {
+      const filterParams = params.filter.split("&");
+      const pageParam = filterParams.find((param) => param.startsWith("page="));
+      if (pageParam) {
+        const page = parseInt(pageParam.split("=")[1], 10);
+        setPageNumber(page);
+      }
+    }
+  }, [params]);
 
   const handlePageChange = (newPageNumber) => {
     setPageNumber(newPageNumber);
+    navigate(`/page=${newPageNumber}`, { replace: true });
   };
 
   return (
@@ -87,7 +100,6 @@ function Index() {
             </div>
           ))}
         </div>
-        {/* Pagination buttons */}
         <div className="pagination">
           <button
             onClick={() => handlePageChange(pageNumber - 1)}
