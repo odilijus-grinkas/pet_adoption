@@ -12,10 +12,14 @@ interface User {
 }
 export default function AdminPanel() {
   return (
-    <>
-      <UserList />
-      <AdminModerator />
-    </>
+    <div className="admin-panel-container">
+      <div className="user-list-container">
+        <UserList />
+      </div>
+      <div className="admin-moderator-container">
+        <AdminModerator />
+      </div>
+    </div>
   );
 }
 
@@ -199,13 +203,6 @@ function AdminModerator() {
       console.error("Error:", error);
     }
   };
-
-  const handleCreateUser = (role: string) => {
-    const authToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZV9pZCI6NCwiaWF0IjoxNzA5MjE0MTQyLCJleHAiOjE3MzUxMzQxNDJ9.Y0NFpP090iZgLDf4mTZ4SesH8Ogj9aKUS7V1xRTKl7A";
-    createUser(role, authToken);
-  };
-
   const handleFormSubmit = (
     e: React.FormEvent<HTMLFormElement>,
     formType: string
@@ -217,10 +214,9 @@ function AdminModerator() {
         return;
       }
       setErrors({});
-      handleCreateUser(selectedRole);
+      createUser(selectedRole, authToken);
     }
   };
-
   const roles = ["plus", "mod", "admin"];
 
   return (

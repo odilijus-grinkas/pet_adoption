@@ -178,3 +178,15 @@ button {
 .regular-user-button:hover {
   background-color: darken(#4a148c, 10%);
 }
+
+.admin-panel-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px; 
+  margin: 0 auto;
+}
+
+.user-list-container,
+.admin-moderator-container {
+  flex: 1;
+}
