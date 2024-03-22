@@ -181,12 +181,15 @@ button {
 
 .admin-panel-container {
   display: flex;
-  justify-content: space-between;
-  max-width: 1200px; 
-  margin: 0 auto;
+  justify-content: center; 
+  align-items: center; 
+  width: 100%;
+  height: 100vh; 
+  background-color: #d4d3d3; 
 }
 
 .user-list-container,
 .admin-moderator-container {
   flex: 1;
+  max-width: 50%; 
 }
