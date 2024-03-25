@@ -55,7 +55,7 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
             page = 1;
         }
 
-        const limit = 2
+        const limit = 8
         const pages = (page - 1) * limit
 
         const whereClause: any = {};

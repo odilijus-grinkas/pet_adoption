@@ -1,6 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import PostList from "../primary_comps/PostList";
+// import PostList from "../primary_comps/PostList";
+import Index from "../primary_comps/Index";
 import Login from "../components/auth/Login";
 import NotFound from "../components/NotFound";
 import Recovery from "../components/auth/Recovery";
@@ -13,7 +14,7 @@ function MainRouter() {
       <div>
         <Routes>
           {/* Root URL Route */}
-          <Route path="/:filter" element={<PostList />} />
+          <Route path="/:filter" element={<Index />} />
           {/* Auth Route */}
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />

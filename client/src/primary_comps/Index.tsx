@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FilterSelector from "../components/Posts/FilterComponents/FilterSelector";
-import ReactPaginate from "react-paginate";
+import Pagination from "../components/Posts/Pagination/Pagination";
+import PostList from "../components/Posts/PostList/PostList";
 import "./index.css";
 
-function PostList() {
+const Index = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [selection, setSelection] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
@@ -62,58 +63,33 @@ function PostList() {
     setPageNumber(newPageNumber);
     navigate(`/page=${newPageNumber}`, { replace: true });
   };
-
   return (
     <div className="container">
-      <div>
-        <FilterSelector
-          inputLabel="Miestai"
-          datalist={["Vilnius", "Klaipėda"]}
-          setSelection={setSelection}
-        />
-        <FilterSelector
-          inputLabel="Rūšys"
-          datalist={["Katinas", "Šuo"]}
-          setSelection={setSelection}
-        />
-        <FilterSelector
-          inputLabel="Svoris"
-          datalist={["Mažas", "Vidutinis", "Didelis"]}
-          setSelection={setSelection}
-        />
-      </div>
-      <div>
-        <div className="d-flex justify-content-center align-items-center flex-wrap">
-          {allPosts.map((item) => (
-            <div className="d-lg-flex my-3 mx-2" key={item.post.id}>
-              <div className="card p-0" style={{ width: "12rem" }}>
-                <img
-                  src="src/IMG/PetNoPhoto.png"
-                  className="card-img-top fluid"
-                  alt="..."
-                />
-                <div className="card-body">
-                  <p className="card-title">{item.post.pet_name}</p>
-                  <p className="card-text">{item.post.species.name}</p>
-                  <p className="card-text">{item.post.city.name}</p>
-                  <p className="card-description">{item.post.description}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="pagination">
-          <ReactPaginate
-            pageCount={Number(totalpages)}
-            previousLabel="<"
-            nextLabel=">"
-            onPageChange={({ selected }) => handlePageChange(selected)}
-            containerClassName={"pagination"}
+      <div className="row">
+        <div className="col-3">
+          <FilterSelector
+            inputLabel="Miestai"
+            datalist={["Vilnius", "Klaipėda"]}
+            setSelection={setSelection}
+          />
+          <FilterSelector
+            inputLabel="Rūšys"
+            datalist={["Katinas", "Šuo"]}
+            setSelection={setSelection}
+          />
+          <FilterSelector
+            inputLabel="Svoris"
+            datalist={["Mažas", "Vidutinis", "Didelis"]}
+            setSelection={setSelection}
           />
         </div>
+        <div className="col-9">
+          <PostList allPosts={allPosts} />
+        </div>
       </div>
+      <Pagination totalpages={totalpages} handlePageChange={handlePageChange} />
     </div>
   );
-}
+};
 
-export default PostList;
+export default Index;
