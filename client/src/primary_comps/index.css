@@ -15,7 +15,7 @@
   color: white;
 }
 .selected {
-  background-color: blueviolet;
+  background-color: #4a148c;
   border-radius: 50px;
 }
 a:not([href]):not([class]),
