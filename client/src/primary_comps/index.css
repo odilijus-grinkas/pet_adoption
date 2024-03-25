@@ -1,0 +1,37 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination li a {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: white;
+}
+.selected {
+  background-color: blueviolet;
+  border-radius: 50px;
+}
+a:not([href]):not([class]),
+a:not([href]):not([class]):hover {
+  color: white;
+}
+
+.card-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to three lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis for overflow */
+  height: 4.5rem;
+}
+.card-title {
+  font-size: small;
+  height: 2rem;
+}

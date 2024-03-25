@@ -57,9 +57,6 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
 
         const limit = 2
         const pages = (page - 1) * limit
-        console.log(pages)
-
-
 
         const whereClause: any = {};
         if (option) {
@@ -84,7 +81,13 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
             };
         }
 
-        // Query the database using the extracted filter value
+        const totalFilteredPosts = await FilterClient.count({
+            where: whereClause
+        });
+
+        const totalPages = Math.ceil(totalFilteredPosts / limit);
+
+
         const FilteredPosts = await FilterClient.findMany({
             include: {
                 post: { include: { species: true, city: true } },
@@ -96,7 +99,7 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
         });
 
         // Send the filtered posts in the response
-        res.status(200).json({ data: FilteredPosts });
+        res.status(200).json({ data: FilteredPosts, totalPages: totalPages });
     } catch (err) {
         console.error(err);
         res.status(500).json({ status: "error", message: "Serverio klaida" });

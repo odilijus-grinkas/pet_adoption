@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client'
+import { faker } from '@faker-js/faker';
+import fakedata from "./postOptions"
 const prisma = new PrismaClient()
 async function inconsistentDataSeed() {
 
@@ -90,55 +92,79 @@ async function inconsistentDataSeed() {
         skipDuplicates: true
     });
 
+    // const newPost = await prisma.post.createMany({
+    //     data: [
+    //         {
+    //             id: 1,
+    //             user_id: 1,
+    //             city_id: 1,
+    //             species_id: 1,
+    //             pet_name: 'Buddy',
+    //             description: 'Description of the first post',
+    //             created: new Date(),
+    //             status: 1,
+    //             valid_until: ValidDate
+    //         },
+    //         {
+    //             id: 2,
+    //             user_id: 2,
+    //             city_id: 1,
+    //             species_id: 2,
+    //             pet_name: 'Max',
+    //             description: 'Description of the second post',
+    //             created: new Date(),
+    //             status: 1,
+    //             valid_until: ValidDate
+    //         },
+    //         {
+    //             id: 3,
+    //             user_id: 1,
+    //             city_id: 2,
+    //             species_id: 1,
+    //             pet_name: 'Amsis',
+    //             description: 'Description of the third post',
+    //             created: new Date(),
+    //             status: 1,
+    //             valid_until: ValidDate
+    //         },
+    //         {
+    //             id: 4,
+    //             user_id: 2,
+    //             city_id: 2,
+    //             species_id: 2,
+    //             pet_name: 'Megatronas',
+    //             description: 'Description of the fourth post',
+    //             created: new Date(),
+    //             status: 1,
+    //             valid_until: ValidDate
+    //         }
+    //     ],
+    //     skipDuplicates: true
+    // });
+
+    const fakePosts = [];
+
+    for (let i = 0; i < 50; i++) {
+        const fakePost = {
+            id: i + 1,
+            user_id: faker.number.int({ min: 1, max: 3 }),
+            city_id: faker.number.int({ min: 1, max: 3 }),
+            species_id: faker.number.int({ min: 1, max: 2 }),
+            pet_name: faker.animal.dog(),
+            description: faker.lorem.sentence(),
+            created: faker.date.past(),
+            status: faker.number.int({ min: 0, max: 1 }),
+            valid_until: faker.date.future()
+        };
+
+        fakePosts.push(fakePost)
+    }
+
     const newPost = await prisma.post.createMany({
-        data: [
-            {
-                id: 1,
-                user_id: 1,
-                city_id: 1,
-                species_id: 1,
-                pet_name: 'Buddy',
-                description: 'Description of the first post',
-                created: new Date(),
-                status: 1,
-                valid_until: ValidDate
-            },
-            {
-                id: 2,
-                user_id: 2,
-                city_id: 1,
-                species_id: 2,
-                pet_name: 'Max',
-                description: 'Description of the second post',
-                created: new Date(),
-                status: 1,
-                valid_until: ValidDate
-            },
-            {
-                id: 3,
-                user_id: 1,
-                city_id: 2,
-                species_id: 1,
-                pet_name: 'Amsis',
-                description: 'Description of the third post',
-                created: new Date(),
-                status: 1,
-                valid_until: ValidDate
-            },
-            {
-                id: 4,
-                user_id: 2,
-                city_id: 2,
-                species_id: 2,
-                pet_name: 'Megatronas',
-                description: 'Description of the fourth post',
-                created: new Date(),
-                status: 1,
-                valid_until: ValidDate
-            }
-        ],
+        data: fakePosts,
         skipDuplicates: true
     });
+
 
     const newContact = await prisma.contact.createMany({
         data: [
@@ -174,23 +200,30 @@ async function inconsistentDataSeed() {
         skipDuplicates: true
     });
 
+    // const newPostOption = await prisma.post_option.createMany({
+    //     data: [
+    //         {
+    //             post_id: 1,
+    //             option_id: 1
+    //         },
+    //         {
+    //             post_id: 2,
+    //             option_id: 2
+    //         },
+    //         {
+    //             post_id: 3,
+    //             option_id: 3
+    //         }
+    //     ],
+    //     skipDuplicates: true
+    // });
+
+
     const newPostOption = await prisma.post_option.createMany({
-        data: [
-            {
-                post_id: 1,
-                option_id: 1
-            },
-            {
-                post_id: 2,
-                option_id: 2
-            },
-            {
-                post_id: 3,
-                option_id: 3
-            }
-        ],
+        data: fakedata,
         skipDuplicates: true
     });
+
 
 
     console.log('Data inserted successfully');
