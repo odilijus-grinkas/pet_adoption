@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import PostImageCarousel from './PostImageCarousel';
 import PostDetails from './PostDetails';
 import PostEditForm from './PostEditForm';
 import PostNotFound from './PostNotFound';
 import "./post.scss";
-
 
 interface Post {
     pet_name: string;
@@ -15,20 +14,24 @@ interface Post {
     created: Date;
     user: User;
 }
+
 interface User {
     id: number;
     user: string;
     email: string;
+    role: number;
 }
 
 interface City {
     city: string;
     name: string;
 }
+
 const Post = () => {
-    const [post, setPost] = useState<Post | null>(null); // Specify Post type for useState
+    const [post, setPost] = useState<Post | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const { id } = useParams();
+    const navigate = useNavigate(); // Initialize useNavigate
     const user = localStorage.getItem("user");
     const parsedUser = user ? JSON.parse(user) : null;
     const authToken = parsedUser ? parsedUser.token : null;
@@ -77,8 +80,26 @@ const Post = () => {
         }
     };
 
-    // Add null checks for post and post.user
-    const isUserPost = post && parsedUser && post.user && parsedUser.id === post.user.id;
+    const handleDelete = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/api/post/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete');
+            }
+            // Navigate to the index page after successful deletion
+            navigate('/'); // Redirect to the index page
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
+    };
+
+    const isAdmin = parsedUser && (parsedUser.role === 3 || parsedUser.role === 4);
+    const isUserPost = post && parsedUser && post.user && (parsedUser.id === post.user.id || isAdmin);
 
     return (
         <section className='PostSection'>
@@ -95,6 +116,13 @@ const Post = () => {
                             <div className="row justify-content-center">
                                 <div className="col-auto">
                                     <button className="btn btn-primary" onClick={handleEdit}>Redaguoti</button>
+                                </div>
+                            </div>
+                        )}
+                        {!isEditing && isAdmin && (
+                            <div className="row justify-content-center">
+                                <div className="col-auto">
+                                    <button className="btn btn-danger" onClick={handleDelete}>Ištrinti Skelbimą</button>
                                 </div>
                             </div>
                         )}

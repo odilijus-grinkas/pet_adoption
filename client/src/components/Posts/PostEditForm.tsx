@@ -12,6 +12,7 @@ interface User {
     id: number;
     user: string;
     email: string;
+    role: number;
 }
 
 interface City {
