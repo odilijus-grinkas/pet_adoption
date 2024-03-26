@@ -1,13 +1,14 @@
-import "./index.scss";
+import "./index.scss"; // Add this import statement
 
 import React, { useEffect, useState } from "react";
 
 import Header from "../components/header_footer/header/Header";
+import { Link } from "react-router-dom";
 import firstpuppy from "./assets/firstpuppy.png";
 import secondpuppy from "./assets/secondpuppy.png";
 
-export default function Index() {
-  const [data, setData] = useState();
+const Index = () => {
+  const [data, setData] = useState([]);
   const [userData, setUserData] = useState();
   const [formData, setFormData] = useState({});
   const [isWiggling, setIsWiggling] = useState(false);
@@ -19,7 +20,7 @@ export default function Index() {
         const parsed = await response.json();
         setData(parsed.data);
       } else {
-        setData("");
+        setData([]);
       }
     } catch (err) {
       console.log(err);
@@ -92,6 +93,34 @@ export default function Index() {
           className="puppy-images"
         ></img>
       </div>
+      <div className="container">
+        <div className="row">
+          {data.map((post) => (
+            <div key={post.id} className="col-md-4 mb-4">
+              <Link to={`/post/${post.id}`} className="card-link">
+                <div className="card">
+                  <img
+                    src={`https://via.placeholder.com/800x400?text=${post.pet_name}`}
+                    className="card-img-top"
+                    alt={post.pet_name}
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">{post.pet_name}</h5>
+                    <p className="card-text">{post.description}</p>
+                    <p className="card-text">
+                      <small className="text-muted">
+                        Posted on: {post.created.split('T')[0]}
+                      </small>
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   );
-}
+};
+
+export default Index;
