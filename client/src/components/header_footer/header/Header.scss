@@ -1,6 +1,7 @@
 .header{
   display: flex;
   justify-content: space-between;
+  background-color: #4a148c;
 }
 .header-nav {
   display: flex;
@@ -18,4 +19,31 @@
 .header-nav-ul li :nth-of-type(1){
   color: white;
   text-decoration: none;
+}
+.logo{
+  height: 15vh;
+  width: 15vh;
+}
+.btn-primary:hover{
+  background-color: #3c0f6e;
+  border-color: #3c0f6e;
+}
+.btn-primary:active{
+  background-color: #3c0f6e!important;
+}
+
+@media screen and (max-width: 48rem) and (min-width: 28rem) {
+  
+  .logo{
+    height: 10vh;
+    width: 10vh;
+  }
+}
+@media screen and (max-width: 28rem) {
+  .header{
+width: 100%;
+  }
+  a {
+    font-size: 2.5vh;
+  }
 }
