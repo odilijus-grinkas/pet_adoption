@@ -43,6 +43,9 @@ const Index = () => {
     if (selection["Svoris"]) {
       updatedUrl += `&option=${selection["Svoris"]}`;
     }
+    if (selection["Spalva"]) {
+      updatedUrl += `&option=${selection["Spalva"]}`;
+    }
 
     setFetchUrl(updatedUrl);
   }, [selection, pageNumber]);
@@ -80,6 +83,11 @@ const Index = () => {
           <FilterSelector
             inputLabel="Svoris"
             datalist={["Mažas", "Vidutinis", "Didelis"]}
+            setSelection={setSelection}
+          />
+          <FilterSelector
+            inputLabel="Spalva"
+            datalist={["Juoda", "Ruda", "Balta"]}
             setSelection={setSelection}
           />
         </div>

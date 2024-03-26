@@ -222,7 +222,7 @@ async function inconsistentDataSeed() {
     for (let i = 1; i < 50; i++) {
         const fakePostOptions = {
             post_id: i,
-            option_id: faker.number.int({ min: 1, max: 3 })
+            option_id: faker.number.int({ min: 1, max: 6 })
         };
 
         fakePostOption.push(fakePostOptions)
