@@ -21,8 +21,8 @@ const Index = () => {
     const response = await fetch(fetchUrl);
     if (response.ok) {
       const parsed = await response.json();
-      console.log(parsed);
       setAllPosts(parsed.data);
+      console.log(parsed.data);
       setTotalPages(parsed.totalPages);
     }
   };

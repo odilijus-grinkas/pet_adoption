@@ -218,9 +218,18 @@ async function inconsistentDataSeed() {
     //     skipDuplicates: true
     // });
 
+    let fakePostOption = [];
+    for (let i = 1; i < 50; i++) {
+        const fakePostOptions = {
+            post_id: i,
+            option_id: faker.number.int({ min: 1, max: 3 })
+        };
+
+        fakePostOption.push(fakePostOptions)
+    }
 
     const newPostOption = await prisma.post_option.createMany({
-        data: fakedata,
+        data: fakePostOption,
         skipDuplicates: true
     });
 

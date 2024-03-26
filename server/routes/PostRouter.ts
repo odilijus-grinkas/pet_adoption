@@ -1,14 +1,14 @@
 import { Router } from "express";
 
-import { getAllPosts, getOnePost, createPost, updatePost, deletePost, getFilteredPosts } from "../controller/PostController";
+import { getFilteredPosts, getOnePost, createPost, updatePost, deletePost } from "../controller/PostController";
 import { createValidation, updateValidation } from "../requests/PostRequest";
 import authToken from "../utils/authToken";
 
 const postsRouter = Router()
 
-postsRouter.get("/post/all", getAllPosts)
-
 postsRouter.get("/post/all/:filter", getFilteredPosts)
+
+// postsRouter.get("/post/all/:filter", getFilteredPosts)
 
 postsRouter.get("/post/:id", getOnePost)
 

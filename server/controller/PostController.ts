@@ -1,7 +1,7 @@
 import express from "express"
 import { PrismaClient } from '@prisma/client'
 const PostClient = new PrismaClient().post
-const FilterClient = new PrismaClient().post_option
+// const FilterClient = new PrismaClient().post_option
 import { postValidation } from "../requests/PostRequest";
 
 function validDate() {
@@ -16,25 +16,31 @@ let ValidDate = validDate();
 /**
  * Fetches full data of every post.
  */
-export const getAllPosts = async (req: express.Request, res: express.Response) => {
-    try {
-        const AllPosts = await FilterClient.findMany({
-            include: {
-                post: { include: { species: true, city: true } },
-                option: true
-            },
-        })
-        res.status(200).json({ data: AllPosts });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ status: "error", message: "Serverio klaida" });
-    }
-};
+// export const getAllPosts = async (req: express.Request, res: express.Response) => {
+//     try {
+//         const AllPosts = await PostClient.findMany({
+//             include: {
+//                 species: true,
+//                 city: true,
+//                 post_option: {
+//                     include: {
+//                         option: true
+//                     }
+//                 }
+//             }
+//         })
+//         res.status(200).json({ data: AllPosts });
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ status: "error", message: "Serverio klaida" });
+//     }
+// };
+
 export const getFilteredPosts = async (req: express.Request, res: express.Response) => {
     try {
         const param = req.params.filter.split('&');
         console.log(param)
-        let option, city, species, page
+        let option, city, species, page;
         param.forEach(item => {
             const [key, value] = item.split('=');
             if (key === 'option') {
@@ -55,43 +61,45 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
             page = 1;
         }
 
-        const limit = 8
-        const pages = (page - 1) * limit
+        const limit = 8;
+        const pages = (page - 1) * limit;
 
         const whereClause: any = {};
         if (option) {
-            whereClause.option = {
-                value: option
-            };
-        }
-        if (city) {
-            whereClause.post = {
-                city: {
-                    name: city
+            whereClause.post_option = {
+                some: {
+                    option: {
+                        value: option
+                    }
                 }
             };
         }
+        if (city) {
+            whereClause.city = {
+                name: city
+            };
+        }
         if (species) {
-            if (!whereClause.post) {
-                whereClause.post = {};
-            }
-            whereClause.post.species = {
+            whereClause.species = {
                 name: species
-
             };
         }
 
-        const totalFilteredPosts = await FilterClient.count({
+        const totalFilteredPosts = await PostClient.count({
             where: whereClause
         });
 
         const totalPages = Math.ceil(totalFilteredPosts / limit);
 
-
-        const FilteredPosts = await FilterClient.findMany({
+        const filteredPosts = await PostClient.findMany({
             include: {
-                post: { include: { species: true, city: true } },
-                option: true
+                species: true,
+                city: true,
+                post_option: {
+                    include: {
+                        option: true
+                    }
+                }
             },
             where: whereClause,
             take: limit,
@@ -99,12 +107,89 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
         });
 
         // Send the filtered posts in the response
-        res.status(200).json({ data: FilteredPosts, totalPages: totalPages });
+        res.status(200).json({ data: filteredPosts, totalPages: totalPages });
     } catch (err) {
         console.error(err);
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
+
+
+// export const getFilteredPosts = async (req: express.Request, res: express.Response) => {
+//     try {
+//         const param = req.params.filter.split('&');
+//         console.log(param)
+//         let option, city, species, page
+//         param.forEach(item => {
+//             const [key, value] = item.split('=');
+//             if (key === 'option') {
+//                 option = value;
+//             }
+//             if (key === 'city') {
+//                 city = value;
+//             }
+//             if (key === 'species') {
+//                 species = value;
+//             }
+//             if (key === 'page') {
+//                 page = parseInt(value);
+//             }
+//         });
+
+//         if (page === undefined) {
+//             page = 1;
+//         }
+
+//         const limit = 8
+//         const pages = (page - 1) * limit
+
+//         const whereClause: any = {};
+//         if (option) {
+//             whereClause.option = {
+//                 value: option
+//             };
+//         }
+//         if (city) {
+//             whereClause.post = {
+//                 city: {
+//                     name: city
+//                 }
+//             };
+//         }
+//         if (species) {
+//             if (!whereClause.post) {
+//                 whereClause.post = {};
+//             }
+//             whereClause.post.species = {
+//                 name: species
+
+//             };
+//         }
+
+//         const totalFilteredPosts = await FilterClient.count({
+//             where: whereClause
+//         });
+
+//         const totalPages = Math.ceil(totalFilteredPosts / limit);
+
+
+//         const FilteredPosts = await FilterClient.findMany({
+//             include: {
+//                 post: { include: { species: true, city: true } },
+//                 option: true
+//             },
+//             where: whereClause,
+//             take: limit,
+//             skip: pages
+//         });
+
+//         // Send the filtered posts in the response
+//         res.status(200).json({ data: FilteredPosts, totalPages: totalPages });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ status: "error", message: "Serverio klaida" });
+//     }
+// };
 
 
 
