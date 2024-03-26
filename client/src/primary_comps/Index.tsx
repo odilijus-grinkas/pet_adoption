@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import Header from "../components/auth/header/Header";
-import Footer from "../components/auth/header/Footer";
+import Header from "../components/header_footer/header/Header";
 
 export default function Index() {
   // const [data, setData] = useState([]);
@@ -58,8 +57,8 @@ export default function Index() {
 
   return (
     <>
-    <Header/>
-      <h1>Working index page, give me components</h1> 
+      <Header/>
+      <h1>Working index page, give me components</h1>
       <div>
         <h3>Fetched Data:</h3>
         {data ? (

@@ -1,59 +1,68 @@
-import './auth.scss'; // Import SCSS file
-import logo from './assets/logo.png';
-import { Link } from 'react-router-dom';
-import Header from './header/Header'
-import Footer from './header/Footer'
+import "./auth.scss";
+
+import { Link } from "react-router-dom";
+import { ValidationRegister } from "../Inputs/Validation";
+import logo from "./assets/logo.png";
 import { useState } from "react";
-import { ValidationRegister } from '../Inputs/Validation'; 
+
+// import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+// import DeinoroFooter from "./header/Footer";
+// import DeinoroHeader from "./header/Header";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Register = () => {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState({});
   const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
     email: "",
     username: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const errors = ValidationRegister(formData);
-  
+
     if (Object.keys(errors).length > 0) {
-      setErrorMessage(errors); 
+      setErrorMessage(errors);
       return;
     }
-  
+
     try {
-      const response = await fetch("http://localhost:3001/api/user/create/regular", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-  
+      const response = await fetch(
+        "http://localhost:3001/api/user/create/regular",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
       if (response.ok) {
         const parsedResponse = await response.json();
         setUserData(parsedResponse);
-        setErrorMessage(""); 
+        setErrorMessage({});
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.message);
+        setErrorMessage({ general: errorData.message });
       }
     } catch (error) {
       console.error("Error:", error);
-      setErrorMessage("An error occurred. Please try again later.");
+      setErrorMessage({
+        general: "An error occurred. Please try again later.",
+      });
     }
   };
 
@@ -66,40 +75,78 @@ const Register = () => {
         </div>
         <form onSubmit={handleSubmit}>
           <h4 className="text-center">Registracija</h4>
-          <div className="mt-3">
-            <div className="inputbox position-relative">
-              <input placeholder="El. Paštas" className="form-control pl-5"  name="email" onChange={handleChange} />
+          <div className="mt-3 text-center">
+            <div className="form-outline mb-4 d-flex align-items-center">
+              {/* <FontAwesomeIcon icon={faEnvelope} className="icon  me-2" /> */}
+              <input
+                placeholder="El. Paštas"
+                className="form-control pl-5"
+                name="email"
+                onChange={handleChange}
+              />
             </div>
-            
-          </div>
-          <div className="mt-3 text-center">
-            <input placeholder="Naudotojo Vardas" className="form-control" name="username" onChange={handleChange} />            
-          </div>
-          <div className="mt-3 text-center">
-            <input placeholder="Slaptažodis" className="form-control" name="password" type="password" onChange={handleChange} />
-            
-          </div>
-          <div className="mt-3 text-center">
-            <input type="password" placeholder="Pakartokite Slaptažodį" className="form-control" name="confirmPassword" onChange={handleChange} />
-            
-          </div>
-          <div>
-            {userData ? Object.keys(userData).map((key, index) => (<div key={index}>{key}: {userData[key]}</div>)) : null}
-            {errorMessage && <div className='errorMessage'>{errorMessage.email}</div>} 
-            {errorMessage && <div className='errorMessage'>{errorMessage.username}</div>}
-            {errorMessage && <div className='errorMessage'>{errorMessage.password}</div>} 
-            {errorMessage && <div className='errorMessage'>{errorMessage.confirmPassword}</div>} 
-          </div>
-          <div className="text-center">
-            <Link className="forgot" to="/Login">Jau turi Paskyra? Prisijungti</Link>
-          </div>
-          <div className="mt-2 text-center">
-            <button className="btn btn-primary btn-block">Registruotis</button>
+            <div className="form-outline mb-4 d-flex align-items-center">
+              {/* <FontAwesomeIcon icon={faUser} className="icon  me-2" /> */}
+              <input
+                placeholder="Naudotojo Vardas"
+                className="form-control"
+                name="username"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-outline mb-4 d-flex align-items-center">
+              {/* <FontAwesomeIcon icon={faLock} className="icon  me-2" /> */}
+              <input
+                placeholder="Slaptažodis"
+                className="form-control"
+                name="password"
+                type="password"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-outline mb-4 d-flex align-items-center">
+              {/* <FontAwesomeIcon icon={faLock} className="icon  me-2" /> */}
+              <input
+                type="password"
+                placeholder="Pakartokite Slaptažodį"
+                className="form-control"
+                name="confirmPassword"
+                onChange={handleChange}
+              />
+            </div>
+            {errorMessage && (
+              <div className="errorMessage">{errorMessage.email}</div>
+            )}
+            {errorMessage && (
+              <div className="errorMessage">{errorMessage.username}</div>
+            )}
+            {errorMessage && (
+              <div className="errorMessage">{errorMessage.password}</div>
+            )}
+            {errorMessage && (
+              <div className="errorMessage">{errorMessage.confirmPassword}</div>
+            )}
+            {errorMessage.general && (
+              <div className="errorMessage text-center">
+                {errorMessage.general}
+              </div>
+            )}
+            <div className="text-center p-1">
+              <Link className="forgot" to="/Login">
+                Jau turi Paskyra? Prisijungti
+              </Link>
+            </div>
+            <div className="mt-2 text-center">
+              <button className="btn btn-primary btn-block">
+                Registruotis
+              </button>
+            </div>
           </div>
         </form>
         <div className="d-flex justify-content-between"></div>
       </div>
       <Footer/>
+      {/* <DeinoroFooter /> */}
     </section>
   );
 };

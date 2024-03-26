@@ -81,17 +81,23 @@ const createUser = async (
 ) => {
   if (req.tokenInfo) {
     const routePath = req.originalUrl;
-    // Doesn't allow non-admins to create mods/admins
     if (
       routePath == "/api/user/create/mod" ||
       routePath == "/api/user/create/admin"
     ) {
-      if (req.tokenInfo.role_id < 4)
-        return res.status(403).json({ message: "Access denied." });
+      // Doesn't allow non-admins to create mods/admins
+      if (req.tokenInfo.role_id < 4) {
+        return res
+          .status(403)
+          .json({ message: "Access denied, must be admin." });
+      }
     } else {
-      // Doesn't allow non-admins/mods to create user plus
-      if (req.tokenInfo.role_id < 3)
-        return res.status(403).json({ message: "Access denied." });
+      // Doesn't allow non-admins/mods to create plus users
+      if (req.tokenInfo.role_id < 3) {
+        return res
+          .status(403)
+          .json({ message: "Access denied, must be mod or admin." });
+      }
     }
   }
   try {
@@ -225,7 +231,7 @@ const loginUser = async (req: express.Request, res: express.Response) => {
             expiresIn: "1d", // Specify how long until token expires.
           }
         );
-        res.status(200).json({ id: user.id, token: token });
+        res.status(200).json({ id: user.id, token: token, role: user.user_role[0].role_id });
       } else {
         res.status(403).json({ message: "Wrong password." });
       }

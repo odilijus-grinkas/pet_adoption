@@ -1,98 +1,83 @@
-@import url('https://fonts.googleapis.com/css2?family=BioRhyme');
-.Loginsection{
-    font-family: "BioRhyme", serif;
-    background-color: #d4d3d3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+@import url("https://fonts.googleapis.com/css2?family=BioRhyme");
+section {
+  font-family: "BioRhyme", serif;
+  background-color: #d4d3d3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-
-.card{
-
-    width: 400px;
-    padding: 20px;
-    border:none;
+.card {
+  width: 400px;
+  padding: 20px;
+  border: none;
 }
 
-
-
-.account{
-
-        font-weight: 500;
-    font-size: 17px;
+.account {
+  font-weight: 500;
+  font-size: 17px;
 }
 
-.contact{
-
-        font-size: 13px;
+.contact {
+  font-size: 13px;
 }
 
-.form-control{
-   text-indent: 14px;
+.form-control {
+  text-indent: 14px;
 }
 
 .form-control:focus {
-    color: #495057;
-    background-color: #fff;
-    border-color: #4a148c;
-    outline: 0;
-    box-shadow: none;
+  color: #495057;
+  background-color: #fff;
+  border-color: #4a148c;
+  outline: 0;
+  box-shadow: none;
 }
 
-.inputbox{
-
-    margin-bottom: 10px;
-    position: relative;
+.inputbox {
+  margin-bottom: 10px;
+  position: relative;
 }
 
-.inputbox i{
-
-        position: absolute;
-    left: 8px;
-    top: 12px;
-    color: #dadada;
+.inputbox i {
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  color: #dadada;
 }
 
-
-.form-check-label{
-
-    font-size: 13px;
+.form-check-label {
+  font-size: 13px;
 }
 
 .form-check-input {
-    width: 14px;
-    height: 15px;
-    margin-top: 5px;
-
-    }
-
-   .forgot {
-    font-size: 14px;
-    text-decoration: none;
-    color: #4A148C;
+  width: 14px;
+  height: 15px;
+  margin-top: 5px;
 }
 
-.mail{
-
-    color: #4a148c;
-    text-decoration: none;
+.forgot {
+  font-size: 14px;
+  text-decoration: none;
+  color: #4a148c;
 }
 
-
-    .form-check{
-
-    cursor: pointer;
-    }
-
-    .btn-primary {
-    color: #fff;
-    background-color: #4A148C;
-    border-color: #4A148C;
+.mail {
+  color: #4a148c;
+  text-decoration: none;
 }
 
-.errorMessage {
-    font-weight: 900;
-    color: red;
+.form-check {
+  cursor: pointer;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #4a148c;
+  border-color: #4a148c;
+}
+.icon {
+  color: #4a148c;
+  text-shadow: 0 0 20px rgba(74, 20, 140, 0.8);
 }
