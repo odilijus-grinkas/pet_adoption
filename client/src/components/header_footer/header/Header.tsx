@@ -1,12 +1,15 @@
-import { Link } from "react-router-dom";
 import "./Header.scss";
+
+import { Link } from "react-router-dom";
+import logo from "./assets/logo.png";
 import { useState } from "react";
 
 export default function Header() {
   const [user] = useState(localStorage.getItem("user"));
   return (
     <header className="header">
-      <div>Logo 🦊</div>
+      <img src={logo} alt="Logo" width="80" height="80" />
+      {/* <div>Logo 🦊</div> */}
       <nav className="header-nav">
         <ul className="header-nav-ul">
           <li className="btn btn-primary">
