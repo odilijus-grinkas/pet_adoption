@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useParams, useNavigate } from 'react-router-dom'; 
 import PostImageCarousel from './PostImageCarousel';
 import PostDetails from './PostDetails';
 import PostEditForm from './PostEditForm';
@@ -31,7 +31,7 @@ const Post = () => {
     const [post, setPost] = useState<Post | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const { id } = useParams();
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate(); 
     const user = localStorage.getItem("user");
     const parsedUser = user ? JSON.parse(user) : null;
     const authToken = parsedUser ? parsedUser.token : null;
@@ -91,7 +91,6 @@ const Post = () => {
             if (!response.ok) {
                 throw new Error('Failed to delete');
             }
-            // Navigate to the index page after successful deletion
             navigate('/'); // Redirect to the index page
         } catch (error) {
             console.error('Error deleting post:', error);
