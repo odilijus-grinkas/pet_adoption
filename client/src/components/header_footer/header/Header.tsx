@@ -1,7 +1,5 @@
-import "./Header.scss";
-
 import { Link } from "react-router-dom";
-import logo from "./assets/logo.png";
+import "./Header.scss";
 import { useState } from "react";
 import logo from '../../../primary_comps/Auth/assets/logo.png';
 
@@ -9,8 +7,6 @@ export default function Header() {
   const [user] = useState(localStorage.getItem("user"));
   return (
     <header className="header">
-      <img src={logo} alt="Logo" width="80" height="80" />
-      {/* <div>Logo 🦊</div> */}
         <a href="/" className="logo-nav">
             <img className="logo" src={logo} alt="Logo" />
         </a>
