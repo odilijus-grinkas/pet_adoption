@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import "./Index.scss"; // Add this import statement
 
 import React, { useEffect, useState } from "react";
@@ -8,10 +10,9 @@ import firstpuppy from "./Assets/firstpuppy.png";
 import secondpuppy from "./Assets/secondpuppy.png";
 
 const Index = () => {
-  const [data, setData] = useState([]);
-  const [userData, setUserData] = useState();
+  const [data, setData] = useState([]); // Initialize data as an empty array
+  const [userData, setUserData] = useState(null); // Initialize userData as null
   const [formData, setFormData] = useState({});
-  const [isWiggling, setIsWiggling] = useState(false);
 
   const fetchAndSetData = async () => {
     try {
@@ -20,20 +21,20 @@ const Index = () => {
         const parsed = await response.json();
         setData(parsed.data);
       } else {
-        setData([]);
+        setData([]); // Reset data to an empty array if response is not OK
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { name: unknown; value: unknown } }) => {
     const name = e.target.name;
     const value = e.target.value;
-    setFormData((old) => ({ ...old, [name]: value }));
+    setFormData((old) => ({ ...old, ["name"]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:3001/api/login", {
@@ -52,10 +53,6 @@ const Index = () => {
     }
   };
 
-  const toggleWiggle = () => {
-    setIsWiggling((prevState) => !prevState);
-  };
-
   useEffect(() => {
     fetchAndSetData();
   }, [formData, userData]);
@@ -66,9 +63,7 @@ const Index = () => {
       <img
         src={firstpuppy}
         alt="firstpuppy"
-        width=""
-        height=""
-        className="puppy-image"
+        className="puppy-image" // Removed width and height props
       ></img>
       <div className="container">
         <div className="text-wrapper">
@@ -88,9 +83,7 @@ const Index = () => {
         <img
           src={secondpuppy}
           alt="secondpuppy"
-          width=""
-          height=""
-          className="puppy-images"
+          className="puppy-images" // Removed width and height props
         ></img>
       </div>
       <div className="container">
@@ -109,7 +102,7 @@ const Index = () => {
                     <p className="card-text">{post.description}</p>
                     <p className="card-text">
                       <small className="text-muted">
-                        Posted on: {post.created.split('T')[0]}
+                        Posted on: {post.created.split("T")[0]}
                       </small>
                     </p>
                   </div>
