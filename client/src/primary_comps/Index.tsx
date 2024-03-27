@@ -1,126 +1,95 @@
-import "./Index.scss"; // Add this import statement
+import { useState, useEffect } from "react";
+import FilterSelector from "../components/Posts/FilterComponents/FilterSelector";
 
-import React, { useEffect, useState } from "react";
+function Index() {
+  const [allPosts, setAllPosts] = useState([]);
+  const [selection, setSelection] = useState("");
+  const [currentPosts, setCurrentPosts] = useState([]);
 
-import Header from "../components/header_footer/header/Header";
-import { Link } from "react-router-dom";
-import firstpuppy from "./Assets/firstpuppy.png";
-import secondpuppy from "./Assets/secondpuppy.png";
-
-const Index = () => {
-  const [data, setData] = useState([]);
-  const [userData, setUserData] = useState();
-  const [formData, setFormData] = useState({});
-  const [isWiggling, setIsWiggling] = useState(false);
-
-  const fetchAndSetData = async () => {
-    try {
-      const response = await fetch(`http://localhost:3001/api/post/all`);
-      if (response.ok) {
-        const parsed = await response.json();
-        setData(parsed.data);
-      } else {
-        setData([]);
-      }
-    } catch (err) {
-      console.log(err);
+  const fetchData = async () => {
+    const response = await fetch(`http://localhost:3001/api/post/all`);
+    if (response.ok) {
+      const parsed = await response.json();
+      setAllPosts(parsed.data);
     }
-  };
-
-  const handleChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setFormData((old) => ({ ...old, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:3001/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        const parsedResponse = await response.json();
-        setUserData(parsedResponse);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const toggleWiggle = () => {
-    setIsWiggling((prevState) => !prevState);
   };
 
   useEffect(() => {
-    fetchAndSetData();
-  }, [formData, userData]);
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const posts = allPosts.filter((item) => {
+      if (
+        selection["Miestai"] &&
+        item.post.city.name.toLowerCase() !== selection["Miestai"].toLowerCase()
+      ) {
+        return false;
+      }
+      if (
+        selection["Rūšys"] &&
+        item.post.species.name.toLowerCase() !==
+          selection["Rūšys"].toLowerCase()
+      ) {
+        return false;
+      }
+      if (
+        selection["Svoris"] &&
+        item.option.value.toLowerCase() !== selection["Svoris"].toLowerCase()
+      ) {
+        return false;
+      }
+      return true;
+    });
+    setCurrentPosts(posts);
+  }, [selection, allPosts]);
 
   return (
-    <>
-      <Header />
-      <img
-        src={firstpuppy}
-        alt="firstpuppy"
-        width=""
-        height=""
-        className="puppy-image"
-      ></img>
-      <div className="container">
-        <div className="text-wrapper">
-          <p className="line">
-            <span className="league-spartan">Snag a furball,</span>
-          </p>
-          <p className="line">
-            <span className="league-spartan">strut with style,</span>
-          </p>
-          <p className="line">
-            <span className="league-spartan">and watch the</span>
-          </p>
-          <p className="line">
-            <span className="league-spartan">world go wild!</span>
-          </p>
-        </div>
-        <img
-          src={secondpuppy}
-          alt="secondpuppy"
-          width=""
-          height=""
-          className="puppy-images"
-        ></img>
+    <div className="container">
+      <div>
+        <FilterSelector
+          inputLabel="Miestai"
+          datalist={["Vilnius", "Klaipėda"]}
+          setSelection={setSelection}
+        />
+        <FilterSelector
+          inputLabel="Rūšys"
+          datalist={["Katinas", "Šuo"]}
+          setSelection={setSelection}
+        />
+        <FilterSelector
+          inputLabel="Svoris"
+          datalist={["Mažas", "Vidutinis", "Didelis"]}
+          setSelection={setSelection}
+        />
       </div>
-      <div className="container">
-        <div className="row">
-          {data.map((post) => (
-            <div key={post.id} className="col-md-4 mb-4">
-              <Link to={`/post/${post.id}`} className="card-link">
-                <div className="card">
-                  <img
-                    src={`https://via.placeholder.com/800x400?text=${post.pet_name}`}
-                    className="card-img-top"
-                    alt={post.pet_name}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{post.pet_name}</h5>
-                    <p className="card-text">{post.description}</p>
-                    <p className="card-text">
-                      <small className="text-muted">
-                        Posted on: {post.created.split('T')[0]}
-                      </small>
-                    </p>
-                  </div>
+      <div>
+        <div className="d-flex justify-content-center align-items-center flex-wrap">
+          {currentPosts.map((item) => (
+            <div className="d-lg-flex my-3 mx-2" key={item.post.id}>
+              <div className="card p-0" style={{ width: "12rem" }}>
+                <img
+                  src="src/IMG/PetNoPhoto.png"
+                  className="card-img-top fluid"
+                  alt="..."
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{item.post.pet_name}</h5>
+                  <p className="card-text">{item.post.species.name}</p>
+                  <p className="card-text" style={{ height: "3rem" }}>
+                    {item.post.description}
+                  </p>
+                  <p className="card-text">{item.post.city.name}</p>
                 </div>
-              </Link>
+              </div>
             </div>
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
-};
+}
+
+export default Index;
 
 export default Index;

@@ -1,10 +1,8 @@
 import express from "express"
 import { PrismaClient } from '@prisma/client'
 const PostClient = new PrismaClient().post
-const UserClient = new PrismaClient().user
+const FilterClient = new PrismaClient().post_option
 import { postValidation } from "../requests/PostRequest";
-import { parse } from "path";
-const jwt = require("jsonwebtoken");
 
 function validDate() {
     const currentDate = new Date();
@@ -20,7 +18,11 @@ let ValidDate = validDate();
  */
 export const getAllPosts = async (req: express.Request, res: express.Response) => {
     try {
-        const AllPosts = await PostClient.findMany({
+        const AllPosts = await FilterClient.findMany({
+            include: {
+                post: { include: { species: true, city: true } },
+                option: true
+            },
         })
         res.status(200).json({ data: AllPosts });
     } catch (err) {
@@ -28,24 +30,82 @@ export const getAllPosts = async (req: express.Request, res: express.Response) =
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
-
-export const getAllUserPosts = async (req: express.Request, res: express.Response) => {
+export const getFilteredPosts = async (req: express.Request, res: express.Response) => {
     try {
-        const userId = req.params.id;
-        const userPosts = await PostClient.findMany({
-            where: {
-                user_id: parseInt(userId)
+        const param = req.params.filter.split('&');
+        console.log(param)
+        let option, city, species, page
+        param.forEach(item => {
+            const [key, value] = item.split('=');
+            if (key === 'option') {
+                option = value;
             }
-        })
-        if (userPosts.length === 0) {
-            return res.status(404).json({ status: "error", message: "User doesn't exist or doesn't have posts" });
+            if (key === 'city') {
+                city = value;
+            }
+            if (key === 'species') {
+                species = value;
+            }
+            if (key === 'page') {
+                page = parseInt(value);
+            }
+        });
+
+        if (page === undefined) {
+            page = 1;
         }
-        res.status(200).json({ data: userPosts });
+
+        const limit = 1
+        const pages = (page - 1) * limit
+        console.log(pages)
+
+
+
+        const whereClause: any = {};
+        if (option) {
+            whereClause.option = {
+                value: option
+            };
+        }
+        if (city) {
+            whereClause.post = {
+                city: {
+                    name: city
+                }
+            };
+        }
+        if (species) {
+            if (!whereClause.post) {
+                whereClause.post = {};
+            }
+            whereClause.post.species = {
+                name: species
+
+            };
+        }
+
+        // Query the database using the extracted filter value
+        const FilteredPosts = await FilterClient.findMany({
+            include: {
+                post: { include: { species: true, city: true } },
+                option: true
+            },
+            where: whereClause,
+            take: limit,
+            skip: pages
+        });
+
+        // Send the filtered posts in the response
+        res.status(200).json({ data: FilteredPosts });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
-}
+};
+
+
+
+
 /**
  * Fetches 1 post based on id parameter.
  * Body requires: id
@@ -80,43 +140,48 @@ export const getOnePost = async (req: express.Request, res: express.Response) =>
  * Normal user can create 3 posts. Admins, mods and plus users can create unlimited posts.
  */
 export const createPost = async (
-    req: any,
-    res: any,
+    req: express.Request,
+    res: express.Response,
     roleLevel: number
 ) => {
     try {
         const [post, valid, messages] = postValidation(req);
         if (!valid) {
             return res.status(400).json({
-                status: "fail",
                 message: "Validacijos klaida",
                 error_messages: messages,
             });
         }
 
         const routePath = req.originalUrl;
-        const userId = parseInt(req.tokenInfo.id);
+        let userId: number;
+
+        if (req.tokenInfo !== undefined) {
+            userId = req.tokenInfo.id;
+        } else {
+            return
+        }
+
         const userPostCount = await PostClient.count({
             where: { user_id: userId },
         });
 
         if (routePath === "/api/post/create/plus") {
-            if (req.tokenInfo.role_id === 1) {
+            if (req.tokenInfo !== undefined && req.tokenInfo.role_id === 1) {
                 return res.status(403).json({ message: "Access denied." });
             }
         }
 
         if (routePath === "/api/post/create/regular" && userPostCount >= 3) {
             return res.status(400).json({
-                status: "fail",
                 message: "You have reached the maximum number of posts allowed.",
             });
         }
 
-        if (req.tokenInfo.role_id === 1) {
-            post.status === 0
+        if (req.tokenInfo !== undefined && req.tokenInfo.role_id === 1) {
+            post.status = 0;
         } else {
-            post.status === 1
+            post.status = 1;
         }
 
         const CreatedPost = await PostClient.create({
@@ -143,13 +208,12 @@ export const createPost = async (
  * Body requires: id, city_id, species_id, pet_name, description
  * Only user to whom data belongs or admin/mod can update post.
  */
-export const updatePost = async (req: any, res: express.Response) => {
+export const updatePost = async (req: express.Request, res: express.Response) => {
     const postId = parseInt(req.params.id);
     const [post, valid, messages] = postValidation(req);
 
     if (!valid) {
         return res.status(400).json({
-            status: "fail",
             message: "Validacijos klaida",
             error_messages: messages,
         });
@@ -167,7 +231,7 @@ export const updatePost = async (req: any, res: express.Response) => {
 
         const userId = existingPost.user_id;
 
-        if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) return res.status(401).json({ message: "Access denied." })
+        if (req.tokenInfo !== undefined && req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) return res.status(401).json({ message: "Access denied." })
 
         const updatedPost = await PostClient.update({
             where: { id: postId },
@@ -191,7 +255,7 @@ export const updatePost = async (req: any, res: express.Response) => {
  * Body requires: id
  * Only user to whom data belongs or admin/mod can delete post.
  */
-export const deletePost = async (req: any, res: express.Response) => {
+export const deletePost = async (req: express.Request, res: express.Response) => {
     try {
         const Id = req.params.id;
         const onepost = await PostClient.findUnique({
@@ -203,7 +267,7 @@ export const deletePost = async (req: any, res: express.Response) => {
         }
 
         const userId = onepost.user_id;
-        if (req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) {
+        if (req.tokenInfo !== undefined && req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) {
             return res.status(401).json({ message: "Access denied." });
         }
 
