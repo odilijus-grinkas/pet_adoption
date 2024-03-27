@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import FilterSelector from "../components/Posts/FilterComponents/FilterSelector";
 import Pagination from "../components/Posts/Pagination/Pagination";
 import PostList from "../components/Posts/PostList/PostList";
-import "./index.css";
+import "./AllPostsPage.css";
 
 const AllPostsPage = () => {
   const [allPosts, setAllPosts] = useState([]);
