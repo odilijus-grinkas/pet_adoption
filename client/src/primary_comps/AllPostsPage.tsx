@@ -5,7 +5,7 @@ import Pagination from "../components/Posts/Pagination/Pagination";
 import PostList from "../components/Posts/PostList/PostList";
 import "./index.css";
 
-const Index = () => {
+const AllPostsPage = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [selection, setSelection] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
@@ -64,7 +64,7 @@ const Index = () => {
   const handlePageChange = (selectedPage) => {
     const newPageNumber = selectedPage + 1;
     setPageNumber(newPageNumber);
-    navigate(`/page=${newPageNumber}`);
+    navigate(`/allposts/page=${newPageNumber}`);
   };
 
   useEffect(() => {
@@ -105,4 +105,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default AllPostsPage;
