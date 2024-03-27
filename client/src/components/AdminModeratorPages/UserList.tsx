@@ -98,7 +98,7 @@ export default function UserList() {
       {authToken ? (
         <section className="section">
           <div className="card">
-            <h2 className="account">User List</h2>
+            <h2 className="account">Vartotojų Sąrašas</h2>
             <ul>
               {/* Render user list */}
               {users.map((user) => (
@@ -108,10 +108,10 @@ export default function UserList() {
                     {user.role_id}
                   </p>
                   <button
-                    className="button"
+                    className="submit-button"
                     onClick={() => handleDelete(user.id, user.username)}
                   >
-                    Delete | Trinti
+                    Trinti
                   </button>
                 </li>
               ))}

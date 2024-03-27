@@ -9,6 +9,7 @@ import Recovery from "../primary_comps/Auth/Recovery";
 import Register from "../primary_comps/Auth/Register";
 import Post from "../components/Posts/Post";
 import Profile from "../components/Profile/Profile";
+import PostCreate from "../components/Posts/PostCreate";
 
 function MainRouter() {
   return (
@@ -22,6 +23,7 @@ function MainRouter() {
             {/* Posts URL Route */}
             <Route path="/Post" element={<Post />} />
             <Route path="/Post/:id" element={<Post />} />
+            <Route path="/Post/Create" element={<PostCreate />} />
             {/* Auth Route */}
             <Route path="/Login" element={<Login />} />
             <Route path="/Register" element={<Register />} />

@@ -90,7 +90,7 @@ function AdminModerator() {
 
   return (
     <div className="admin-moderator-container">
-      <h2 className="admin-moderator-heading">Create special user</h2>
+      <h2 className="admin-moderator-heading">Sukurkite Spec. Paskyrą</h2>
       <div className="admin-moderator-buttons">
         {roles.map((role) => (
           <button
@@ -111,14 +111,14 @@ function AdminModerator() {
           onChange={(e) =>
             setFormData({ ...formData, username: e.target.value })
           }
-          placeholder="Create a username | Susikurkite vartotojo vardą"
+          placeholder="Susikurkite vartotojo vardą"
           className="admin-moderator-input"
         />
         <input
           type="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          placeholder="Enter your email address | Įrašykite savo el.pašto adresą"
+          placeholder="Įrašykite savo el.pašto adresą"
           className="admin-moderator-input"
         />
         <input
@@ -127,7 +127,7 @@ function AdminModerator() {
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
           }
-          placeholder="Create a password | Susikurkite slaptažodį"
+          placeholder="Susikurkite slaptažodį"
           className="admin-moderator-input"
         />
         <input
@@ -136,11 +136,11 @@ function AdminModerator() {
           onChange={(e) =>
             setFormData({ ...formData, confirmPassword: e.target.value })
           }
-          placeholder="Confirm password | Patvirtinkite slaptažodį"
+          placeholder="Patvirtinkite slaptažodį"
           className="admin-moderator-input"
         />
         <button type="submit" className="submit-button">
-          Submit | Pateikti
+          Pateikti
         </button>
       </form>
       {Object.keys(errors).length > 0 && (
