@@ -13,7 +13,6 @@ const Index = () => {
   const [fetchUrl, setFetchUrl] = useState(
     `http://localhost:3001/api/post/all/page=${pageNumber}`
   );
-
   const navigate = useNavigate();
   const params = useParams();
 
@@ -22,7 +21,6 @@ const Index = () => {
     if (response.ok) {
       const parsed = await response.json();
       setAllPosts(parsed.data);
-      console.log(parsed.data);
       setTotalPages(parsed.totalPages);
     }
   };
@@ -33,25 +31,20 @@ const Index = () => {
 
   useEffect(() => {
     let updatedUrl = `http://localhost:3001/api/post/all/page=${pageNumber}`;
-    let newUrl = "";
 
     if (selection["Miestai"]) {
       updatedUrl += `&city=${selection["Miestai"]}`;
-      newUrl += `?city=${selection["Miestai"]}`;
     }
     if (selection["Rūšys"]) {
       updatedUrl += `&species=${selection["Rūšys"]}`;
-      newUrl += `?city=${selection["Miestai"]}`;
     }
     if (selection["Svoris"]) {
       updatedUrl += `&option=${selection["Svoris"]}`;
-      newUrl += `?option=${selection["Svoris"]}`;
     }
     if (selection["Spalva"]) {
       updatedUrl += `&option=${selection["Spalva"]}`;
-      newUrl += `?option=${selection["Svoris"]}`;
     }
-    navigate(newUrl);
+
     setFetchUrl(updatedUrl);
   }, [selection, pageNumber]);
 
@@ -63,14 +56,21 @@ const Index = () => {
         const page = parseInt(pageParam.split("=")[1], 10);
         setPageNumber(page);
       }
+    } else {
+      setPageNumber(1);
     }
   }, [params]);
 
   const handlePageChange = (selectedPage) => {
     const newPageNumber = selectedPage + 1;
     setPageNumber(newPageNumber);
-    navigate(`/page=${newPageNumber}`, { replace: true });
+    navigate(`/page=${newPageNumber}`);
   };
+
+  useEffect(() => {
+    setPageNumber(1);
+  }, []);
+
   return (
     <div className="container">
       <div className="row">

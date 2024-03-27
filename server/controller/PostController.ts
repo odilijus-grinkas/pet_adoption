@@ -39,20 +39,18 @@ let ValidDate = validDate();
 export const getFilteredPosts = async (req: express.Request, res: express.Response) => {
     try {
         const param = req.params.filter.split('&');
-        console.log(param)
-        let option, city, species, page;
+        console.log(param);
+        let options: string[] = [], city, species, page;
+
         param.forEach(item => {
             const [key, value] = item.split('=');
             if (key === 'option') {
-                option = value;
-            }
-            if (key === 'city') {
+                options.push(value);
+            } else if (key === 'city') {
                 city = value;
-            }
-            if (key === 'species') {
+            } else if (key === 'species') {
                 species = value;
-            }
-            if (key === 'page') {
+            } else if (key === 'page') {
                 page = parseInt(value);
             }
         });
@@ -65,14 +63,19 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
         const pages = (page - 1) * limit;
 
         const whereClause: any = {};
-        if (option) {
-            whereClause.post_option = {
-                some: {
-                    option: {
-                        value: option
+        if (options.length > 0) {
+            // Constructing an array of condition objects for each option
+            const optionConditions = options.map(option => ({
+                post_option: {
+                    some: {
+                        option: {
+                            value: option
+                        }
                     }
                 }
-            };
+            }));
+            // Combining conditions using the AND operator
+            whereClause.AND = optionConditions;
         }
         if (city) {
             whereClause.city = {
@@ -113,6 +116,7 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
+
 
 
 // export const getFilteredPosts = async (req: express.Request, res: express.Response) => {

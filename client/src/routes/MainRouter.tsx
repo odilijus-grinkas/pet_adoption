@@ -14,6 +14,7 @@ function MainRouter() {
       <div>
         <Routes>
           {/* Root URL Route */}
+          <Route path="/" element={<Index />} />
           <Route path="/:filter" element={<Index />} />
           {/* Auth Route */}
           <Route path="/Login" element={<Login />} />
