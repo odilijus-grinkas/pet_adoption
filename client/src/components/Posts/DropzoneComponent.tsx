@@ -1,52 +1,46 @@
-import React, { useCallback } from "react";
+import "./dropzone.css";
+
+import React, { useEffect } from "react";
 
 import Dropzone from "dropzone";
-import { useDropzone } from "react-dropzone";
 
 const DropzoneComponent: React.FC = () => {
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const formData = new FormData();
-    formData.append("file", acceptedFiles[0]);
+  useEffect(() => {
+    const dropzone = new Dropzone("#uploadForm", {
+      url: "/upload",
+      autoProcessQueue: false,
+      uploadMultiple: true,
+      parallelUploads: 100,
+      maxFiles: 100,
+      init() {
+        // Add uploaded class when files are added
+        this.on("addedfile", () => {
+          document.querySelector(".dropzone")?.classList.add("uploaded");
+        });
+        // Remove uploaded class when files are removed
+        this.on("removedfile", () => {
+          if (this.files.length === 0) {
+            document.querySelector(".dropzone")?.classList.remove("uploaded");
+          }
+        });
+      },
+    });
 
-    try {
-      const response = await fetch("http://localhost:3001/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        console.log("File uploaded successfully");
-      } else {
-        console.error("Failed to upload file");
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
+    return () => {
+      dropzone.removeAllFiles(); // Remove all files when component unmounts
+      dropzone.destroy(); // Destroy Dropzone instance
+    };
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
   return (
-    <div className="card" style={cardStyle}>
-      <div className="card-body" {...getRootProps()} style={dropzoneStyles}>
-        <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
-      </div>
+    <div>
+      <form id="uploadForm" className="dropzone">
+        <div className="fallback">
+          <input name="file" type="file" multiple />
+        </div>
+      </form>
     </div>
   );
-};
-
-const cardStyle: React.CSSProperties = {
-  maxWidth: "400px", // Adjust as needed
-  margin: "0 auto", // Center the card horizontally
-};
-
-const dropzoneStyles: React.CSSProperties = {
-  border: "2px dashed #cccccc",
-  borderRadius: "4px",
-  padding: "20px",
-  textAlign: "center",
-  cursor: "pointer",
 };
 
 export default DropzoneComponent;

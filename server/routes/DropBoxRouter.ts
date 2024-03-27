@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import multer, { FileFilterCallback } from "multer";
 
-import path from "path";
+// import path from "path";
 
 const app = express();
 const PORT = 3001;
@@ -21,18 +21,18 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: FileFilterCallback
 ) => {
-  // Accept only certain file types
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-    cb(null, true);
-  } else {
-    cb(null, false); // Pass null for the error parameter and false to reject the file
-  }
+  // Accept all file types
+  cb(null, true);
 };
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 // Handle file upload
 app.post("/upload", upload.single("file"), (req: Request, res: Response) => {
+  if (!req.file) {
+    // No file uploaded
+    return res.status(400).send("No file uploaded");
+  }
   console.log(req.file); // This should log the uploaded file details
   res.send("File uploaded successfully");
 });
