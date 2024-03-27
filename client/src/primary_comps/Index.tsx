@@ -33,20 +33,25 @@ const Index = () => {
 
   useEffect(() => {
     let updatedUrl = `http://localhost:3001/api/post/all/page=${pageNumber}`;
+    let newUrl = "";
 
     if (selection["Miestai"]) {
       updatedUrl += `&city=${selection["Miestai"]}`;
+      newUrl += `?city=${selection["Miestai"]}`;
     }
     if (selection["Rūšys"]) {
       updatedUrl += `&species=${selection["Rūšys"]}`;
+      newUrl += `?city=${selection["Miestai"]}`;
     }
     if (selection["Svoris"]) {
       updatedUrl += `&option=${selection["Svoris"]}`;
+      newUrl += `?option=${selection["Svoris"]}`;
     }
     if (selection["Spalva"]) {
       updatedUrl += `&option=${selection["Spalva"]}`;
+      newUrl += `?option=${selection["Svoris"]}`;
     }
-
+    navigate(newUrl);
     setFetchUrl(updatedUrl);
   }, [selection, pageNumber]);
 
