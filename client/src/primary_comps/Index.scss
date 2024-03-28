@@ -1,0 +1,38 @@
+@keyframes flow {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(20px);
+    } /* Flow */
+  }
+  
+  .container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .puppy-image {
+    margin-top: 12vh;
+  }
+  
+  .puppy-images {
+    padding-left: 60%;
+    // i virsu
+  }
+  
+  .text-wrapper {
+    text-align: center;
+  }
+  
+  .league-spartan {
+    font-family: "League Spartan", sans-serif;
+    font-size: 3em;
+    font-weight: 900;
+    font-style: normal;
+    display: inline-block;
+    cursor: pointer;
+    animation: flow 3s ease-in-out infinite; /* Set animation to run infinitely with a duration of 3 seconds and ease-in-out timing function */
+  }
+  

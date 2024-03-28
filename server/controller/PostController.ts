@@ -1,7 +1,7 @@
 import express from "express"
 import { PrismaClient } from '@prisma/client'
 const PostClient = new PrismaClient().post
-// const FilterClient = new PrismaClient().post_option
+const UserClient = new PrismaClient().user
 import { postValidation } from "../requests/PostRequest";
 
 function validDate() {
@@ -117,87 +117,23 @@ export const getFilteredPosts = async (req: express.Request, res: express.Respon
     }
 };
 
-
-
-// export const getFilteredPosts = async (req: express.Request, res: express.Response) => {
-//     try {
-//         const param = req.params.filter.split('&');
-//         console.log(param)
-//         let option, city, species, page
-//         param.forEach(item => {
-//             const [key, value] = item.split('=');
-//             if (key === 'option') {
-//                 option = value;
-//             }
-//             if (key === 'city') {
-//                 city = value;
-//             }
-//             if (key === 'species') {
-//                 species = value;
-//             }
-//             if (key === 'page') {
-//                 page = parseInt(value);
-//             }
-//         });
-
-//         if (page === undefined) {
-//             page = 1;
-//         }
-
-//         const limit = 8
-//         const pages = (page - 1) * limit
-
-//         const whereClause: any = {};
-//         if (option) {
-//             whereClause.option = {
-//                 value: option
-//             };
-//         }
-//         if (city) {
-//             whereClause.post = {
-//                 city: {
-//                     name: city
-//                 }
-//             };
-//         }
-//         if (species) {
-//             if (!whereClause.post) {
-//                 whereClause.post = {};
-//             }
-//             whereClause.post.species = {
-//                 name: species
-
-//             };
-//         }
-
-//         const totalFilteredPosts = await FilterClient.count({
-//             where: whereClause
-//         });
-
-//         const totalPages = Math.ceil(totalFilteredPosts / limit);
-
-
-//         const FilteredPosts = await FilterClient.findMany({
-//             include: {
-//                 post: { include: { species: true, city: true } },
-//                 option: true
-//             },
-//             where: whereClause,
-//             take: limit,
-//             skip: pages
-//         });
-
-//         // Send the filtered posts in the response
-//         res.status(200).json({ data: FilteredPosts, totalPages: totalPages });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ status: "error", message: "Serverio klaida" });
-//     }
-// };
-
-
-
-
+export const getAllUserPosts = async (req: express.Request, res: express.Response) => {
+    try {
+        const userId = req.params.id;
+        const userPosts = await PostClient.findMany({
+            where: {
+                user_id: parseInt(userId)
+            }
+        })
+        if (userPosts.length === 0) {
+            return res.status(404).json({ status: "error", message: "User doesn't exist or doesn't have posts" });
+        }
+        res.status(200).json({ data: userPosts });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ status: "error", message: "Serverio klaida" });
+    }
+}
 /**
  * Fetches 1 post based on id parameter.
  * Body requires: id
@@ -219,7 +155,7 @@ export const getOnePost = async (req: express.Request, res: express.Response) =>
         if (OnePost) {
             res.status(200).json({ data: OnePost });
         } else {
-            res.status(404).json({ status: "error" });
+            res.status(404).json({ message: "user doesn't exist or doesn't have posts" });
         }
     } catch (err) {
         console.log(err);
