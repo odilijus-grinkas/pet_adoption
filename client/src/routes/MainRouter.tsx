@@ -10,6 +10,7 @@ import Recovery from "../primary_comps/Auth/Recovery";
 import Register from "../primary_comps/Auth/Register";
 import Post from "../components/Posts/Post";
 import Profile from "../components/Profile/Profile";
+import Index from "../primary_comps/Index";
 
 function MainRouter() {
   return (
@@ -19,6 +20,7 @@ function MainRouter() {
         <Timeout timeout={3600000}>
           <Routes>
             {/* Posts Page Route */}
+            {<Route path="/" element={<Index />} />}
             <Route path="/allposts" element={<AllPostsPage />} />
             <Route path="/allposts/:filter" element={<AllPostsPage />} />
             {/* Posts URL Route */}
