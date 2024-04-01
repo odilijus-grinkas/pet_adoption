@@ -31,15 +31,19 @@ const AllPostsPage = () => {
 
     if (selection["Miestai"]) {
       updatedUrl += `&city=${selection["Miestai"]}`;
+      setPageNumber(1);
     }
     if (selection["Rūšys"]) {
       updatedUrl += `&species=${selection["Rūšys"]}`;
+      setPageNumber(1);
     }
     if (selection["Svoris"]) {
       updatedUrl += `&option=${selection["Svoris"]}`;
+      setPageNumber(1);
     }
     if (selection["Spalva"]) {
       updatedUrl += `&option=${selection["Spalva"]}`;
+      setPageNumber(1);
     }
 
     setFetchUrl(updatedUrl);
@@ -62,6 +66,11 @@ const AllPostsPage = () => {
     }
   }, [params]);
 
+  const handleFilterChange = (newSelection) => {
+    setSelection(newSelection);
+    navigate(`/allposts/page=1`); // Navigate to page 1 when a filter is selected
+  };
+
   const handlePageChange = (selectedPage) => {
     const newPageNumber = selectedPage + 1;
     setPageNumber(newPageNumber);
@@ -79,17 +88,17 @@ const AllPostsPage = () => {
           <FilterSelector
             inputLabel="Miestai"
             datalist={["Vilnius", "Klaipėda"]}
-            setSelection={setSelection}
+            setSelection={handleFilterChange}
           />
           <FilterSelector
             inputLabel="Rūšys"
             datalist={["Katinas", "Šuo"]}
-            setSelection={setSelection}
+            setSelection={handleFilterChange}
           />
           <FilterSelector
             inputLabel="Svoris"
             datalist={["Mažas", "Vidutinis", "Didelis"]}
-            setSelection={setSelection}
+            setSelection={handleFilterChange}
           />
           <FilterSelector
             inputLabel="Spalva"
