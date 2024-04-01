@@ -1,6 +1,6 @@
 import ReactPaginate from "react-paginate";
 
-const Pagination = ({ totalpages, handlePageChange }) => {
+const Pagination = ({ totalpages, handlePageChange, currentPage }) => {
   return (
     <div className="pagination">
       <ReactPaginate
@@ -9,6 +9,7 @@ const Pagination = ({ totalpages, handlePageChange }) => {
         nextLabel=">"
         onPageChange={({ selected }) => handlePageChange(selected)}
         containerClassName={"pagination"}
+        forcePage={currentPage - 1}
       />
     </div>
   );

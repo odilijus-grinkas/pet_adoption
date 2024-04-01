@@ -9,6 +9,7 @@ const AllPostsPage = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [selection, setSelection] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
+  console.log(pageNumber);
   const [totalpages, setTotalPages] = useState("");
   const [fetchUrl, setFetchUrl] = useState(
     `http://localhost:3001/api/post/all/page=${pageNumber}`
@@ -24,10 +25,6 @@ const AllPostsPage = () => {
       setTotalPages(parsed.totalPages);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchUrl]);
 
   useEffect(() => {
     let updatedUrl = `http://localhost:3001/api/post/all/page=${pageNumber}`;
@@ -47,6 +44,10 @@ const AllPostsPage = () => {
 
     setFetchUrl(updatedUrl);
   }, [selection, pageNumber]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchUrl]);
 
   useEffect(() => {
     if (params.filter) {
@@ -100,7 +101,13 @@ const AllPostsPage = () => {
           <PostList allPosts={allPosts} />
         </div>
       </div>
-      <Pagination totalpages={totalpages} handlePageChange={handlePageChange} />
+      {totalpages !== "" && (
+        <Pagination
+          totalpages={totalpages}
+          handlePageChange={handlePageChange}
+          currentPage={pageNumber}
+        />
+      )}
     </div>
   );
 };
