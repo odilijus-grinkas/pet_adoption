@@ -45,31 +45,32 @@ const PostEditForm = ({
             onChange={(e) => setPost({ ...post, pet_name: e.target.value })}
           />
         </div>
+        <div className="col-md-6">
+          <div className="d-flex align-items-center">
+            <FontAwesomeIcon icon={faMapMarkerAlt} className="icon me-2" />
+            <select
+              className="form-control"
+              value={post.city_id}
+              onChange={(e) =>
+                setPost({
+                  ...post,
+                  city_id: parseInt(e.target.value),
+                  city: {
+                    city: e.target.options[e.target.selectedIndex].text,
+                    name: "",
+                  },
+                })
+              }
+            >
+              <option value={1}>New York</option>
+              <option value={2}>Vilnius</option>
+              <option value={3}>Klaipėda</option>
+              <option value={4}>Kaunas</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div className="form-outline mb-4 d-flex align-items-center">
-        <FontAwesomeIcon icon={faMapMarkerAlt} className="icon me-2" />
-        <div className="row p-2">
-          <div className="col-md-6"></div>
-          <select
-            className="form-control"
-            value={post.city_id}
-            onChange={(e) =>
-              setPost({
-                ...post,
-                city_id: parseInt(e.target.value),
-                city: {
-                  city: e.target.options[e.target.selectedIndex].text,
-                  name: "",
-                },
-              })
-            }
-          >
-            <option value={1}>New York</option>
-            <option value={2}>Vilnius</option>
-            <option value={3}>Klaipėda</option>
-            <option value={4}>Kaunas</option>
-          </select>
-        </div>
         <DropzoneComponent />
       </div>
       <hr />
