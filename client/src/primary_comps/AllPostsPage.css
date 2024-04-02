@@ -35,3 +35,6 @@ a:not([href]):not([class]):hover {
   font-size: small;
   height: 2rem;
 }
+.card-link {
+  text-decoration: none;
+}
