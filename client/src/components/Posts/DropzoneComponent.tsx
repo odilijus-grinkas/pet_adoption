@@ -13,15 +13,12 @@ const DropzoneComponent: React.FC = () => {
       parallelUploads: 30,
       maxFiles: 30,
       init() {
-        // Add uploaded class when files are added
-        this.on("addedfile", () => {
-          document.querySelector(".dropzone")?.classList.add("uploaded");
-        });
-        // Remove uploaded class when files are removed
-        this.on("removedfile", () => {
-          if (this.files.length === 0) {
-            document.querySelector(".dropzone")?.classList.remove("uploaded");
-          }
+        this.on("addedfile", function (file) {
+          // Sanitize filename to prevent XSS vulnerabilities
+          const sanitizedFileName = sanitizeFileName(file.name);
+
+          // Store sanitized filename in local storage
+          localStorage.setItem("uploadedFileName", sanitizedFileName);
         });
       },
     });
@@ -32,11 +29,23 @@ const DropzoneComponent: React.FC = () => {
     };
   }, []);
 
+  // Function to sanitize filename to prevent XSS vulnerabilities
+  const sanitizeFileName = (fileName: string): string => {
+    // Replace any potentially dangerous characters with safe alternatives
+    return fileName.replace(/[<>"'&/]/g, "");
+  };
+
   return (
     <div>
       <form id="uploadForm" className="dropzone">
         <div className="fallback">
-          <input name="file" type="file" multiple />
+          {/* Add placeholder attribute to input field */}
+          <input
+            name="file"
+            type="file"
+            multiple
+            placeholder="Select files to upload"
+          />
         </div>
       </form>
     </div>
