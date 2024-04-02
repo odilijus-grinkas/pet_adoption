@@ -69,6 +69,21 @@ const AllPostsPage = () => {
   }, [params]);
 
   const handleFilterChange = (newSelection) => {
+    let newUrl = "";
+
+    if (selection["Miestai"]) {
+      newUrl += `?city=${selection["Miestai"]}`;
+    }
+    if (selection["Rūšys"]) {
+      newUrl += `?species=${selection["Rūšys"]}`;
+    }
+    if (selection["Svoris"]) {
+      newUrl += `?option=${selection["Svoris"]}`;
+    }
+    if (selection["Spalva"]) {
+      newUrl += `?option=${selection["Spalva"]}`;
+    }
+    navigate(`/allposts/page=1` + newUrl);
     setSelection(newSelection);
     setPageNumber(1);
   };
