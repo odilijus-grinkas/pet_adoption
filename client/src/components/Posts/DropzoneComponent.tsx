@@ -25,6 +25,7 @@ const DropzoneComponent: React.FC = () => {
         });
       },
     });
+
     return () => {
       dropzone.removeAllFiles(); // Remove all files when component unmounts
       dropzone.destroy(); // Destroy Dropzone instance
