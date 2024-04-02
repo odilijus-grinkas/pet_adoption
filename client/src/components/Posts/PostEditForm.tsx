@@ -45,6 +45,8 @@ const PostEditForm = ({
             onChange={(e) => setPost({ ...post, pet_name: e.target.value })}
           />
         </div>
+      </div>
+      <div className="row">
         <div className="col-md-6">
           <div className="d-flex align-items-center">
             <FontAwesomeIcon icon={faMapMarkerAlt} className="icon me-2" />
@@ -70,8 +72,10 @@ const PostEditForm = ({
           </div>
         </div>
       </div>
-      <div className="form-outline mb-4 d-flex align-items-center">
-        <DropzoneComponent />
+      <div className="row">
+        <div className="col-md-6">
+          <DropzoneComponent />
+        </div>
       </div>
       <hr />
       <div className="row">
@@ -92,7 +96,7 @@ const PostEditForm = ({
         </div>
       </div>
       <div className="row">
-        <div className="col">
+        <div className="col-md-6">
           <div className="form-outline mb-4 d-flex align-items-center">
             <FontAwesomeIcon icon={faPhone} className="icon me-2" />
             Cia butu telefonas
