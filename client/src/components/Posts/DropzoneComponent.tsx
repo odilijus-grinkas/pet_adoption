@@ -7,8 +7,8 @@ import Dropzone from "dropzone";
 const DropzoneComponent: React.FC = () => {
   useEffect(() => {
     const dropzone = new Dropzone("#uploadForm", {
-      url: "/upload",
-      autoProcessQueue: false,
+      url: "http://localhost:3001/upload",
+      autoProcessQueue: true,
       uploadMultiple: true,
       parallelUploads: 30,
       maxFiles: 30,
