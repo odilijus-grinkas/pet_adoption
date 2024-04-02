@@ -33,26 +33,22 @@ const AllPostsPage = () => {
 
     if (selection["Miestai"]) {
       updatedUrl += `&city=${selection["Miestai"]}`;
-      setPageNumber(1);
       newUrl += `?city=${selection["Miestai"]}`;
     }
     if (selection["Rūšys"]) {
       updatedUrl += `&species=${selection["Rūšys"]}`;
-      setPageNumber(1);
       newUrl += `?species=${selection["Rūšys"]}`;
     }
     if (selection["Svoris"]) {
       updatedUrl += `&option=${selection["Svoris"]}`;
-      setPageNumber(1);
       newUrl += `?option=${selection["Svoris"]}`;
     }
     if (selection["Spalva"]) {
       updatedUrl += `&option=${selection["Spalva"]}`;
-      setPageNumber(1);
       newUrl += `?option=${selection["Spalva"]}`;
     }
-    navigate(newUrl);
     setFetchUrl(updatedUrl);
+    navigate(newUrl);
   }, [selection, pageNumber]);
 
   useEffect(() => {
@@ -74,7 +70,7 @@ const AllPostsPage = () => {
 
   const handleFilterChange = (newSelection) => {
     setSelection(newSelection);
-    navigate(`/allposts/page=1`); // Navigate to page 1 when a filter is selected
+    setPageNumber(1);
   };
 
   const handlePageChange = (selectedPage) => {
