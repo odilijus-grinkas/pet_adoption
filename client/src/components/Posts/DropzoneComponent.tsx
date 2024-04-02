@@ -10,8 +10,8 @@ const DropzoneComponent: React.FC = () => {
       url: "/upload",
       autoProcessQueue: false,
       uploadMultiple: true,
-      parallelUploads: 100,
-      maxFiles: 100,
+      parallelUploads: 30,
+      maxFiles: 30,
       init() {
         // Add uploaded class when files are added
         this.on("addedfile", () => {
@@ -25,7 +25,6 @@ const DropzoneComponent: React.FC = () => {
         });
       },
     });
-
     return () => {
       dropzone.removeAllFiles(); // Remove all files when component unmounts
       dropzone.destroy(); // Destroy Dropzone instance
