@@ -1,53 +1,39 @@
-import "./dropzone.css";
+import React, { useCallback } from 'react';
+import Dropzone from 'react-dropzone';
 
-import React, { useEffect } from "react";
+const DropzoneComponent = () => {
+  const onDrop = useCallback(async (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    const formData = new FormData();
+    formData.append('photo', file); // Change 'file' to 'photo'
 
-import Dropzone from "dropzone";
+    try {
+      const response = await fetch('http://localhost:3001/upload', {
+        method: 'POST',
+        body: formData,
+      });
 
-const DropzoneComponent: React.FC = () => {
-  useEffect(() => {
-    const dropzone = new Dropzone("#uploadForm", {
-      url: "http://localhost:3001/upload",
-      autoProcessQueue: true,
-      uploadMultiple: true,
-      parallelUploads: 30,
-      maxFiles: 30,
-      init() {
-        this.on("addedfile", function (file) {
-          // Sanitize filename to prevent XSS vulnerabilities
-          const sanitizedFileName = sanitizeFileName(file.name);
-
-          // Store sanitized filename in local storage
-          localStorage.setItem("uploadedFileName", sanitizedFileName);
-        });
-      },
-    });
-
-    return () => {
-      dropzone.removeAllFiles(); // Remove all files when component unmounts
-      dropzone.destroy(); // Destroy Dropzone instance
-    };
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data); // Handle success response
+      } else {
+        throw new Error('Upload failed');
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error); // Handle error response
+    }
   }, []);
-
-  // Function to sanitize filename to prevent XSS vulnerabilities
-  const sanitizeFileName = (fileName: string): string => {
-    // Replace any potentially dangerous characters with safe alternatives
-    return fileName.replace(/[<>"'&/]/g, "");
-  };
 
   return (
     <div>
-      <form id="uploadForm" className="dropzone">
-        <div className="fallback">
-          {/* Add placeholder attribute to input field */}
-          <input
-            name="file"
-            type="file"
-            multiple
-            placeholder="Select files to upload"
-          />
-        </div>
-      </form>
+      <Dropzone onDrop={onDrop}>
+        {({ getRootProps, getInputProps }) => (
+          <div {...getRootProps()} style={{ border: '1px dashed black', padding: '20px' }}>
+            <input {...getInputProps()} />
+            <p>Drag & drop files here, or click to select files</p>
+          </div>
+        )}
+      </Dropzone>
     </div>
   );
 };

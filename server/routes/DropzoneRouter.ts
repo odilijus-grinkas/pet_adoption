@@ -1,15 +1,14 @@
 import { Request, Response, Router } from "express";
 import multer, { FileFilterCallback } from "multer";
-
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const dropzoneRouter = Router()
+const dropzoneRouter = Router();
 
 // Multer configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "../uploads");
+    cb(null, "./uploads");
   },
   filename: function (req, file, cb) {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -21,18 +20,27 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: FileFilterCallback
 ) => {
-  // Accept all file types
-  cb(null, true);
+  // Check if the file mimetype starts with 'image/'
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true); // Accept the file
+  } else {
+    cb(null, false); // Reject the file
+  }
 };
 
-const upload = multer({ storage: storage, fileFilter: fileFilter });
+const upload = multer({ 
+  storage: storage, 
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // Limit file size to 10MB
+  }
+});
 
 // Handle file upload
 dropzoneRouter.post(
   "/upload",
-  upload.single("file"),
+  upload.single("photo"), // Use 'photo' instead of 'file'
   async (req: Request, res: Response) => {
-    console.log("upload");
     if (!req.file) {
       // No file uploaded
       return res.status(400).send("No file uploaded");
@@ -41,8 +49,10 @@ dropzoneRouter.post(
       // Save uploaded file details to the database using Prisma
       const savedPhoto = await prisma.photo.create({
         data: {
-          post_id: req.body.post_id, // Sending post_id in the request body
-          photo: req.file.filename, // Save the filename of the uploaded photo
+          // Assuming post_id is sent in the request body
+          post_id: req.body.post_id,
+          // Save the filename of the uploaded photo
+          photo: req.file.filename,
         },
       });
 

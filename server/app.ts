@@ -13,6 +13,7 @@ const app = express();
 // Body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 // Serve static files from the 'uploads' directory
 app.use(express.static("../uploads")); // Adjust the path accordingly
 // Error handling middleware
