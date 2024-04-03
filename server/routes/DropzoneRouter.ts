@@ -4,7 +4,7 @@ import multer, { FileFilterCallback } from "multer";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const dropzoneRouter = Router()
+const dropzoneRouter = Router();
 
 // Multer configuration
 const storage = multer.diskStorage({
