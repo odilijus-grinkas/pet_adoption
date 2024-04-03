@@ -1,15 +1,17 @@
-import React, { useCallback } from 'react';
-import Dropzone from 'react-dropzone';
+import "./dropzone.css";
+
+import Dropzone, { DropzoneState } from "react-dropzone";
+
+import { useCallback } from "react";
 
 const DropzoneComponent = () => {
-  const onDrop = useCallback(async (acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     const formData = new FormData();
-    formData.append('photo', file); // Change 'file' to 'photo'
-
+    formData.append("photo", file);
     try {
-      const response = await fetch('http://localhost:3001/upload', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/upload", {
+        method: "POST",
         body: formData,
       });
 
@@ -17,18 +19,21 @@ const DropzoneComponent = () => {
         const data = await response.json();
         console.log(data); // Handle success response
       } else {
-        throw new Error('Upload failed');
+        throw new Error("Upload failed");
       }
     } catch (error) {
-      console.error('Error uploading file:', error); // Handle error response
+      console.error("Error uploading file:", error); // Handle error response
     }
   }, []);
 
   return (
     <div>
       <Dropzone onDrop={onDrop}>
-        {({ getRootProps, getInputProps }) => (
-          <div {...getRootProps()} style={{ border: '1px dashed black', padding: '20px' }}>
+        {({ getRootProps, getInputProps }: DropzoneState) => (
+          <div
+            {...getRootProps()}
+            style={{ border: "1px dashed black", padding: "20px" }}
+          >
             <input {...getInputProps()} />
             <p>Drag & drop files here, or click to select files</p>
           </div>
