@@ -1,11 +1,11 @@
-import "./dropzone.css";
+import "./dropzone.css"; // Import custom Dropzone CSS
 
-import Dropzone, { DropzoneState } from "react-dropzone";
+import React, { useCallback } from "react";
 
-import { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 const DropzoneComponent = () => {
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => { // Explicitly define the type of acceptedFiles
     const file = acceptedFiles[0];
     const formData = new FormData();
     formData.append("photo", file);
@@ -26,19 +26,21 @@ const DropzoneComponent = () => {
     }
   }, []);
 
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+  });
+
   return (
-    <div>
-      <Dropzone onDrop={onDrop}>
-        {({ getRootProps, getInputProps }: DropzoneState) => (
-          <div
-            {...getRootProps()}
-            style={{ border: "1px dashed black", padding: "20px" }}
-          >
-            <input {...getInputProps()} />
-            <p>Drag & drop files here, or click to select files</p>
-          </div>
-        )}
-      </Dropzone>
+    <div className="dropzone-container">
+      <div
+        {...getRootProps()}
+        className={`dropzone ${isDragActive ? "active" : ""}`}
+      >
+        <input {...getInputProps()} />
+        <p>
+          {isDragActive ? "Drop the files here" : "Drag & drop files here"}
+        </p>
+      </div>
     </div>
   );
 };
