@@ -1,20 +1,10 @@
-import express, { Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import multer, { FileFilterCallback } from "multer";
 
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const app = express();
-
-// Enable CORS (to allow localhost:3000 to use APIs)
-app.use(
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
-  }
-);
+const dropzoneRouter = Router()
 
 // Multer configuration
 const storage = multer.diskStorage({
@@ -38,7 +28,7 @@ const fileFilter = (
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 // Handle file upload
-app.post(
+dropzoneRouter.post(
   "/upload",
   upload.single("file"),
   async (req: Request, res: Response) => {
@@ -47,7 +37,6 @@ app.post(
       // No file uploaded
       return res.status(400).send("No file uploaded");
     }
-
     try {
       // Save uploaded file details to the database using Prisma
       const savedPhoto = await prisma.photo.create({
@@ -66,18 +55,4 @@ app.post(
   }
 );
 
-// Serve static files from the 'uploads' directory
-app.use(express.static("../uploads")); // Adjust the path accordingly
-
-// Error handling middleware
-app.use((err: any, req: Request, res: Response, next: express.NextFunction) => {
-  if (err instanceof multer.MulterError) {
-    // Multer error
-    res.status(400).send("Multer error: " + err.message);
-  } else {
-    // Other errors
-    res.status(500).send("Internal server error");
-  }
-});
-
-export default app;
+export default dropzoneRouter;

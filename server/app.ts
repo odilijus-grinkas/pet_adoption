@@ -1,6 +1,8 @@
+import express, { Request, Response } from "express";
+import multer, { FileFilterCallback } from "multer";
+
 import bodyParser from "body-parser";
-import dropBoxRouter from "./routes/DropzoneRouter";
-import express from "express";
+import dropzoneRouter from "./routes/DropzoneRouter";
 import postsRouter from "./routes/PostRouter";
 import userRouter from "./routes/UserRouter";
 
@@ -11,6 +13,18 @@ const app = express();
 // Body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+// Serve static files from the 'uploads' directory
+app.use(express.static("../uploads")); // Adjust the path accordingly
+// Error handling middleware
+app.use((err: any, req: Request, res: Response, next: express.NextFunction) => {
+  if (err instanceof multer.MulterError) {
+    // Multer error
+    res.status(400).send("Multer error: " + err.message);
+  } else {
+    // Other errors
+    res.status(500).send("Internal server error");
+  }
+});
 
 const port = process.env.PORT || 3001;
 
@@ -36,7 +50,7 @@ app.use(
 
 app.use("/api", postsRouter);
 app.use("/api", userRouter);
-app.use("/", dropBoxRouter);
+app.use("/", dropzoneRouter);
 
 app.listen(port, () => {
   console.log(`Server listening on: http://localhost:${port}`);
