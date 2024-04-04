@@ -2,11 +2,11 @@ import "./Index.scss";
 import Header from "../components/header_footer/header/Header";
 import firstpuppy from "./Assets/firstpuppy.png";
 import secondpuppy from "./Assets/secondpuppy.png";
-// import doglogo from ".././IMG/doglogo.png";
-// import catlogo from ".././IMG/catlogo.jpg";
-// import fishlogo from ".././IMG/fishlogo.jpg";
-// import bunnylogo from ".././IMG/bunnylogo.jpg";
-// import { Link } from "react-router-dom";
+import doglogo from ".././IMG/doglogo.png";
+import catlogo from ".././IMG/catlogo.jpg";
+import fishlogo from ".././IMG/fishlogo.jpg";
+import bunnylogo from ".././IMG/bunnylogo.jpg";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -19,7 +19,7 @@ const Index = () => {
       ></img>
       <div className="container">
         <div className="text-wrapper">
-          <p className="line">
+          {/* <p className="line">
             <span className="league-spartan">Snag a furball,</span>
           </p>
           <p className="line">
@@ -30,8 +30,8 @@ const Index = () => {
           </p>
           <p className="line">
             <span className="league-spartan">world go wild!</span>
-          </p>
-          {/* <p className="line">
+          </p> */}
+          <p className="line">
             <span className="league-spartan">Kokio gyvūnėlio norėtumėte?</span>
           </p>
         </div>
@@ -42,9 +42,12 @@ const Index = () => {
           <Link to={"/allposts/species=Katinas"}>
             <img src={catlogo} className="animal-logo" alt="..." />
           </Link>
-          <img src={fishlogo} className="animal-logo" alt="..." />
-          <img src={bunnylogo} className="animal-logo" alt="..." />
-        </div> */}
+          <Link to={"/allposts/species=Žuvytės"}>
+            <img src={fishlogo} className="animal-logo" alt="..." />
+          </Link>
+          <Link to={"/allposts/species=Triušiai"}>
+            <img src={bunnylogo} className="animal-logo" alt="..." />
+          </Link>
         </div>
         <img
           src={secondpuppy}

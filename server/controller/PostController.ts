@@ -314,17 +314,49 @@ export const deletePost = async (req: express.Request, res: express.Response) =>
     }
 };
 
-export const getallcharactersticsandoptions = async (req: express.Request, res: express.Response) => {
+// export const getallcharactersticsandoptions = async (req: express.Request, res: express.Response) => {
+//     try {
+//         const AllSpeciesCharacteristicsAndOptions = await Prisma.species_characteristic.findMany({
+//             include: {
+//                 species: true,
+//                 characteristic: true
+//             }
+//         })
+//         res.status(200).json({ data: AllSpeciesCharacteristicsAndOptions });
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ status: "error", message: "Serverio klaida" });
+//     }
+// }
+
+export const getAllSpeciesCharacteristicsAndOptions = async (req: express.Request, res: express.Response) => {
     try {
-        const AllSpeciesCharacteristicsAndOptions = await Prisma.species_characteristic.findMany({
+        const speciesName = req.params.species;
+
+        const allSpeciesCharacteristicsAndOptions = await Prisma.species_characteristic.findMany({
+            where: {
+                species: {
+                    name: speciesName
+                }
+            },
             include: {
-                species: true,
-                characteristic: true
+                species: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
+                characteristic: {
+                    include: {
+                        option: true
+                    }
+                }
             }
-        })
-        res.status(200).json({ data: AllSpeciesCharacteristicsAndOptions });
+        });
+
+        res.status(200).json({ data: allSpeciesCharacteristicsAndOptions });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
-}
+};
