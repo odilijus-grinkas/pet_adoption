@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import FilterSelector from "../components/Posts/FilterComponents/FilterSelector";
 
 function Index() {
@@ -89,7 +90,5 @@ function Index() {
     </div>
   );
 }
-
-export default Index;
 
 export default Index;

@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; 
-import PostImageCarousel from './PostImageCarousel';
+import "./assets/post.scss";
+
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import PostDetails from './PostDetails';
 import PostEditForm from './PostEditForm';
+import PostImageCarousel from './PostImageCarousel';
 import PostNotFound from './PostNotFound';
-import "./post.scss";
 
 interface Post {
     pet_name: string;

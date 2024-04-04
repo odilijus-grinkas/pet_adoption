@@ -1,0 +1,47 @@
+.PostCreate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.PostCreate h2 {
+  margin-bottom: 20px;
+}
+
+.PostCreate form {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.PostCreate form div {
+  margin-bottom: 20px;
+}
+
+.PostCreate form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.PostCreate form input,
+.PostCreate form select,
+.PostCreate form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.PostCreate form button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4a148c;
+  color: #fff;
+  cursor: pointer;
+}
+
+.PostCreate form button:hover {
+  background-color: #38006b;
+}
