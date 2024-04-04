@@ -1,8 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 import { faker } from '@faker-js/faker';
-import fakedata from "./postOptions"
 const prisma = new PrismaClient()
 async function inconsistentDataSeed() {
+
+    const existingPostOptions = await prisma.post_option.findMany();
+    if (existingPostOptions.length > 0) {
+        console.log('post_option table already seeded, skipping...');
+        return;
+    }
 
     function validDate() {
         const currentDate = new Date();
@@ -92,56 +97,6 @@ async function inconsistentDataSeed() {
         skipDuplicates: true
     });
 
-    // const newPost = await prisma.post.createMany({
-    //     data: [
-    //         {
-    //             id: 1,
-    //             user_id: 1,
-    //             city_id: 1,
-    //             species_id: 1,
-    //             pet_name: 'Buddy',
-    //             description: 'Description of the first post',
-    //             created: new Date(),
-    //             status: 1,
-    //             valid_until: ValidDate
-    //         },
-    //         {
-    //             id: 2,
-    //             user_id: 2,
-    //             city_id: 1,
-    //             species_id: 2,
-    //             pet_name: 'Max',
-    //             description: 'Description of the second post',
-    //             created: new Date(),
-    //             status: 1,
-    //             valid_until: ValidDate
-    //         },
-    //         {
-    //             id: 3,
-    //             user_id: 1,
-    //             city_id: 2,
-    //             species_id: 1,
-    //             pet_name: 'Amsis',
-    //             description: 'Description of the third post',
-    //             created: new Date(),
-    //             status: 1,
-    //             valid_until: ValidDate
-    //         },
-    //         {
-    //             id: 4,
-    //             user_id: 2,
-    //             city_id: 2,
-    //             species_id: 2,
-    //             pet_name: 'Megatronas',
-    //             description: 'Description of the fourth post',
-    //             created: new Date(),
-    //             status: 1,
-    //             valid_until: ValidDate
-    //         }
-    //     ],
-    //     skipDuplicates: true
-    // });
-
     const fakePosts = [];
 
     for (let i = 0; i < 50; i++) {
@@ -149,8 +104,8 @@ async function inconsistentDataSeed() {
             id: i + 1,
             user_id: faker.number.int({ min: 1, max: 3 }),
             city_id: faker.number.int({ min: 1, max: 3 }),
-            species_id: faker.number.int({ min: 1, max: 2 }),
-            pet_name: faker.animal.dog(),
+            species_id: faker.number.int({ min: 1, max: 4 }),
+            pet_name: faker.animal.type(),
             description: faker.lorem.sentence(),
             created: faker.date.past(),
             status: faker.number.int({ min: 0, max: 1 }),
@@ -164,8 +119,6 @@ async function inconsistentDataSeed() {
         data: fakePosts,
         skipDuplicates: true
     });
-
-
     const newContact = await prisma.contact.createMany({
         data: [
             {
@@ -200,33 +153,24 @@ async function inconsistentDataSeed() {
         skipDuplicates: true
     });
 
-    // const newPostOption = await prisma.post_option.createMany({
-    //     data: [
-    //         {
-    //             post_id: 1,
-    //             option_id: 1
-    //         },
-    //         {
-    //             post_id: 2,
-    //             option_id: 2
-    //         },
-    //         {
-    //             post_id: 3,
-    //             option_id: 3
-    //         }
-    //     ],
-    //     skipDuplicates: true
-    // });
-
     let fakePostOption = [];
-    for (let i = 1; i < 50; i++) {
+    let optionId = 0;
+    for (let i = 0; i < 50; i++) {
+        // Ensure fakePosts[i] exists before accessing its properties
+        if (fakePosts[i].species_id === 4) {
+            optionId = faker.number.int({ min: 1, max: 6 });
+        } else {
+            optionId = faker.number.int({ min: 1, max: 9 });
+        }
+
         const fakePostOptions = {
-            post_id: i,
-            option_id: faker.number.int({ min: 1, max: 6 })
+            post_id: i + 1,
+            option_id: optionId
         };
 
-        fakePostOption.push(fakePostOptions)
+        fakePostOption.push(fakePostOptions);
     }
+
 
     const newPostOption = await prisma.post_option.createMany({
         data: fakePostOption,
@@ -234,8 +178,7 @@ async function inconsistentDataSeed() {
     });
 
 
-
-    console.log('Data inserted successfully');
+    console.log('inconsistentData inserted successfully');
 }
 
 inconsistentDataSeed()

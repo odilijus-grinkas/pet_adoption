@@ -90,6 +90,10 @@ async function consistentDataSeed() {
             {
                 id: 2,
                 name: "spalva"
+            },
+            {
+                id: 3,
+                name: "kailio ilgis"
             }
         ], skipDuplicates: true
     });
@@ -125,6 +129,21 @@ async function consistentDataSeed() {
                 id: 6,
                 characteristic_id: 2,
                 value: "balta",
+            },
+            {
+                id: 7,
+                characteristic_id: 3,
+                value: "trumpas",
+            },
+            {
+                id: 8,
+                characteristic_id: 3,
+                value: "vidutinis",
+            },
+            {
+                id: 9,
+                characteristic_id: 3,
+                value: "ilgas",
             }
         ], skipDuplicates: true
     });
@@ -139,16 +158,44 @@ async function consistentDataSeed() {
                 characteristic_id: 2
             },
             {
+                species_id: 1,
+                characteristic_id: 3
+            },
+            {
+                species_id: 2,
+                characteristic_id: 1
+            },
+            {
                 species_id: 2,
                 characteristic_id: 2
             },
             {
-                species_id: 1,
+                species_id: 2,
+                characteristic_id: 3
+            },
+            {
+                species_id: 3,
+                characteristic_id: 2
+            },
+            {
+                species_id: 3,
                 characteristic_id: 1
-            }
-
+            },
+            {
+                species_id: 3,
+                characteristic_id: 3
+            },
+            {
+                species_id: 4,
+                characteristic_id: 1
+            },
+            {
+                species_id: 4,
+                characteristic_id: 2
+            },
         ], skipDuplicates: true
     })
+    console.log("DatabaseData seeded successfully");
 }
 
 consistentDataSeed()

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import FilterSelector from "../components/AllPostsPage/FilterComponents/FilterSelector";
 import Pagination from "../components/AllPostsPage/Pagination/Pagination";
 import PostList from "../components/AllPostsPage/PostList/PostList";
@@ -13,6 +13,8 @@ const AllPostsPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   console.log(pageNumber);
   const [totalpages, setTotalPages] = useState("");
+  // const param = window.location.href;
+  // console.log(param.cut("species="));
   const [fetchUrl, setFetchUrl] = useState(
     `http://localhost:3001/api/post/all/page=${pageNumber}`
   );
@@ -69,7 +71,7 @@ const AllPostsPage = () => {
     }
   }, [params]);
 
-  const handleFilterChange = (newSelection) => {
+  const handleFilterChange = (newSelection: Array<string>) => {
     let newUrl = "";
 
     if (selection["Miestai"]) {
