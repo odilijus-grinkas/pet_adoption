@@ -24,13 +24,13 @@ async function consistentDataSeed() {
             },
             {
                 id: 2,
-                region_id: 2,
-                name: 'Vilnius'
+                region_id: 1,
+                name: 'Jonava'
             },
             {
                 id: 3,
-                region_id: 1,
-                name: 'Klaipeda'
+                region_id: 2,
+                name: 'Vilnius'
             },
             {
                 id: 4,
