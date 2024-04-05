@@ -1,7 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import AdminPanel from "../components/AdminModeratorPages/AdminPanel";
-import DropzoneComponent from "../components/Posts/DropzoneComponent"
 import Index from "../primary_comps/Index";
 import Login from "../primary_comps/Auth/Login";
 import NotFound from "../components/NotFound";
@@ -34,7 +33,6 @@ function MainRouter() {
             <Route path="/AdminPanel" element={<AdminPanel />} />
             {/* Admin | Moderator Page Route */}
             {/*  <Route path="/AdMod" element={<UserList />} />*/}
-            <Route path="/Testing" element={<DropzoneComponent />} />
           </Routes>
         </Timeout>
       </div>

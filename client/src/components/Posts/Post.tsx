@@ -37,6 +37,7 @@ const Post = () => {
   const parsedUser = user ? JSON.parse(user) : null;
   const authToken = parsedUser ? parsedUser.token : null;
 
+  
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -98,6 +99,29 @@ const Post = () => {
     }
   };
 
+  const handleDeletePhoto = async (filename: string) => {
+    try {
+      // Make API call to delete photo from backend
+      const response = await fetch(`http://localhost:3001/delete/${filename}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+  
+      if (response.ok) {
+        // If deletion is successful, reload the page
+        window.location.reload();
+      } else {
+        // Handle unsuccessful deletion
+        console.error('Failed to delete photo:', response.statusText);
+      }
+    } catch (error) {
+      // Handle errors
+      console.error('Error deleting photo:', error);
+    }
+  };
+
   const isAdmin =
     parsedUser && (parsedUser.role === 3 || parsedUser.role === 4);
   const isUserPost =
@@ -111,7 +135,7 @@ const Post = () => {
       <div className="postcard text-black">
         {post ? (
           <>
-            <PostImageCarousel />
+            <PostImageCarousel post={post} onDeletePhoto={handleDeletePhoto} />
             {isEditing ? (
               <PostEditForm
                 post={post}

@@ -1,10 +1,15 @@
 import { Request, Response, Router } from "express";
 import multer, { FileFilterCallback } from "multer";
+import cors from "cors"; // Import the cors middleware
+import fs from "fs";
 
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const dropzoneRouter = Router();
+
+// Enable CORS for all routes
+dropzoneRouter.use(cors());
 
 // Multer configuration
 const storage = multer.diskStorage({
@@ -12,9 +17,19 @@ const storage = multer.diskStorage({
     cb(null, "./uploads");
   },
   filename: function (req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    // Extract the timestamp from the original filename using regex
+    const timestampMatch = file.originalname.match(/^(\d+)-/);
+    // Check if a timestamp is found
+    const timestamp = timestampMatch ? timestampMatch[1] : Date.now();
+    // Get the file extension
+    const extension = file.originalname.split('.').pop();
+    // Concatenate timestamp and extension to form the new filename
+    const newFilename = `${timestamp}.${extension}`;
+    // Pass the new filename to the callback
+    cb(null, newFilename);
   },
 });
+
 
 const fileFilter = (
   req: Request,
@@ -39,21 +54,21 @@ const upload = multer({
 
 // Handle file upload
 dropzoneRouter.post(
-  "/upload",
-  upload.single("photo"), // Use 'photo' instead of 'file'
+  "/upload/:id", // Update the route to include the postId parameter
+  upload.single("photo"),
   async (req: Request, res: Response) => {
     if (!req.file) {
       // No file uploaded
       return res.status(400).send("No file uploaded");
     }
     try {
+      const postId = req.params.id; // Get post_id from the URL
+      
       // Save uploaded file details to the database using Prisma
       const savedPhoto = await prisma.photo.create({
         data: {
-          // Assuming post_id is sent in the request body
-          post_id: req.body.post_id,
-          // Save the filename of the uploaded photo
-          photo: req.file.filename,
+          post_id: parseInt(postId), // Set the post_id from the URL
+          photo: req.file.filename, // Save the filename of the uploaded photo
         },
       });
 
@@ -65,5 +80,34 @@ dropzoneRouter.post(
     }
   }
 );
+
+dropzoneRouter.delete("/delete/:filename", async (req: Request, res: Response) => {
+  const { filename } = req.params;
+  try {
+    // Construct the file path relative to the current working directory
+    const filePath = `./uploads/${filename}`;
+
+    // Check if the file exists
+    if (fs.existsSync(filePath)) {
+      // Delete the file from the file system
+      fs.unlinkSync(filePath);
+      // Remove the file entry from the database using Prisma
+      await prisma.photo.deleteMany({
+        where: {
+          photo: filename,
+        },
+      });
+      // Respond with success message
+      res.status(200).json({ message: "File deleted successfully" });
+    } else {
+      // If the file doesn't exist, respond with a 404 error
+      res.status(404).json({ message: "File not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting file:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
 
 export default dropzoneRouter;

@@ -1,6 +1,8 @@
 .PostSection {
     background-color: #d4d3d3;
     min-height: 60em;
+    height: 100%;
+    margin-top: 0.5em;
     .postcard {
         height: 100%;
         background-color: white;
@@ -13,4 +15,116 @@
 
 body {
     background-color: #d4d3d3;
+}
+
+
+.fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.fullscreen-image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.dropzone.active {
+  border-color: #7E57C2;
+}
+
+.icon {
+  color: #4A148C;
+}
+
+.delete-button {
+  position: absolute;
+  bottom: 1em; 
+  right: 2em; 
+  color: #4A148C;
+  background: rgb(212, 211, 211);
+  border: 3px solid #4A148C;
+  font-size: 1em;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 3.5em;
+  height: 3.5em;
+  padding: 10px;
+  box-shadow: 0 0 1em rgba(0, 0, 0, 1);
+  transition: opacity 0.3s ease; /* Add transition for opacity */
+  opacity: 0.3; /* Set initial opacity */
+}
+
+
+.delete-button:hover .trash-icon {
+  color: red;
+  
+}
+.delete-button:hover {
+  border: 3px solid red;
+  opacity: 1;
+}
+
+.delete-button::after {
+  content: "Ištrinti";
+  color: red;
+  position: absolute;
+  bottom: calc(100% + 5px); /* Position it below the button */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.delete-button:hover::after {
+  opacity: 1;
+}
+
+.dropzone-container {
+  position: relative; /* Ensure the container is positioned relatively */
+}
+.thumbnail-container {
+  position: absolute; /* Position the thumbnails absolutely */
+  top: 0; /* Place the thumbnails at the top of the container */
+  left: 0; /* Align the thumbnails to the left side of the container */
+  z-index: 1; /* Ensure the thumbnails are above other elements */
+}
+
+.thumbnail {
+  width: 100px; /* Set the width of the thumbnail */
+  height: auto; /* Allow the height to adjust based on aspect ratio */
+  margin-bottom: 10px; /* Add some margin between thumbnails */
+}
+
+.thumbnail img {
+  width: 5em; /* Allow the image to adjust its width */
+  height: 5em; /* Fill the entire height of the thumbnail */
+  object-fit: cover; /* Cover the entire thumbnail area with the image */
+}
+
+.progress {
+  width: 100%; /* Set the width of the progress bar */
+  height: 10px; /* Set the height of the progress bar */
+  margin-top: 5px; /* Add some margin between thumbnail and progress bar */
+}
+
+.progress-bar {
+  width: 0%; /* Initialize the progress bar width to 0% */
+  height: 100%; /* Fill the entire height of the progress bar */
+  background-color: #007bff; /* Set the background color of the progress bar */
 }

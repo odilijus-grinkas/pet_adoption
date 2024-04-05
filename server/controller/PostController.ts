@@ -52,28 +52,37 @@ export const getAllUserPosts = async (req: express.Request, res: express.Respons
  */
 export const getOnePost = async (req: express.Request, res: express.Response) => {
     try {
-        const id = req.params.id;
+        const id = parseInt(req.params.id);
+
+        if (isNaN(id)) {
+            throw new Error("Invalid post ID");
+        }
 
         const OnePost = await PostClient.findUnique({
             where: {
-                id: parseInt(id)
+                id: id
             },
             include: {
                 user: true,
                 city: true,
-                species: true
+                species: true,
+                photo: true
             }
-        })
+        });
+
         if (OnePost) {
             res.status(200).json({ data: OnePost });
         } else {
-            res.status(404).json({ message: "user doesn't exist or doesn't have posts" });
+            res.status(404).json({ message: "Post not found" });
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
+
+
+
 /**
  * Creates new post while assigning them incremented id
  * Body requires: city_id,species_id,pet_name,description
