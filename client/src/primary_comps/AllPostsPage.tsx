@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import FilterSelector from "../components/AllPostsPage/FilterComponents/FilterSelector";
 import Pagination from "../components/AllPostsPage/Pagination/Pagination";
 import PostList from "../components/AllPostsPage/PostList/PostList";
@@ -19,6 +19,7 @@ const AllPostsPage = () => {
     `http://localhost:3001/api/post/all/${speciesParam}&page=${pageNumber}`
   );
   const navigate = useNavigate();
+  const location = useLocation();
 
   const fetchData = async () => {
     const response = await fetch(fetchUrl);
@@ -60,17 +61,20 @@ const AllPostsPage = () => {
   }, [fetchUrl, speciesParam]);
 
   useEffect(() => {
-    if (params.filter) {
-      const filterParams = params.filter.split("&");
-      const pageParam = filterParams.find((param) => param.startsWith("page="));
-      if (pageParam) {
-        const page = parseInt(pageParam.split("=")[1], 10);
-        setPageNumber(page);
-      }
+    if (!speciesParam) {
+      navigate("/");
+    }
+  }, [speciesParam, navigate]);
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const page = queryParams.get("page");
+    if (page) {
+      setPageNumber(parseInt(page, 10));
     } else {
       setPageNumber(1);
     }
-  }, [params]);
+  }, [location.search]);
 
   const handleFilterChange = (newSelection: Array<string>) => {
     setSelection(newSelection);
@@ -82,10 +86,6 @@ const AllPostsPage = () => {
     setPageNumber(newPageNumber);
     navigate(`/allposts/${speciesParam}?page=${newPageNumber}`);
   };
-
-  useEffect(() => {
-    setPageNumber(1);
-  }, []);
 
   return (
     <>

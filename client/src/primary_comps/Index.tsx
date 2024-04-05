@@ -1,7 +1,7 @@
 import "./Index.scss";
 import Header from "../components/header_footer/header/Header";
-import firstpuppy from "./Assets/firstpuppy.png";
-import secondpuppy from "./Assets/secondpuppy.png";
+// import firstpuppy from "./Assets/firstpuppy.png";
+// import secondpuppy from "./Assets/secondpuppy.png";
 import doglogo from ".././IMG/doglogo.png";
 import catlogo from ".././IMG/catlogo.jpg";
 import fishlogo from ".././IMG/fishlogo.jpg";
@@ -12,13 +12,13 @@ const Index = () => {
   return (
     <>
       <Header />
-      <img
+      {/* <img
         src={firstpuppy}
         alt="firstpuppy"
         className="puppy-image" // Removed width and height props
-      ></img>
+      ></img> */}
       <div className="container">
-        <div className="text-wrapper">
+        <div className="text-wrapper mt-5">
           {/* <p className="line">
             <span className="league-spartan">Snag a furball,</span>
           </p>
@@ -49,11 +49,11 @@ const Index = () => {
             <img src={bunnylogo} className="animal-logo" alt="..." />
           </Link>
         </div>
-        <img
+        {/* <img
           src={secondpuppy}
           alt="secondpuppy"
           className="puppy-images" // Removed width and height props
-        ></img>
+        ></img> */}
       </div>
     </>
   );
