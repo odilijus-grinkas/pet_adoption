@@ -38,6 +38,17 @@ const PostCreate = () => {
   const handleCreatePost = async (e) => {
     e.preventDefault();
 
+    // Simple validation
+    if (
+      !post.pet_name ||
+      !post.city_id ||
+      !post.species_id ||
+      !post.description
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
     try {
       const response = await fetch(
         `http://localhost:3001/api/post/create/plus`,
@@ -81,7 +92,7 @@ const PostCreate = () => {
             type="text"
             name="pet_name"
             value={post.pet_name}
-            onChange={handleInputChange} // Using handleInputChange here
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -89,7 +100,7 @@ const PostCreate = () => {
           <select
             name="city_id"
             value={post.city_id}
-            onChange={handleInputChange} // Using handleInputChange here
+            onChange={handleInputChange}
           >
             <option value="">Select City</option>
             <option value="1">Klaipėda</option>
@@ -103,7 +114,7 @@ const PostCreate = () => {
           <select
             name="species_id"
             value={post.species_id}
-            onChange={handleInputChange} // Using handleInputChange here
+            onChange={handleInputChange}
           >
             <option value="">Select Species</option>
             <option value="1">Šuo</option>
@@ -117,7 +128,7 @@ const PostCreate = () => {
           <textarea
             name="description"
             value={post.description}
-            onChange={handleInputChange} // Using handleInputChange here
+            onChange={handleInputChange}
           />
         </div>
         <button type="submit">Create Post</button>
