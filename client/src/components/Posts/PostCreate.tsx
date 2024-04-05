@@ -1,12 +1,10 @@
-import "./assets/postCreation.scss";
+import { Navigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 const PostCreate = () => {
   const [post, setPost] = useState({
-    // Define initial state for your post
     pet_name: "",
     city_id: "",
     species_id: "",
@@ -15,10 +13,19 @@ const PostCreate = () => {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
   const user = localStorage.getItem("user");
-  const loggedIn = !!user; // Check if user is logged in
+  const loggedIn = !!user;
   const parsedUser = loggedIn ? JSON.parse(user) : null;
   const authToken = parsedUser ? parsedUser.token : null;
+  const userRole = parsedUser ? parsedUser.role : null;
+
+  useEffect(() => {
+    // Redirect if user is not logged in
+    if (!loggedIn) {
+      navigate("/Login");
+    }
+  }, [loggedIn, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +36,7 @@ const PostCreate = () => {
   };
 
   const handleCreatePost = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
 
     try {
       const response = await fetch(
@@ -59,8 +66,9 @@ const PostCreate = () => {
     }
   };
 
-  if (!loggedIn) {
-    return <Navigate to="/Login" />; // Redirect to login page if not logged in
+  // Check if the route matches "/post/create/regular" and user has the "regular" role
+  if (location.pathname !== "/post/create/regular" || userRole !== "regular") {
+    return <Navigate to="/Unauthorized" />;
   }
 
   return (
@@ -73,7 +81,7 @@ const PostCreate = () => {
             type="text"
             name="pet_name"
             value={post.pet_name}
-            onChange={handleInputChange}
+            onChange={handleInputChange} // Using handleInputChange here
           />
         </div>
         <div>
@@ -81,7 +89,7 @@ const PostCreate = () => {
           <select
             name="city_id"
             value={post.city_id}
-            onChange={handleInputChange}
+            onChange={handleInputChange} // Using handleInputChange here
           >
             <option value="">Select City</option>
             <option value="1">Klaipėda</option>
@@ -95,7 +103,7 @@ const PostCreate = () => {
           <select
             name="species_id"
             value={post.species_id}
-            onChange={handleInputChange}
+            onChange={handleInputChange} // Using handleInputChange here
           >
             <option value="">Select Species</option>
             <option value="1">Šuo</option>
@@ -109,7 +117,7 @@ const PostCreate = () => {
           <textarea
             name="description"
             value={post.description}
-            onChange={handleInputChange}
+            onChange={handleInputChange} // Using handleInputChange here
           />
         </div>
         <button type="submit">Create Post</button>
