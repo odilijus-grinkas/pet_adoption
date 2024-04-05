@@ -1,5 +1,8 @@
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import "./assets/postCreation.scss";
+
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -27,7 +30,6 @@ const PostCreate: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     // Check if user is logged in
@@ -68,24 +70,25 @@ const PostCreate: React.FC = () => {
 
     try {
       const authToken = user ? user.token : "";
-      const response = await fetch(
-        `http://localhost:3001/api/post/create/plus`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-          },
-          body: JSON.stringify({
-            ...post,
-            user_id: user ? user.id : "",
-            species_id: parseInt(post.species_id),
-            city_id: parseInt(post.city_id),
-            created: new Date(),
-            valid_until: new Date(),
-          }),
-        }
-      );
+      const role = user ? user.role : "";
+      const endpoint =
+        role === "regular" ? "/post/create/regular" : "/post/create/plus";
+
+      const response = await fetch(`http://localhost:3001/api${endpoint}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          ...post,
+          user_id: user ? user.id : "",
+          species_id: parseInt(post.species_id),
+          city_id: parseInt(post.city_id),
+          created: new Date(),
+          valid_until: new Date(),
+        }),
+      });
       if (!response.ok) {
         throw new Error("Failed to create post");
       }
@@ -94,14 +97,6 @@ const PostCreate: React.FC = () => {
       console.error("Error creating post:", error);
     }
   };
-
-  // Check if the route matches "/post/create/regular" and user has the "regular" role
-  if (
-    location.pathname !== "/post/create/regular" ||
-    (user && user.role !== "regular")
-  ) {
-    return <Navigate to="/Unauthorized" />;
-  }
 
   return (
     <div className="PostCreate">
