@@ -1,10 +1,22 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+interface User {
+  id: string;
+  token: string;
+  role: string;
+}
 
-const PostCreate = () => {
-  const [post, setPost] = useState({
+interface Post {
+  pet_name: string;
+  city_id: string;
+  species_id: string;
+  description: string;
+  status: string;
+}
+
+const PostCreate: React.FC = () => {
+  const [post, setPost] = useState<Post>({
     pet_name: "",
     city_id: "",
     species_id: "",
@@ -12,22 +24,27 @@ const PostCreate = () => {
     status: "",
   });
 
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const user = localStorage.getItem("user");
-  const loggedIn = !!user;
-  const parsedUser = loggedIn ? JSON.parse(user) : null;
-  const authToken = parsedUser ? parsedUser.token : null;
-  const userRole = parsedUser ? parsedUser.role : null;
 
   useEffect(() => {
-    // Redirect if user is not logged in
-    if (!loggedIn) {
+    // Check if user is logged in
+    const userString = localStorage.getItem("user");
+    const loggedInUser = userString ? JSON.parse(userString) : null;
+    if (loggedInUser) {
+      setUser(loggedInUser);
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
       navigate("/Login");
     }
-  }, [loggedIn, navigate]);
+  }, [navigate]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setPost((prevState) => ({
       ...prevState,
@@ -35,7 +52,7 @@ const PostCreate = () => {
     }));
   };
 
-  const handleCreatePost = async (e) => {
+  const handleCreatePost = async (e: FormEvent) => {
     e.preventDefault();
 
     // Simple validation
@@ -50,6 +67,7 @@ const PostCreate = () => {
     }
 
     try {
+      const authToken = user ? user.token : "";
       const response = await fetch(
         `http://localhost:3001/api/post/create/plus`,
         {
@@ -60,7 +78,7 @@ const PostCreate = () => {
           },
           body: JSON.stringify({
             ...post,
-            user_id: parsedUser.id,
+            user_id: user ? user.id : "",
             species_id: parseInt(post.species_id),
             city_id: parseInt(post.city_id),
             created: new Date(),
@@ -78,7 +96,10 @@ const PostCreate = () => {
   };
 
   // Check if the route matches "/post/create/regular" and user has the "regular" role
-  if (location.pathname !== "/post/create/regular" || userRole !== "regular") {
+  if (
+    location.pathname !== "/post/create/regular" ||
+    (user && user.role !== "regular")
+  ) {
     return <Navigate to="/Unauthorized" />;
   }
 
