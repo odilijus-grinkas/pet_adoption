@@ -37,16 +37,16 @@ const Index = () => {
         </div>
         <div className="d-flex gap-3">
           <Link to={"/allposts/species=Šuo"}>
-            <img src={doglogo} className="animal-logo" alt="..." />
+            <img src={doglogo} className="animal-logo" alt="Dog" />
           </Link>
           <Link to={"/allposts/species=Katinas"}>
-            <img src={catlogo} className="animal-logo" alt="..." />
+            <img src={catlogo} className="animal-logo" alt="Cat" />
           </Link>
           <Link to={"/allposts/species=Žuvytės"}>
-            <img src={fishlogo} className="animal-logo" alt="..." />
+            <img src={fishlogo} className="animal-logo" alt="Fish" />
           </Link>
           <Link to={"/allposts/species=Triušiai"}>
-            <img src={bunnylogo} className="animal-logo" alt="..." />
+            <img src={bunnylogo} className="animal-logo" alt="Bunny" />
           </Link>
         </div>
         {/* <img

@@ -40,8 +40,8 @@ const AllPostsPage = () => {
   useEffect(() => {
     let updatedUrl = `http://localhost:3001/api/post/all/${speciesParam}&page=${pageNumber}`;
 
-    if (selection["Miestai"]) {
-      updatedUrl += `&city=${selection["Miestai"]}`;
+    if (selection["miestai"]) {
+      updatedUrl += `&city=${selection["miestai"]}`;
     }
     if (selection["svoris"]) {
       updatedUrl += `&option=${selection["svoris"]}`;
@@ -90,7 +90,7 @@ const AllPostsPage = () => {
   return (
     <>
       <Header />
-      <div className="container mt-4">
+      <div className="container mt-4 allposts">
         <div className="row">
           <div className="col-3">
             {optionFilters.map((filter, index) => (
@@ -104,7 +104,7 @@ const AllPostsPage = () => {
               />
             ))}
             <FilterSelector
-              inputLabel="Miestai"
+              inputLabel="miestai "
               datalist={["Vilnius", "Klaipėda"]}
               setSelection={handleFilterChange}
             />
