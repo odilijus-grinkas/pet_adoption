@@ -21,7 +21,7 @@ function MainRouter() {
           <Routes>
             {/* Posts Page Route */}
             {<Route path="/" element={<Index />} />}
-            <Route path="/allposts" element={<AllPostsPage />} />
+            <Route path="/allposts/" element={<AllPostsPage />} />
             <Route path="/allposts/:filter" element={<AllPostsPage />} />
             {/* Posts URL Route */}
             <Route path="/Post" element={<Post />} />

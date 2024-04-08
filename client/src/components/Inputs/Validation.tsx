@@ -3,6 +3,8 @@ interface FormData {
   username: string;
   password: string;
   confirmPassword: string;
+  pet_name: string;
+  description: string;
 }
 
 interface Errors {
@@ -10,7 +12,26 @@ interface Errors {
   username?: string;
   password?: string;
   confirmPassword?: string;
+  pet_name?: string;
+  description?: string;
 }
+
+export const ValidationEdit = (formData: FormData): Errors => {
+  const errors: Errors = {};
+
+  if (!formData.pet_name) {
+    errors.pet_name = "Reikalingas gyvūno vardas";
+  } else if (formData.pet_name.length < 3) {
+    errors.pet_name = "Gyvūno vardas negali būti trumpesnis už 3 simbolius";
+  } else if (formData.pet_name.length > 30) {
+    errors.pet_name = "Gyvūno vardas negali būti ilgesnis už 30 simbolių";
+  }
+
+  if (!formData.description) {
+    errors.description = "Reikalingas Skelbimo aprašymas";
+  }
+  return errors;
+};
 
 export const ValidationRegister = (formData: FormData): Errors => {
   const errors: Errors = {};

@@ -1,73 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import "./Index.scss"; // Add this import statement
-
-import React, { useEffect, useState } from "react";
-
+import "./Index.scss";
 import Header from "../components/header_footer/header/Header";
+// import firstpuppy from "./Assets/firstpuppy.png";
+// import secondpuppy from "./Assets/secondpuppy.png";
+import doglogo from ".././IMG/doglogo.png";
+import catlogo from ".././IMG/catlogo.jpg";
+import fishlogo from ".././IMG/fishlogo.jpg";
+import bunnylogo from ".././IMG/bunnylogo.jpg";
 import { Link } from "react-router-dom";
-import firstpuppy from "./Assets/firstpuppy.png";
-import secondpuppy from "./Assets/secondpuppy.png";
 
 const Index = () => {
-  const [data, setData] = useState([]); // Initialize data as an empty array
-  const [userData, setUserData] = useState(null); // Initialize userData as null
-  const [formData, setFormData] = useState({});
-
-  const fetchAndSetData = async () => {
-    try {
-      const response = await fetch(`http://localhost:3001/api/post/all`);
-      if (response.ok) {
-        const parsed = await response.json();
-        setData(parsed.data);
-      } else {
-        setData([]); // Reset data to an empty array if response is not OK
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleChange = (e: { target: { name: unknown; value: unknown } }) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setFormData((old) => ({ ...old, ["name"]: value }));
-  };
-
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:3001/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        const parsedResponse = await response.json();
-        setUserData(parsedResponse);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAndSetData();
-  }, [formData, userData]);
-
   return (
     <>
       <Header />
-      <img
+      {/* <img
         src={firstpuppy}
         alt="firstpuppy"
         className="puppy-image" // Removed width and height props
-      ></img>
+      ></img> */}
       <div className="container">
-        <div className="text-wrapper">
-          <p className="line">
+        <div className="text-wrapper mt-5">
+          {/* <p className="line">
             <span className="league-spartan">Snag a furball,</span>
           </p>
           <p className="line">
@@ -78,39 +30,30 @@ const Index = () => {
           </p>
           <p className="line">
             <span className="league-spartan">world go wild!</span>
+          </p> */}
+          <p className="line">
+            <span className="league-spartan">Kokio gyvūnėlio norėtumėte?</span>
           </p>
         </div>
-        <img
+        <div className="d-flex gap-3">
+          <Link to={"/allposts/?species=Šuo"}>
+            <img src={doglogo} className="animal-logo" alt="Dog" />
+          </Link>
+          <Link to={"/allposts/?species=Katinas"}>
+            <img src={catlogo} className="animal-logo" alt="Cat" />
+          </Link>
+          <Link to={"/allposts/?species=Žuvytės"}>
+            <img src={fishlogo} className="animal-logo" alt="Fish" />
+          </Link>
+          <Link to={"/allposts/?species=Triušiai"}>
+            <img src={bunnylogo} className="animal-logo" alt="Bunny" />
+          </Link>
+        </div>
+        {/* <img
           src={secondpuppy}
           alt="secondpuppy"
           className="puppy-images" // Removed width and height props
-        ></img>
-      </div>
-      <div className="container">
-        <div className="row">
-          {data.map((post) => (
-            <div key={post.id} className="col-md-4 mb-4">
-              <Link to={`/post/${post.id}`} className="card-link">
-                <div className="card">
-                  <img
-                    src={`https://via.placeholder.com/800x400?text=${post.pet_name}`}
-                    className="card-img-top"
-                    alt={post.pet_name}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{post.pet_name}</h5>
-                    <p className="card-text">{post.description}</p>
-                    <p className="card-text">
-                      <small className="text-muted">
-                        Posted on: {post.created.split("T")[0]}
-                      </small>
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          ))}
-        </div>
+        ></img> */}
       </div>
     </>
   );

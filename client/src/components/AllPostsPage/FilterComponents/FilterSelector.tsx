@@ -40,7 +40,7 @@ export default function FilterSelector({
     });
   };
   return (
-    <div className="filter-selector d-flex">
+    <div className="filter-selector form-floating d-flex">
       <DatalistInput
         placeholder={datalist[0]}
         label={inputLabel}

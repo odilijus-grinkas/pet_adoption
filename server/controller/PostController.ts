@@ -1,5 +1,6 @@
 import express from "express"
 import { PrismaClient } from '@prisma/client'
+const Prisma = new PrismaClient()
 const PostClient = new PrismaClient().post
 const UserClient = new PrismaClient().user
 import { postValidation } from "../requests/PostRequest";
@@ -140,11 +141,11 @@ export const getAllUserPosts = async (req: express.Request, res: express.Respons
  */
 export const getOnePost = async (req: express.Request, res: express.Response) => {
     try {
-        const id = req.params.id;
+        const id = parseInt(req.params.id);
 
         const OnePost = await PostClient.findUnique({
             where: {
-                id: parseInt(id)
+                id: id
             },
             include: {
                 user: true,
@@ -310,5 +311,62 @@ export const deletePost = async (req: express.Request, res: express.Response) =>
     } catch (err) {
         console.error(err);
         return res.status(500).json({ status: "error", message: "Serverio klaida" });
+    }
+};
+
+// export const getallcharactersticsandoptions = async (req: express.Request, res: express.Response) => {
+//     try {
+//         const AllSpeciesCharacteristicsAndOptions = await Prisma.species_characteristic.findMany({
+//             include: {
+//                 species: true,
+//                 characteristic: true
+//             }
+//         })
+//         res.status(200).json({ data: AllSpeciesCharacteristicsAndOptions });
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ status: "error", message: "Serverio klaida" });
+//     }
+// }
+
+export const getAllSpeciesCharacteristicsAndOptions = async (req: express.Request, res: express.Response) => {
+    try {
+        const speciesName = req.params.species;
+
+        const allSpeciesCharacteristicsAndOptions = await Prisma.species_characteristic.findMany({
+            where: {
+                species: {
+                    name: speciesName
+                }
+            },
+            include: {
+                species: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
+                characteristic: {
+                    include: {
+                        option: true
+                    }
+                }
+            }
+        });
+
+        res.status(200).json({ data: allSpeciesCharacteristicsAndOptions });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ status: "error", message: "Serverio klaida" });
+    }
+};
+
+export const getAllCities = async (req: express.Request, res: express.Response) => {
+    try {
+        const allCities = await Prisma.city.findMany();
+        res.status(200).json({ data: allCities });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
