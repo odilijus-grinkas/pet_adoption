@@ -1,15 +1,15 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Timeout from "../primary_comps/Auth/Timeout";
 
 import AdminPanel from "../components/AdminModeratorPages/AdminPanel";
 // import PostList from "../primary_comps/PostList";
 import AllPostsPage from "../primary_comps/AllPostsPage";
 import Login from "../primary_comps/Auth/Login";
 import NotFound from "../components/NotFound";
-import Recovery from "../primary_comps/Auth/Recovery";
-import Register from "../primary_comps/Auth/Register";
 import Post from "../components/Posts/Post";
 import Profile from "../components/Profile/Profile";
+import Recovery from "../primary_comps/Auth/Recovery";
+import Register from "../primary_comps/Auth/Register";
+import Timeout from '../primary_comps/Auth/Timeout';
 import Index from "../primary_comps/Index";
 
 function MainRouter() {

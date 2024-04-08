@@ -1,96 +1,76 @@
+import React, { useEffect, useState } from "react";
+import { faEnvelope, faMapMarkerAlt, faPhone,faSignature } from "@fortawesome/free-solid-svg-icons";
+import DropzoneComponent from "./DropzoneComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ValidationEdit } from "../Inputs/Validation";
-import { useState } from "react";
-import {
-  faMapMarkerAlt,
-  faEnvelope,
-  faPhone,
-} from "@fortawesome/free-solid-svg-icons";
-interface Post {
-  pet_name: string;
-  city_id: number;
-  city: City;
-  description: string;
-  created: Date;
-  user: User;
-}
-interface User {
-  id: number;
-  user: string;
-  email: string;
-  role: number;
-}
 
-interface City {
-  city: string;
-  name: string;
-}
-const PostEditForm = ({
-  post,
-  setPost,
-  handleSave,
-}: {
+interface PostEditFormProps {
   post: Post;
   setPost: (post: Post) => void;
   handleSave: () => void;
-}) => {
-  const [errors, setErrors] = useState<Partial<Post>>({});
+}
 
-  const validateForm = () => {
-    const formData = { ...post };
-    const newErrors = ValidationEdit(formData);
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }) => {
+  const [postId, setPostId] = useState<string | null>(null);
 
-  const handleChange = (field: keyof Post, value: string | number) => {
-    setPost({ ...post, [field]: value });
-  };
-
-  const handleFormSubmit = () => {
-    if (validateForm()) {
-      handleSave();
+  useEffect(() => {
+    // Check if postId exists in localStorage
+    const storedPostId = localStorage.getItem("postId");
+    if (storedPostId) {
+      setPostId(storedPostId);
     }
+  }, []);
+
+  useEffect(() => {
+    // Save postId to localStorage when it's set in the post object
+    if (post.id) {
+      localStorage.setItem("postId", post.id.toString());
+    }
+  }, [post.id]);
+
+  const handleSaveAndRefresh = () => {
+    handleSave(); // Save the changes
+    window.location.reload(); // Reload the page
   };
+
 
   return (
     <div className="p-3">
       <div className="row">
         <div className="col-md-6">
+        <div className="d-flex align-items-center">
+            <FontAwesomeIcon icon={faSignature} className="icon me-2" />
           <input
             className="form-control"
             value={post.pet_name}
-            name="pet_name"
-            onChange={(e) => handleChange("pet_name", e.target.value)}
+            onChange={(e) => setPost({ ...post, pet_name: e.target.value })}
           />
-          {errors.pet_name && (
-            <span className="text-danger">{errors.pet_name}</span>
-          )}
+          </div>
         </div>
       </div>
-      <div className="form-outline mb-4 d-flex align-items-center">
-        <FontAwesomeIcon icon={faMapMarkerAlt} className="icon me-2" />
-        <div className="row p-2">
-          <div className="col-md-6"></div>
-          <select
-            className="form-control"
-            value={post.city_id}
-            onChange={(e) =>
-              setPost({
-                ...post,
-                city_id: parseInt(e.target.value),
-                city: {
-                  city: e.target.value,
-                  name: e.target.options[e.target.selectedIndex].text,
-                },
-              })
-            }
-          >
-            <option value={1}>Klaipėda</option>
-            <option value={2}>Jonava</option>
-            <option value={3}>Vilnius</option>
-            <option value={4}>Trakai</option>
-          </select>
+      <div className="row p-2">
+        <div className="col-md-6">
+          <div className="d-flex align-items-center">
+            <FontAwesomeIcon icon={faMapMarkerAlt} className="icon me-2" />
+            <select
+              className="form-control"
+              value={post.city_id}
+              onChange={(e) =>
+                setPost({
+                  ...post,
+                  city_id: parseInt(e.target.value),
+                  city: {
+                    city: e.target.options[e.target.selectedIndex].text,
+                    name: "",
+                  },
+                })
+              }
+            >
+              <option value={1}>New York</option>
+              <option value={2}>Vilnius</option>
+              <option value={3}>Klaipėda</option>
+              <option value={4}>Kaunas</option>
+            </select>
+          </div>
         </div>
       </div>
       <hr />
@@ -98,13 +78,9 @@ const PostEditForm = ({
         <div className="col-md-6">
           <textarea
             className="form-control"
-            name="description"
             value={post.description}
-            onChange={(e) => handleChange("description", e.target.value)}
+            onChange={(e) => setPost({ ...post, description: e.target.value })}
           />
-          {errors.description && (
-            <span className="text-danger">{errors.description}</span>
-          )}
         </div>
       </div>
       <div className="row">
@@ -116,11 +92,16 @@ const PostEditForm = ({
         </div>
       </div>
       <div className="row">
-        <div className="col">
+        <div className="col-md-6">
           <div className="form-outline mb-4 d-flex align-items-center">
             <FontAwesomeIcon icon={faPhone} className="icon me-2" />
             Cia butu telefonas
           </div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-6" style={{ maxHeight: "20em", maxWidth: "70em", width: "100%", overflowY: "auto" }}>
+         <DropzoneComponent postId={postId ? postId : ''} />
         </div>
       </div>
       <hr />
@@ -129,7 +110,7 @@ const PostEditForm = ({
       </p>
       <div className="row justify-content-center">
         <div className="col-auto">
-          <button className="btn btn-primary" onClick={handleFormSubmit}>
+          <button className="btn btn-primary" onClick={handleSaveAndRefresh}>
             Išsaugoti
           </button>
         </div>
