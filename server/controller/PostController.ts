@@ -35,6 +35,9 @@ export const getAllUserPosts = async (req: express.Request, res: express.Respons
         const userPosts = await PostClient.findMany({
             where: {
                 user_id: parseInt(userId)
+            },
+            include: {
+                photo: true
             }
         })
         if (userPosts.length === 0) {

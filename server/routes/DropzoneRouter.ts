@@ -55,7 +55,7 @@ const upload = multer({
 // Handle file upload
 dropzoneRouter.post(
   "/upload/:id", // Update the route to include the postId parameter
-  upload.single("photo"),
+  upload.single("file"),
   async (req: Request, res: Response) => {
     if (!req.file) {
       // No file uploaded

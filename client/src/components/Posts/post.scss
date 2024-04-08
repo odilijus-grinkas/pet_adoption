@@ -1,7 +1,7 @@
 .PostSection {
     background-color: #d4d3d3;
     min-height: 60em;
-    height: 100%;
+    height: 100vh;
     margin-top: 0.5em;
     .postcard {
         height: 100%;
@@ -12,9 +12,9 @@
         border:none;
     }
 }
-
-body {
-    background-color: #d4d3d3;
+body, .PostSection {
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -66,8 +66,8 @@ body {
   height: 3.5em;
   padding: 10px;
   box-shadow: 0 0 1em rgba(0, 0, 0, 1);
-  transition: opacity 0.3s ease; /* Add transition for opacity */
-  opacity: 0.3; /* Set initial opacity */
+  transition: opacity 0.3s ease; 
+  opacity: 0.3; 
 }
 
 
@@ -84,7 +84,7 @@ body {
   content: "Ištrinti";
   color: red;
   position: absolute;
-  bottom: calc(100% + 5px); /* Position it below the button */
+  bottom: calc(100% + 5px); 
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
@@ -95,36 +95,18 @@ body {
   opacity: 1;
 }
 
-.dropzone-container {
-  position: relative; /* Ensure the container is positioned relatively */
-}
-.thumbnail-container {
-  position: absolute; /* Position the thumbnails absolutely */
-  top: 0; /* Place the thumbnails at the top of the container */
-  left: 0; /* Align the thumbnails to the left side of the container */
-  z-index: 1; /* Ensure the thumbnails are above other elements */
-}
 
-.thumbnail {
-  width: 100px; /* Set the width of the thumbnail */
-  height: auto; /* Allow the height to adjust based on aspect ratio */
-  margin-bottom: 10px; /* Add some margin between thumbnails */
-}
 
-.thumbnail img {
-  width: 5em; /* Allow the image to adjust its width */
-  height: 5em; /* Fill the entire height of the thumbnail */
-  object-fit: cover; /* Cover the entire thumbnail area with the image */
+.dz-drag-hover {
+  border: 1px solid #4A148C;
 }
-
-.progress {
-  width: 100%; /* Set the width of the progress bar */
-  height: 10px; /* Set the height of the progress bar */
-  margin-top: 5px; /* Add some margin between thumbnail and progress bar */
+.dropzone {
+  border: 1px dashed #4A148C;
 }
-
-.progress-bar {
-  width: 0%; /* Initialize the progress bar width to 0% */
-  height: 100%; /* Fill the entire height of the progress bar */
-  background-color: #007bff; /* Set the background color of the progress bar */
+.upload-icon {
+  font-size: 3em;
+  color: #4A148C;
+}
+.form-control {
+  width: 30em;
 }

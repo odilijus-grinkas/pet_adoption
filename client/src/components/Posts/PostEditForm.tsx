@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { faEnvelope, faMapMarkerAlt, faPhone,faSignature } from "@fortawesome/free-solid-svg-icons";
 import DropzoneComponent from "./DropzoneComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 interface PostEditFormProps {
   post: Post;
   setPost: (post: Post) => void;
@@ -72,11 +73,6 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-md-6" style={{ maxHeight: "200px", overflowY: "auto" }}>
-          <DropzoneComponent postId={postId} />
-        </div>
-      </div>
       <hr />
       <div className="row">
         <div className="col-md-6">
@@ -101,6 +97,11 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
             <FontAwesomeIcon icon={faPhone} className="icon me-2" />
             Cia butu telefonas
           </div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-6" style={{ maxHeight: "20em", maxWidth: "70em", width: "100%", overflowY: "auto" }}>
+         <DropzoneComponent postId={postId ? postId : ''} />
         </div>
       </div>
       <hr />

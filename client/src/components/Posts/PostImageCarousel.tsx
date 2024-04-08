@@ -4,14 +4,16 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import noImageFound from "../../primary_comps/Assets/notfound.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import Post from '../Posts/Post';
 
 interface PostImageCarouselProps {
   post: Post;
-  userRole: number; // User's role
-  onDeletePhoto: (photoId: number) => void; // Function to handle photo deletion
+  userRole?: number; // Make userRole optional
+  onDeletePhoto: (filename: string) => void;
+  isEditing: boolean;
 }
 
-const PostImageCarousel: React.FC<PostImageCarouselProps> = ({ post, userRole, onDeletePhoto }) => {
+const PostImageCarousel: React.FC<PostImageCarouselProps> = ({ post, userRole, onDeletePhoto, isEditing }) => {
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
   const user = localStorage.getItem("user");
   const parsedUser = user ? JSON.parse(user) : null;
@@ -41,13 +43,13 @@ const PostImageCarousel: React.FC<PostImageCarouselProps> = ({ post, userRole, o
                   src={photoUrl}
                   className="img-thumbnail"
                   alt={`Post ${index}`}
-                  style={{ width: "100%", height: "550px" }}
+                  style={{ width: "100%", maxHeight: "550px", height: "auto" }}
                 />
-                {(parsedUser && parsedUser.id === post.user.id) || isAdmin ? (
-                  <button className="delete-button" onClick={() => handleDeletePhoto(photo.photo)}>
-                    <FontAwesomeIcon icon={faTrashAlt} className="trash-icon" />
+                {(isEditing && ((parsedUser && parsedUser.id === post.user.id) || isAdmin)) ? (
+                  <button className="delete-button" onClick={(event) => { event.stopPropagation(); handleDeletePhoto(photo.photo); }}>
+                  <FontAwesomeIcon icon={faTrashAlt} className="trash-icon" />
                   </button>
-                ) : null}
+              ) : null}
               </div>
             );
           })}

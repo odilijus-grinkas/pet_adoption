@@ -48,11 +48,12 @@ app.use(
 //   }
 // }
 // seeding();
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api", postsRouter);
 app.use("/api", userRouter);
 app.use("/", dropzoneRouter);
-app.use("/uploads", express.static("uploads"));
+
 
 app.listen(port, () => {
   console.log(`Server listening on: http://localhost:${port}`);

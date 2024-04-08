@@ -110,8 +110,11 @@ const Post = () => {
       });
   
       if (response.ok) {
-        // If deletion is successful, reload the page
-        window.location.reload();
+        // If deletion is successful, remove the photo from the state
+        setPost(prevPost => {
+          const updatedPhotos = prevPost.photo.filter(photo => photo.photo !== filename);
+          return { ...prevPost, photo: updatedPhotos };
+        });
       } else {
         // Handle unsuccessful deletion
         console.error('Failed to delete photo:', response.statusText);
@@ -135,7 +138,7 @@ const Post = () => {
       <div className="postcard text-black">
         {post ? (
           <>
-            <PostImageCarousel post={post} onDeletePhoto={handleDeletePhoto} />
+            <PostImageCarousel post={post} onDeletePhoto={handleDeletePhoto} isEditing={isEditing} />
             {isEditing ? (
               <PostEditForm
                 post={post}
@@ -154,15 +157,15 @@ const Post = () => {
                 </div>
               </div>
             )}
-            {!isEditing && isAdmin && (
-              <div className="row justify-content-center">
-                <div className="col-auto">
-                  <button className="btn btn-danger" onClick={handleDelete}>
-                    Ištrinti Skelbimą
+            {isEditing && isAdmin && (
+            <div className="row justify-content-center">
+              <div className="col-auto">
+                <button className="btn btn-danger" onClick={handleDelete}>
+                     Ištrinti Skelbimą
                   </button>
-                </div>
               </div>
-            )}
+           </div>
+        )}
           </>
         ) : (
           <PostNotFound />

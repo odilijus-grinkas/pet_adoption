@@ -1,60 +1,58 @@
-import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
-import "./post.scss";
+import React, { useEffect, useState } from 'react';
+import Dropzone, { DropzoneOptions } from 'dropzone';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
 
-const DropzoneComponent = ({ postId }: { postId: string }) => {
-  const [notification, setNotification] = useState<string | null>(null);
+const DropzoneComponent: React.FC<{ postId: string }> = ({ postId }) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [fileUploaded, setFileUploaded] = useState(false);
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    const formData = new FormData();
-    formData.append("photo", file);
-    try {
-      const response = await fetch(`http://localhost:3001/upload/${postId}`, {
-        method: "POST",
-        body: formData,
-      });
+  useEffect(() => {
+    const dropzoneOptions: DropzoneOptions = {
+      url: `http://localhost:3001/upload/${postId}`,
+      acceptedFiles: 'image/*',
+      dictDefaultMessage: 'Vilkite čia Failus & Paspauskite',
+      maxFiles: 10,
+    };
 
-      if (response.ok) {
-        setNotification("Nuotrauka sėkmingai įkelta!");
-        console.log("File uploaded successfully!");
+    const dropzone = new Dropzone('#uploadForm', dropzoneOptions);
+
+    dropzone.on('error', (file, errorMessage) => {
+      console.error('Error uploading file:', errorMessage);
+      
+      if(errorMessage instanceof Error) {
+        setErrorMessage(errorMessage.message);
       } else {
-        throw new Error(`Upload failed with status ${response.status}`);
+        setErrorMessage(errorMessage);
       }
-    } catch (error) {
-      setNotification("Error uploading file. Please try again.");
-      console.error("Error uploading file:", error);
-    }
+    });
 
-    // Clear the notification after 5 seconds
-    setTimeout(() => {
-      setNotification(null);
-    }, 5000);
+    dropzone.on('maxfilesexceeded', () => {
+      setErrorMessage('Maksimalus viršytų failų skaičius.');
+    });
+
+    dropzone.on('maxfilesreached', () => {
+      setErrorMessage(null);
+    });
+
+    dropzone.on('success', () => {
+      setFileUploaded(true);
+    });
+
+    return () => {
+      dropzone.destroy();
+    };
   }, [postId]);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-  });
 
   return (
     <div className="dropzone-container p-2">
-      <div {...getRootProps()} className={`dropzone ${isDragActive ? "active" : ""}`}>
-        <input {...getInputProps()} />
-        <FontAwesomeIcon className="icon" icon={faCloudUploadAlt} size="2x" />
-        <p>{isDragActive ? "Paleiskite Failą čia" : "Vilkite čia Failus & Paspauskite"}</p>
-      </div>
-      <div className="row notification-container justify-content-md-center justify-content-end">
-        <div className="col-md-6">
-          {notification && (
-            <div className="notification alert alert-warning d-flex justify-content-between align-items-center" role="alert" style={{ marginLeft: "-20em",  width: "20em", color: "white" }}>
-              <span>{notification}</span>
-              <button type="button" className="btn-close" onClick={() => setNotification(null)} aria-label="Close"></button>
-            </div>
-          )}
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
+      <form id="uploadForm" className="dropzone">
+        <div className="fallback">
+          <input name="file" type="file" multiple placeholder="Pasirinkite failus, kuriuos norite įkelti" />
         </div>
-      </div>
+        {!fileUploaded && <div className="upload-icon"><FontAwesomeIcon icon={faFileUpload} /></div>}
+      </form>
     </div>
   );
 };
