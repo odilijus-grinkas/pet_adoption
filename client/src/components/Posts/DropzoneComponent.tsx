@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Dropzone, { DropzoneOptions } from 'dropzone';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
+import "./post.scss"; // Import your SCSS file
 
 const DropzoneComponent: React.FC<{ postId: string }> = ({ postId }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [fileUploaded, setFileUploaded] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null); 
+  const [uploadedCount, setUploadedCount] = useState<number>(0); // State to track uploaded count
 
   useEffect(() => {
     const dropzoneOptions: DropzoneOptions = {
@@ -35,8 +38,10 @@ const DropzoneComponent: React.FC<{ postId: string }> = ({ postId }) => {
       setErrorMessage(null);
     });
 
-    dropzone.on('success', () => {
+    dropzone.on('success', (file) => {
       setFileUploaded(true);
+      setUploadedCount(prevCount => prevCount + 1); // Increment uploaded count
+      setNotification("Sėkmingai įkelta!");
     });
 
     return () => {
@@ -47,6 +52,7 @@ const DropzoneComponent: React.FC<{ postId: string }> = ({ postId }) => {
   return (
     <div className="dropzone-container p-2">
       {errorMessage && <div className="error-message">{errorMessage}</div>}
+      {notification && <div className="notification">{notification} {uploadedCount > 0 && `(Įkelta: ${uploadedCount} ${uploadedCount === 1 ? 'nuotrauka' : 'nuotraukos'})`}</div>} 
       <form id="uploadForm" className="dropzone">
         <div className="fallback">
           <input name="file" type="file" multiple placeholder="Pasirinkite failus, kuriuos norite įkelti" />

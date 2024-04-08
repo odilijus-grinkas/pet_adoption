@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -85,7 +85,7 @@ const Profile = () => {
                 {userData ? (
                     <div className='p-3'>
                         <div className="row justify-content-center">
-                            <div className="col-auto">
+                            <div>
                                 <h2>Jūsų Paskyra</h2>
                                 <div className="form-outline mb-4 d-flex align-items-center">
                                     <FontAwesomeIcon icon={faUser} className='icon me-2' />
@@ -105,7 +105,7 @@ const Profile = () => {
                                     {filteredPosts.length > 0 ? (
                                         <div className="row">
                                             {filteredPosts.map(post => (
-                                                <div key={post.id} className="col-md-8 col-lg-6  mx-auto">
+                                                <div key={post.id} className="col-md-auto col-lg-6 ">
                                                     <div className="card ">
                                                         {post.photo.length > 0 ? (
                                                             <img className="card-img-top" src={`http://localhost:3001/uploads/${post.photo[0].photo}`} alt={`Pirmoji nuotrauka ${post.pet_name}`} style={{ width: "100%", height: "300px", objectFit: "cover" }} />

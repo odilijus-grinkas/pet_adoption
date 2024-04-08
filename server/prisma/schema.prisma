@@ -152,3 +152,4 @@ model user_role {
   @@id([user_id, role_id])
   @@index([role_id], map: "role_id")
 }
+

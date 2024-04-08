@@ -5,7 +5,7 @@ import logo from './assets/logo.png';
 const Recovery = () => {
 
     return (
-        <section>
+        <article>
             <div className="card">
                 <div className="text-center intro">
                     <img src={logo} alt="Logo" width="100" height="100" />
@@ -26,7 +26,7 @@ const Recovery = () => {
                 <div className="d-flex justify-content-between">
                 </div>
             </div>
-        </section>
+        </article>
     );
 };
 

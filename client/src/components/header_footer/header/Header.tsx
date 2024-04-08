@@ -10,21 +10,21 @@ export default function Header() {
         <a href="/" className="logo-nav">
             <img className="logo" src={logo} alt="Logo" />
         </a>
-      <nav className="header-nav">
+      <nav className="header-nav p-2">
         <ul className="header-nav-ul">
           <li className="btn btn-primary">
-            <Link to="/">Home</Link>
+            <Link to="/">Titulinis</Link>
           </li>
           {user ? ( // Profile button
             <li className="btn btn-primary">
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile">Profilis</Link>
             </li>
           ) : null}
 
           {user ? ( // Admin Panel button (if admin/mod logged in)
             JSON.parse(user).role > 2 ? (
               <li className="btn btn-primary">
-                <Link to="/AdminPanel">Admin Panel</Link>
+                <Link to="/AdminPanel">Admino Panelė</Link>
               </li>
             ) : null
           ) : null}
@@ -35,11 +35,11 @@ export default function Header() {
               to={"/login"}
               onClick={() => localStorage.removeItem("user")}
             >
-              Logout
+              Atsijungti
             </Link>
           ) : (
             <li className="btn btn-warning">
-              <Link to="/Login">Login</Link>
+              <Link to="/Login">Prisijungti</Link>
             </li>
           )}
         </ul>

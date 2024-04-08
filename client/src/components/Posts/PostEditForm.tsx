@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { faEnvelope, faMapMarkerAlt, faPhone,faSignature } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faMapMarkerAlt, faPhone, faSignature } from "@fortawesome/free-solid-svg-icons";
 import DropzoneComponent from "./DropzoneComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -11,6 +11,7 @@ interface PostEditFormProps {
 
 const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }) => {
   const [postId, setPostId] = useState<string | null>(null);
+  const [cities, setCities] = useState<string[]>([]);
 
   useEffect(() => {
     // Check if postId exists in localStorage
@@ -18,6 +19,9 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
     if (storedPostId) {
       setPostId(storedPostId);
     }
+    
+    // Fetch cities
+    fetchCities();
   }, []);
 
   useEffect(() => {
@@ -27,23 +31,37 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
     }
   }, [post.id]);
 
+  const fetchCities = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/post/cities");
+      if (!response.ok) {
+        throw new Error("Failed to fetch cities");
+      }
+      const data = await response.json();
+      const allcities = data.data;
+      const cityNames = allcities.map((city) => city.name);
+      setCities(cityNames);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const handleSaveAndRefresh = () => {
     handleSave(); // Save the changes
     window.location.reload(); // Reload the page
   };
 
-
   return (
     <div className="p-3">
       <div className="row">
         <div className="col-md-6">
-        <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center">
             <FontAwesomeIcon icon={faSignature} className="icon me-2" />
-          <input
-            className="form-control"
-            value={post.pet_name}
-            onChange={(e) => setPost({ ...post, pet_name: e.target.value })}
-          />
+            <input
+              className="form-control"
+              value={post.pet_name}
+              onChange={(e) => setPost({ ...post, pet_name: e.target.value })}
+            />
           </div>
         </div>
       </div>
@@ -65,10 +83,9 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
                 })
               }
             >
-              <option value={1}>New York</option>
-              <option value={2}>Vilnius</option>
-              <option value={3}>Klaipėda</option>
-              <option value={4}>Kaunas</option>
+              {cities.map((city, index) => (
+                <option key={index} value={index + 1}>{city}</option>
+              ))}
             </select>
           </div>
         </div>
@@ -100,8 +117,8 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
         </div>
       </div>
       <div className="row">
-        <div className="col-md-6" style={{ maxHeight: "20em", maxWidth: "70em", width: "100%", overflowY: "auto" }}>
-         <DropzoneComponent postId={postId ? postId : ''} />
+        <div className="col-md-6" style={{ maxHeight: "20em", width: "100%", overflowY: "auto" }}>
+          <DropzoneComponent postId={postId ? postId : ''} />
         </div>
       </div>
       <hr />

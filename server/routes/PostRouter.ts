@@ -12,6 +12,7 @@ postsRouter.get("/post/test/:species", getAllSpeciesCharacteristicsAndOptions)
 
 postsRouter.get("/post/cities", getAllCities)
 
+
 postsRouter.get("/post/owned/:id", getAllUserPosts)
 
 postsRouter.get("/post/:id", getOnePost)
@@ -23,6 +24,8 @@ postsRouter.post("/post/create/regular", authToken, createValidation, async (req
 postsRouter.post("/post/create/plus", authToken, createValidation, async (req: any, res: any) => {
     createPost(req, res, 3)
 })
+
+
 
 postsRouter.put("/post/:id", authToken, updateValidation, updatePost)
 

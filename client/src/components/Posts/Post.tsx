@@ -101,7 +101,6 @@ const Post = () => {
 
   const handleDeletePhoto = async (filename: string) => {
     try {
-      // Make API call to delete photo from backend
       const response = await fetch(`http://localhost:3001/delete/${filename}`, {
         method: 'DELETE',
         headers: {
@@ -110,17 +109,14 @@ const Post = () => {
       });
   
       if (response.ok) {
-        // If deletion is successful, remove the photo from the state
         setPost(prevPost => {
           const updatedPhotos = prevPost.photo.filter(photo => photo.photo !== filename);
           return { ...prevPost, photo: updatedPhotos };
         });
       } else {
-        // Handle unsuccessful deletion
         console.error('Failed to delete photo:', response.statusText);
       }
     } catch (error) {
-      // Handle errors
       console.error('Error deleting photo:', error);
     }
   };

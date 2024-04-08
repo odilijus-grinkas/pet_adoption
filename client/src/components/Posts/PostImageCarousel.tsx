@@ -43,7 +43,7 @@ const PostImageCarousel: React.FC<PostImageCarouselProps> = ({ post, userRole, o
                   src={photoUrl}
                   className="img-thumbnail"
                   alt={`Post ${index}`}
-                  style={{ width: "100%", maxHeight: "550px", height: "auto" }}
+                  style={{ width: "100%", maxHeight: "500px", height: "100%" }}
                 />
                 {(isEditing && ((parsedUser && parsedUser.id === post.user.id) || isAdmin)) ? (
                   <button className="delete-button" onClick={(event) => { event.stopPropagation(); handleDeletePhoto(photo.photo); }}>

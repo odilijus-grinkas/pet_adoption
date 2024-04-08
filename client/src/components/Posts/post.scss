@@ -1,22 +1,20 @@
 .PostSection {
-    background-color: #d4d3d3;
-    min-height: 60em;
-    height: 100vh;
-    margin-top: 0.5em;
+  z-index: 2;
+  height: 90em;
     .postcard {
         height: 100%;
+        max-height: 100em;
         background-color: white;
         border-radius: 10px;
-        width: 100vh;
-        padding: 20px;
+        width: 100%;
+        max-width: 100vh;
         border:none;
     }
 }
-body, .PostSection {
-  margin: 0;
-  padding: 0;
-}
 
+body {
+  z-index: 1;
+}
 
 .fullscreen-overlay {
   position: fixed;

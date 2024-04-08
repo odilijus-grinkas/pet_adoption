@@ -2,6 +2,7 @@ import "./assets/AdMod.scss";
 
 import AdminModerator from "./AdminModerator";
 import UserList from "./UserList";
+import City from "./City";
 
 export default function AdminPanel() {
   return (
@@ -11,6 +12,9 @@ export default function AdminPanel() {
       </div>
       <div className="admin-moderator-container">
         <AdminModerator />
+      </div>
+      <div >
+        <City />
       </div>
     </div>
   );
