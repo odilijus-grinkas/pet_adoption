@@ -360,3 +360,13 @@ export const getAllSpeciesCharacteristicsAndOptions = async (req: express.Reques
         res.status(500).json({ status: "error", message: "Serverio klaida" });
     }
 };
+
+export const getAllCities = async (req: express.Request, res: express.Response) => {
+    try {
+        const allCities = await Prisma.city.findMany();
+        res.status(200).json({ data: allCities });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ status: "error", message: "Serverio klaida" });
+    }
+};

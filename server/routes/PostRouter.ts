@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { getFilteredPosts, getOnePost, createPost, updatePost, deletePost, getAllUserPosts, getAllSpeciesCharacteristicsAndOptions } from "../controller/PostController";
+import { getFilteredPosts, getOnePost, createPost, updatePost, deletePost, getAllUserPosts, getAllSpeciesCharacteristicsAndOptions, getAllCities } from "../controller/PostController";
 import { createValidation, updateValidation } from "../requests/PostRequest";
 import authToken from "../utils/authToken";
 
@@ -10,7 +10,7 @@ postsRouter.get("/post/all/:filter", getFilteredPosts)
 
 postsRouter.get("/post/test/:species", getAllSpeciesCharacteristicsAndOptions)
 
-// postsRouter.get("/post/all/:filter", getFilteredPosts)
+postsRouter.get("/post/cities", getAllCities)
 
 postsRouter.get("/post/owned/:id", getAllUserPosts)
 

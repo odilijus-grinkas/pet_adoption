@@ -18,8 +18,28 @@ const AllPostsPage = () => {
   const [fetchUrl, setFetchUrl] = useState(
     `http://localhost:3001/api/post/all/${speciesParam}&page=${pageNumber}`
   );
+  const [city, setCity] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const fetchCities = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/post/cities");
+      if (!response.ok) {
+        throw new Error("Failed to fetch cities");
+      }
+      const data = await response.json();
+      const allcities = data.data;
+      const city = allcities.map((city) => city.name);
+      setCity(city);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCities();
+  }, []);
 
   const fetchData = async () => {
     const response = await fetch(fetchUrl);
@@ -104,8 +124,8 @@ const AllPostsPage = () => {
               />
             ))}
             <FilterSelector
-              inputLabel="miestai "
-              datalist={["Vilnius", "Klaipėda"]}
+              inputLabel="miestai"
+              datalist={city}
               setSelection={handleFilterChange}
             />
           </div>
