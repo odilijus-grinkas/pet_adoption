@@ -13,30 +13,6 @@ function validDate() {
 
 let ValidDate = validDate();
 
-
-/**
- * Fetches full data of every post.
- */
-// export const getAllPosts = async (req: express.Request, res: express.Response) => {
-//     try {
-//         const AllPosts = await PostClient.findMany({
-//             include: {
-//                 species: true,
-//                 city: true,
-//                 post_option: {
-//                     include: {
-//                         option: true
-//                     }
-//                 }
-//             }
-//         })
-//         res.status(200).json({ data: AllPosts });
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).json({ status: "error", message: "Serverio klaida" });
-//     }
-// };
-
 export const getFilteredPosts = async (req: express.Request, res: express.Response) => {
     try {
         const param = req.params.filter.split('&');
