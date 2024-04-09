@@ -1,4 +1,4 @@
-import "./post.scss";
+import "./assets/post.scss";
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -38,7 +38,6 @@ const Post = () => {
   const parsedUser = user ? JSON.parse(user) : null;
   const authToken = parsedUser ? parsedUser.token : null;
 
-  
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -103,22 +102,24 @@ const Post = () => {
   const handleDeletePhoto = async (filename: string) => {
     try {
       const response = await fetch(`http://localhost:3001/delete/${filename}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
-  
+
       if (response.ok) {
-        setPost(prevPost => {
-          const updatedPhotos = prevPost.photo.filter(photo => photo.photo !== filename);
+        setPost((prevPost) => {
+          const updatedPhotos = prevPost.photo.filter(
+            (photo) => photo.photo !== filename
+          );
           return { ...prevPost, photo: updatedPhotos };
         });
       } else {
-        console.error('Failed to delete photo:', response.statusText);
+        console.error("Failed to delete photo:", response.statusText);
       }
     } catch (error) {
-      console.error('Error deleting photo:', error);
+      console.error("Error deleting photo:", error);
     }
   };
 
@@ -135,7 +136,11 @@ const Post = () => {
       <div className="postcard text-black">
         {post ? (
           <>
-            <PostImageCarousel post={post} onDeletePhoto={handleDeletePhoto} isEditing={isEditing} />
+            <PostImageCarousel
+              post={post}
+              onDeletePhoto={handleDeletePhoto}
+              isEditing={isEditing}
+            />
             {isEditing ? (
               <PostEditForm
                 post={post}
@@ -155,14 +160,14 @@ const Post = () => {
               </div>
             )}
             {isEditing && isAdmin && (
-            <div className="row justify-content-center">
-              <div className="col-auto">
-                <button className="btn btn-danger" onClick={handleDelete}>
-                     Ištrinti Skelbimą
+              <div className="row justify-content-center">
+                <div className="col-auto">
+                  <button className="btn btn-danger" onClick={handleDelete}>
+                    Ištrinti Skelbimą
                   </button>
+                </div>
               </div>
-           </div>
-        )}
+            )}
           </>
         ) : (
           <PostNotFound />
