@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import "./assets/AdMod.scss";
+
+import React, { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +10,7 @@ interface User {
   role_id: number;
 }
 
-export default function UserList() {
+function UserList() {
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [authToken, setAuthToken] = useState("");
@@ -111,3 +113,5 @@ export default function UserList() {
     </div>
   );
 }
+
+export default UserList;

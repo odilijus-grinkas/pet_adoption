@@ -12,13 +12,13 @@ $primary-color: #4a148c;
 .card-container {
   background-color: #d4d3d3;
   border-radius: 10px;
-  width: fit-content; /* Adjust the width as needed */
+  width: fit-content;
   padding: 20px;
-  overflow: hidden; /* Hide any content that overflows */
+  overflow: hidden;
 }
 
 .card {
-  width: 100%; /* Card fills its container */
+  width: 100%;
   border: none;
 }
 
