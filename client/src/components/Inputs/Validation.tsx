@@ -74,6 +74,16 @@ export const ValidationRegister = (formData: FormData): Errors => {
   return errors;
 };
 
+export const ValidationPasswordReset = (formData: FormData): Errors => {
+  const errors: Errors = {};
+  if (!formData.password) {
+    errors.password = "Reikalingas Slaptažodis.";
+  } else if (formData.password.length < 8) {
+    errors.password = "Slaptažodis turi turėti bent 8 simbolius.";
+  }
+  return errors;
+};
+
 interface FormDataLogin {
   username: string;
   password: string;

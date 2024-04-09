@@ -11,6 +11,7 @@ import Profile from "../components/Profile/Profile";
 import Recovery from "../primary_comps/Auth/Recovery";
 import Register from "../primary_comps/Auth/Register";
 import Timeout from "../primary_comps/Auth/Timeout";
+import PasswordReset from "../primary_comps/Auth/PasswordReset";
 
 // import PostList from "../primary_comps/PostList";
 
@@ -33,6 +34,7 @@ function MainRouter() {
             <Route path="/Login" element={<Login />} />
             <Route path="/Register" element={<Register />} />
             <Route path="/Recovery" element={<Recovery />} />
+            <Route path="/PasswordReset/:token" element={<PasswordReset />} />
             {/* Profile */}
             <Route path="/Profile" element={<Profile />} />
             {/* 404 Not Found Route */}
