@@ -33,6 +33,17 @@ export const ValidationEdit = (formData: FormData): Errors => {
   return errors;
 };
 
+export const ValidationRecovery = (formData: FormData): Errors => {
+  const errors: Errors = {};
+
+  if (!formData.email) {
+    errors.email = "Reikalingas el. paštas";
+  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    errors.email = "Neteisingas El. Pašto formatas.";
+  }
+  return errors;
+};
+
 export const ValidationRegister = (formData: FormData): Errors => {
   const errors: Errors = {};
 
