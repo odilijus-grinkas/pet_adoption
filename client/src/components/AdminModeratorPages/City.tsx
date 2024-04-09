@@ -43,7 +43,7 @@ export default function City() {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            className="form-control"
+            className="form-control smaller-input" // Add the smaller-input class
             id="regionId"
             value={regionId}
             onChange={(e) => setRegionId(e.target.value)}
@@ -52,7 +52,7 @@ export default function City() {
           />
           <input
             type="text"
-            className="form-control"
+            className="form-control smaller-input" // Add the smaller-input class
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}

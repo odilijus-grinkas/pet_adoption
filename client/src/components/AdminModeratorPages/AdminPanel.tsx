@@ -10,7 +10,7 @@ export default function AdminPanel() {
       <div className="user-list-container">
         <UserList />
       </div>
-      <div >
+      <div className="city-container">
         <City />
       </div>
       <div className="admin-moderator-container">
