@@ -2,6 +2,7 @@
 
 $primary-color: #4a148c;
 
+/* Shared styles */
 .section {
   font-family: "BioRhyme", serif;
   display: flex;
@@ -96,12 +97,14 @@ $primary-color: #4a148c;
   color: red;
 }
 
+/* Styles for AdminModerator component */
 .admin-moderator-container {
   font-family: "BioRhyme", serif;
   background-color: #d4d3d3;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  align-items: center; /* Center alignment */
   padding: 20px;
 }
 
@@ -160,30 +163,7 @@ $primary-color: #4a148c;
   margin-top: 10px;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-button {
-  margin-bottom: 20px;
-}
-
-.regular-user-button {
-  margin-bottom: 20px;
-  color: #fff;
-  background-color: #4a148c;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.regular-user-button:hover {
-  background-color: darken(#4a148c, 10%);
-}
-
+/* Styles for UserList component */
 .admin-panel-container {
   display: flex;
   justify-content: center;
@@ -197,4 +177,13 @@ button {
 .admin-moderator-container {
   flex: 1;
   max-width: 50%;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
 }

@@ -1,4 +1,4 @@
-import "./assets/AdMod.scss";
+import "./assets/AdMod.scss"; // Import AdMod.scss stylesheet
 
 import React, { useState } from "react";
 
@@ -37,42 +37,34 @@ export default function City() {
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Create City</h2>
+    <div className="admin-moderator-container">
+      <h2 className="admin-moderator-heading">Create City</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="regionId" className="form-label">
-            Region ID
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="regionId"
-            value={regionId}
-            onChange={(e) => setRegionId(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          className="admin-moderator-input"
+          id="regionId"
+          value={regionId}
+          onChange={(e) => setRegionId(e.target.value)}
+          placeholder="Region ID"
+          required
+        />
+        <input
+          type="text"
+          className="admin-moderator-input"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Name"
+          required
+        />
         {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
+          <div className="admin-moderator-error">
+            <p className="error-message">{error}</p>
           </div>
         )}
         <button type="submit" className="btn btn-primary">
-          Pateikti
+          Submit
         </button>
       </form>
     </div>

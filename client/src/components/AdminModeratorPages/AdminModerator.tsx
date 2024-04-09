@@ -1,4 +1,4 @@
-import "./assets/AdMod.scss";
+import "./assets/AdMod.scss"; // Import AdMod.scss stylesheet
 
 import React, { useEffect, useState } from "react";
 
@@ -18,7 +18,7 @@ interface Errors {
   confirmPassword?: string;
 }
 
-function AdminModerator() {
+export default function AdminModerator() {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     username: "",
@@ -155,5 +155,3 @@ function AdminModerator() {
     </div>
   );
 }
-
-export default AdminModerator;
