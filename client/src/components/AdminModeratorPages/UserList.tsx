@@ -81,24 +81,26 @@ export default function UserList() {
     <div className="admin-panel-container">
       {authToken ? (
         <section className="section">
-          <div className="card">
-            <h2 className="account">Vartotojų Sąrašas</h2>
-            <ul>
-              {users.map((user) => (
-                <li key={user.id}>
-                  <p>
-                    {user.username}
-                    {user.role_id}
-                  </p>
-                  <button
-                    className="submit-button"
-                    onClick={() => handleDelete(user.id, user.username)}
-                  >
-                    Trinti
-                  </button>
-                </li>
-              ))}
-            </ul>
+          <div className="card-container">
+            <div className="card">
+              <h2 className="account">Vartotojų Sąrašas</h2>
+              <ul>
+                {users.map((user) => (
+                  <li key={user.id}>
+                    <p>
+                      {user.username}
+                      {user.role_id}
+                    </p>
+                    <button
+                      className="submit-button"
+                      onClick={() => handleDelete(user.id, user.username)}
+                    >
+                      Trinti
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
       ) : (

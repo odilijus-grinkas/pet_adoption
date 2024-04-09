@@ -9,9 +9,16 @@ $primary-color: #4a148c;
   align-items: center;
 }
 
-.card {
-  width: 400px;
+.card-container {
+  background-color: #d4d3d3;
+  border-radius: 10px;
+  width: fit-content; /* Adjust the width as needed */
   padding: 20px;
+  overflow: hidden; /* Hide any content that overflows */
+}
+
+.card {
+  width: 100%; /* Card fills its container */
   border: none;
 }
 
