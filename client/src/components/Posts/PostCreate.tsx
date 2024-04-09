@@ -1,13 +1,11 @@
 import "./assets/postCreation.scss";
-
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
   token: string;
-  role: string;
+  role: string; // Ensure role is defined as a string
 }
 
 interface Post {
@@ -56,47 +54,50 @@ const PostCreate: React.FC = () => {
 
   const handleCreatePost = async (e: FormEvent) => {
     e.preventDefault();
-
-    // Simple validation
-    if (
-      !post.pet_name ||
-      !post.city_id ||
-      !post.species_id ||
-      !post.description
-    ) {
-      alert("Please fill in all required fields.");
-      return;
+  
+    // Check if user is admin or user
+    const isPlus = user && (user.role === "4" || user.role === "3" || user.role === "2");
+  
+    // Determine the endpoint based on user's role
+    let endpoint = "";
+    if (isPlus) { 
+      endpoint = "/post/create/plus";
+    } else {
+      endpoint = "/post/create/regular";
     }
-
+  
+    // Continue with post creation
     try {
-      const authToken = user ? user.token : "";
-      const role = user ? user.role : "";
-      const endpoint =
-        role === "regular" ? "/post/create/regular" : "/post/create/plus";
-
-      const response = await fetch(`http://localhost:3001/api${endpoint}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
-          ...post,
-          user_id: user ? user.id : "",
-          species_id: parseInt(post.species_id),
-          city_id: parseInt(post.city_id),
-          created: new Date(),
-          valid_until: new Date(),
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to create post");
-      }
-      navigate("/"); // Redirect to the index page
+        const authToken = user ? user.token : "";
+      
+        const response = await fetch(`http://localhost:3001/api${endpoint}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+                ...post,
+                user_id: user ? user.id : "",
+                species_id: parseInt(post.species_id),
+                city_id: parseInt(post.city_id),
+                created: new Date(),
+                valid_until: new Date(),
+            }),
+        });
+  
+        const responseData = await response.json();
+  
+        if (!response.ok) {
+            throw new Error(responseData.message);
+        }
+  
+        navigate("/"); // Redirect to the index page
     } catch (error) {
-      console.error("Error creating post:", error);
+        console.error("Error creating post:", error);
+        // Display error message to the user
     }
-  };
+};
 
   return (
     <div className="PostCreate">

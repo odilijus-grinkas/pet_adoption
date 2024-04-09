@@ -15,7 +15,7 @@ export default function Header() {
       <nav className="header-nav p-2">
         <ul className="header-nav-ul">
           <li className="btn btn-primary">
-            <Link to="/">Titulinis</Link>
+            <Link to="/"> <i><FontAwesomeIcon icon={faHome} />  </i> Titulinis</Link>
           </li>
           {user ? ( // Profile button
             <li className="btn btn-primary">
