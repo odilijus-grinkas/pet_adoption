@@ -1,5 +1,6 @@
-import  { useState } from 'react';
 import './assets/AdMod.scss';
+
+import  { useState } from 'react';
 
 export default function City() {
     const [regionId, setRegionId] = useState('');
@@ -48,7 +49,7 @@ export default function City() {
                     <input type="text" className="form-control" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
                 </div>
                 {error && <div className="alert alert-danger" role="alert">{error}</div>}
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">Pateikti</button>
             </form>
         </div>
     );
