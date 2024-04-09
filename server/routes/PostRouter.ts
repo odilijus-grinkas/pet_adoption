@@ -7,6 +7,7 @@ import {
   getFilteredPosts,
   getOnePost,
   updatePost,
+  createCity
 } from "../controller/PostController";
 import { createValidation, updateValidation } from "../requests/PostRequest";
 
@@ -42,6 +43,7 @@ postsRouter.post(
     createPost(req, res, 3);
   }
 );
+postsRouter.put("/post/createCity", authToken, createCity);
 
 postsRouter.put("/post/:id", authToken, updateValidation, updatePost);
 
