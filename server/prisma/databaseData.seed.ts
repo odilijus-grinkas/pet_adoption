@@ -2,39 +2,22 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function consistentDataSeed() {
-    const newRegion = await prisma.region.createMany({
-        data: [
-            {
-                id: 1,
-                name: 'Klaipėdos Apskritis'
-            },
-            {
-                id: 2,
-                name: 'Vilniaus Apskritis'
-            }
-        ],
-        skipDuplicates: true
-    })
     const newCity = await prisma.city.createMany({
         data: [
             {
                 id: 1,
-                region_id: 1,
                 name: 'Klaipėda'
             },
             {
                 id: 2,
-                region_id: 1,
                 name: 'Jonava'
             },
             {
                 id: 3,
-                region_id: 2,
                 name: 'Vilnius'
             },
             {
                 id: 4,
-                region_id: 2,
                 name: 'Trakai'
             }
         ],

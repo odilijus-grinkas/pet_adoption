@@ -361,3 +361,21 @@ export const getAllCities = async (req: express.Request, res: express.Response) 
     }
 };
 
+export const createCity = async (req: express.Request, res: express.Response) => {
+    try {
+        if (req.tokenInfo !== undefined && req.tokenInfo.role_id <= 2) {
+            return res.status(403).json({ message: "Access denied." });
+        }
+        const postData = req.body;
+        const city = await Prisma.city.create({
+            data: {
+                name: postData.name
+            }
+        });
+        res.status(200).json({ data: city });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ status: "error", message: "Serverio klaida" });
+    }
+};
+
