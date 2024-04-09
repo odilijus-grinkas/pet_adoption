@@ -10,14 +10,26 @@
   transition: background-color 0.3s ease; /* Add transition for smooth color change */
 }
 
+/* Add margin around inputs and buttons */
+.smaller-input,
+.form-control {
+  margin: 5px; 
+}
+
+.btn-custom-delete,
+.btn-primary,
+.admin-moderator-button {
+  margin: 5px;
+}
+
 .smaller-input {
-  width: 200px; /* Adjust the width as needed */
-  padding: 8px; /* Adjust padding to fit smaller input */
-  font-size: 14px; /* Adjust font size */
+  width: 200px; 
+  padding: 8px; 
+  font-size: 14px; 
 }
 
 .btn-custom-delete:hover {
-  background-color: #7e57c2; /* Darker purple background color on hover */
+  background-color: #7e57c2; 
 }
 
 .admin-panel-container {
