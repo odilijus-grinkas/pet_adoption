@@ -47,10 +47,11 @@ dropzoneRouter.post(
     }
     try {
       // Save uploaded file details to the database using Prisma
+      const postId = req.body.postId;
       const savedPhoto = await prisma.photo.create({
         data: {
           // Assuming post_id is sent in the request body
-          post_id: req.body.post_id,
+          post_id: postId,
           // Save the filename of the uploaded photo
           photo: req.file.filename,
         },

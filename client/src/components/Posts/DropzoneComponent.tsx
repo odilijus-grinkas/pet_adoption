@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import Dropzone from 'react-dropzone';
 
-const DropzoneComponent = () => {
+const DropzoneComponent = ({ postId }) => {
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
     const formData = new FormData();
-    formData.append('photo', file); // Change 'file' to 'photo'
+    formData.append('photo', file);
+    formData.append('post_id', postId); // Use postId here
 
     try {
       const response = await fetch('http://localhost:3001/upload', {
@@ -22,7 +24,7 @@ const DropzoneComponent = () => {
     } catch (error) {
       console.error('Error uploading file:', error); // Handle error response
     }
-  }, []);
+  }, [postId]);
 
   return (
     <div>
@@ -39,3 +41,4 @@ const DropzoneComponent = () => {
 };
 
 export default DropzoneComponent;
+
