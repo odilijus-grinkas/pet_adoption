@@ -5,6 +5,8 @@ import authToken from "../utils/authToken";
 const userRouter = Router();
 
 userRouter.get("/user/all", authToken, UserController.getAllUsers);
+userRouter.post("/user/forgotpassword", UserController.forgot_password);
+userRouter.post("/user/resetpassword/:token", UserController.password_recovery);
 userRouter.get("/user/:id", authToken, UserController.getOneUser);
 userRouter.post("/login", UserController.loginUser);
 
