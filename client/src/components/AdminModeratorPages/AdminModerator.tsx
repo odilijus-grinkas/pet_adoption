@@ -1,3 +1,5 @@
+import "./assets/AdMod.scss";
+
 import React, { useEffect, useState } from "react";
 
 import { ValidationLogin } from "../Inputs/Validation";
