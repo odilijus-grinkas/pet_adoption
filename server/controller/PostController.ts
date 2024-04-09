@@ -1,9 +1,11 @@
-import express from "express"
 import { PrismaClient } from '@prisma/client'
+import express from "express"
+import { postValidation } from "../requests/PostRequest";
+
 const Prisma = new PrismaClient()
 const PostClient = new PrismaClient().post
 const UserClient = new PrismaClient().user
-import { postValidation } from "../requests/PostRequest";
+
 
 function validDate() {
     const currentDate = new Date();

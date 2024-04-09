@@ -2,6 +2,8 @@ import { Router } from "express";
 
 import { getFilteredPosts, getOnePost, createPost, updatePost, deletePost, getAllUserPosts, getAllSpeciesCharacteristicsAndOptions, getAllCities } from "../controller/PostController";
 import { createValidation, updateValidation } from "../requests/PostRequest";
+
+import { Router } from "express";
 import authToken from "../utils/authToken";
 
 const postsRouter = Router()
@@ -31,4 +33,4 @@ postsRouter.put("/post/:id", authToken, updateValidation, updatePost)
 
 postsRouter.delete("/post/:id", authToken, deletePost)
 
-export default postsRouter
+export default postsRouter;

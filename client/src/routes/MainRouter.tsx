@@ -1,8 +1,8 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import AdminPanel from "../components/AdminModeratorPages/AdminPanel";
-// import PostList from "../primary_comps/PostList";
 import AllPostsPage from "../primary_comps/AllPostsPage";
+import Index from "../primary_comps/Index";
 import Login from "../primary_comps/Auth/Login";
 import NotFound from "../components/NotFound";
 import Post from "../components/Posts/Post";
@@ -10,7 +10,17 @@ import Profile from "../components/Profile/Profile";
 import Recovery from "../primary_comps/Auth/Recovery";
 import Register from "../primary_comps/Auth/Register";
 import Timeout from '../primary_comps/Auth/Timeout';
-import Index from "../primary_comps/Index";
+
+// import PostList from "../primary_comps/PostList";
+
+
+
+
+
+
+
+
+
 
 function MainRouter() {
   return (
@@ -26,6 +36,7 @@ function MainRouter() {
             {/* Posts URL Route */}
             <Route path="/Post" element={<Post />} />
             <Route path="/Post/:id" element={<Post />} />
+            <Route path="/Post/Create" element={<PostCreate />} />
             {/* Auth Route */}
             <Route path="/Login" element={<Login />} />
             <Route path="/Register" element={<Register />} />
@@ -34,9 +45,8 @@ function MainRouter() {
             <Route path="/Profile" element={<Profile />} />
             {/* 404 Not Found Route */}
             <Route path="*" element={<NotFound />} />
-            <Route path="/AdminPanel" element={<AdminPanel />} />
             {/* Admin | Moderator Page Route */}
-            {/*  <Route path="/AdMod" element={<UserList />} />*/}
+            <Route path="/AdminPanel" element={<AdminPanel />} />
           </Routes>
         </Timeout>
       </div>

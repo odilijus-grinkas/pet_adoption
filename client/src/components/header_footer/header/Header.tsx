@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import "./Header.scss";
 import { useState } from "react";
 import logo from '../../../primary_comps/Auth/assets/logo.png';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome, faUser, faCogs, faPlus, faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
   const [user] = useState(localStorage.getItem("user"));
