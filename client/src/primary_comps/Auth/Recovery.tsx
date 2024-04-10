@@ -10,7 +10,7 @@ const Recovery = () => {
   const [formData, setFormData] = useState({
     email: "",
   });
-  const [alert, setAlert] = useState(false);
+  const [notification, setNotification] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,7 +43,7 @@ const Recovery = () => {
         const parsedResponse = await response.json();
         console.log(parsedResponse);
         setErrorMessage({});
-        setAlert(true);
+        setNotification(true);
       } else {
         const errorData = await response.json();
         setErrorMessage({ general: errorData.message });
@@ -57,10 +57,10 @@ const Recovery = () => {
   };
 
   return (
-    <article>
-      {alert && (
+    <article className="recovery_article">
+      {notification && (
         <div
-          className="alert alert-warning alert-dismissible fade show"
+          className="alert alert-light alert-dismissible fade show"
           role="alert"
         >
           <strong>Vartotojas rastas</strong> Instrukcijas aip pakeisti savo
@@ -70,7 +70,7 @@ const Recovery = () => {
             className="btn-close"
             data-bs-dismiss="alert"
             aria-label="Close"
-            onClick={() => setAlert(false)}
+            onClick={() => setNotification(false)}
           ></button>
         </div>
       )}

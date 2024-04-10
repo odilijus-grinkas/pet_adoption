@@ -266,14 +266,39 @@ const forgot_password = async (req: express.Request, res: express.Response) => {
     if (!user) {
       return res.status(403).json({ message: "User does not exist." });
     } else {
+      // Delete expired tokens for the user
+      await prisma.password_reset.deleteMany({
+        where: {
+          user_id: user.id,
+          expires: {
+            lte: new Date(),
+          },
+        },
+      });
+
+      const existingUserToken = await prisma.password_reset.findFirst({
+        where: {
+          user_id: user.id,
+          expires: {
+            gt: new Date(),
+          },
+        },
+      });
+
+      if (existingUserToken) {
+        return res.status(403).json({ message: "Password reset email already sent." });
+      }
+
       const token = crypto.randomBytes(64).toString("hex");
-      const UserToken = await prisma.password_reset.create({
+
+      const newUserToken = await prisma.password_reset.create({
         data: {
           user_id: user.id,
           token: token,
           expires: new Date(Date.now() + 300000),
         },
       });
+
       const mailOptions = {
         from: 'svelniejibiciuliai4@gmail.com',
         to: email,
@@ -287,7 +312,7 @@ const forgot_password = async (req: express.Request, res: express.Response) => {
           res.status(500).json({ message: "Failed to send email." });
         } else {
           console.log('Email sent: ' + info.response);
-          res.status(200).json({ status: "OK", data: UserToken });
+          res.status(200).json({ status: "OK", data: newUserToken });
         }
       });
     }
@@ -296,6 +321,7 @@ const forgot_password = async (req: express.Request, res: express.Response) => {
     res.status(500).json({ message: "Serverio klaida." });
   }
 };
+
 
 const password_recovery = async (req: express.Request, res: express.Response) => {
   try {
@@ -313,6 +339,14 @@ const password_recovery = async (req: express.Request, res: express.Response) =>
     }
 
     if (user.expires < currentDate) {
+      await prisma.password_reset.delete({
+        where: {
+          user_id_token: {
+            token: token,
+            user_id: user.user_id
+          }
+        }
+      });
       return res.status(403).json({ message: "Token expired." });
     }
 

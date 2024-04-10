@@ -11,6 +11,7 @@ const Recovery = () => {
     password: "",
   });
   const [succeeded, setSucceeded] = useState(false);
+  const [alert, setAlert] = useState(false);
   const [token, setToken] = useState("");
   const params = useParams();
   const navigate = useNavigate();
@@ -33,6 +34,12 @@ const Recovery = () => {
     setTimeout(function () {
       navigate("/login");
     }, 10000);
+  }
+
+  if (alert === true) {
+    setTimeout(function () {
+      navigate("/recovery");
+    }, 7000);
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,6 +69,7 @@ const Recovery = () => {
       } else {
         const errorData = await response.json();
         setErrorMessage({ general: errorData.message });
+        setAlert(true);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -72,7 +80,23 @@ const Recovery = () => {
   };
 
   return (
-    <article>
+    <article className="recovery_article">
+      {alert && (
+        <div
+          className="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          <strong>Token galiojimas baigėsi.</strong> Netrukus būsite redaguotas
+          atgal į recovery puslapį
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+            onClick={() => setAlert(false)}
+          ></button>
+        </div>
+      )}
       {succeeded && (
         <div
           className="alert alert-warning alert-dismissible fade show"
