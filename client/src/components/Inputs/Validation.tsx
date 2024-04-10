@@ -81,6 +81,12 @@ export const ValidationPasswordReset = (formData: FormData): Errors => {
   } else if (formData.password.length < 8) {
     errors.password = "Slaptažodis turi turėti bent 8 simbolius.";
   }
+
+  if (!formData.confirmPassword) {
+    errors.confirmPassword = "Reikia patvirtinti Slaptažodį.";
+  } else if (formData.password !== formData.confirmPassword) {
+    errors.confirmPassword = "Slaptažodžiai nesutampa.";
+  }
   return errors;
 };
 

@@ -9,6 +9,7 @@ const Recovery = () => {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({});
   const [formData, setFormData] = useState({
     password: "",
+    confirmPassword: "",
   });
   const [succeeded, setSucceeded] = useState(false);
   const [alert, setAlert] = useState(false);
@@ -126,11 +127,26 @@ const Recovery = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
+              type="password"
+            />
+          </div>
+          <div className="form-outline mb-4 d-flex align-items-center">
+            <FontAwesomeIcon icon={faLock} className="icon  me-2" />
+            <input
+              placeholder="Pakartokite slaptažodį"
+              className="form-control pl-5"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              type="password"
             />
           </div>
           <div className="text-start">
             {errorMessage.password && (
               <ErrorMessage message={errorMessage.password} />
+            )}
+            {errorMessage.confirmPassword && (
+              <ErrorMessage message={errorMessage.confirmPassword} />
             )}
           </div>
           <div className="mt-2 text-center">
