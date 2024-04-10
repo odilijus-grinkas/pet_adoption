@@ -1,4 +1,4 @@
-import "./assets/AdMod.scss"; // Import AdMod.scss stylesheet
+import "./assets/AdMod.scss"; // Import the CSS file
 
 import React, { useEffect, useState } from "react";
 
@@ -112,14 +112,14 @@ export default function AdminModerator() {
             setFormData({ ...formData, username: e.target.value })
           }
           placeholder="Susikurkite vartotojo vardą"
-          className="admin-moderator-input"
+          className="admin-moderator-input form-control"
         />
         <input
           type="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           placeholder="Įrašykite savo el.pašto adresą"
-          className="admin-moderator-input"
+          className="admin-moderator-input form-control"
         />
         <input
           type="password"
@@ -128,7 +128,7 @@ export default function AdminModerator() {
             setFormData({ ...formData, password: e.target.value })
           }
           placeholder="Susikurkite slaptažodį"
-          className="admin-moderator-input"
+          className="admin-moderator-input form-control"
         />
         <input
           type="password"
@@ -137,7 +137,7 @@ export default function AdminModerator() {
             setFormData({ ...formData, confirmPassword: e.target.value })
           }
           placeholder="Patvirtinkite slaptažodį"
-          className="admin-moderator-input"
+          className="admin-moderator-input form-control"
         />
         <button type="submit" className="btn btn-primary">
           Pateikti

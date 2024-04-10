@@ -1,6 +1,6 @@
 import "./assets/AdMod.scss";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -10,10 +10,22 @@ interface User {
   role_id: number;
 }
 
-function UserList() {
+export default function UserList() {
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [authToken, setAuthToken] = useState("");
+
+  useEffect(() => {
+    const user = localStorage.getItem("user") ?? "";
+    const parsedUser = JSON.parse(user);
+    setAuthToken(parsedUser.token || "");
+  }, []);
+
+  useEffect(() => {
+    if (authToken) {
+      userFetch();
+    }
+  }, [authToken]);
 
   const userFetch = async () => {
     try {
@@ -36,18 +48,6 @@ function UserList() {
       console.error("Error:", error);
     }
   };
-
-  useEffect(() => {
-    const user = localStorage.getItem("user") ?? "";
-    const parsedUser = JSON.parse(user);
-    setAuthToken(parsedUser.token || "");
-  }, []);
-
-  useEffect(() => {
-    if (authToken) {
-      userFetch();
-    }
-  }, [authToken]);
 
   const deleteFetch = async (id: string) => {
     try {
@@ -80,38 +80,40 @@ function UserList() {
   };
 
   return (
-    <div className="admin-panel-container">
+    <>
       {authToken ? (
-        <section className="section">
+        <div className="card">
+          <h2 className="account">Vartotojų Sąrašas</h2>
+          <ul className="list-group">
+            {users.map((user) => (
+              <li key={user.id} className="list-group-item">
+                <div className="d-flex justify-content-between align-items-center">
+                  <p className="mb-0">
+                    {user.username}
+                    {user.role_id}
+                  </p>
+                  <button
+                    className="btn btn-custom-delete"
+                    onClick={() => handleDelete(user.id, user.username)}
+                  >
+                    Trinti
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div className="section">
           <div className="card-container">
             <div className="card">
-              <h2 className="account">Vartotojų Sąrašas</h2>
-              <ul>
-                {users.map((user) => (
-                  <li key={user.id}>
-                    <p>
-                      {user.username}
-                      {user.role_id}
-                    </p>
-                    <button
-                      className="submit-button"
-                      onClick={() => handleDelete(user.id, user.username)}
-                    >
-                      Trinti
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <div role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
             </div>
           </div>
-        </section>
-      ) : (
-        <div className="spinner-border" role="status">
-          <span className="sr-only">Loading...</span>
         </div>
       )}
-    </div>
+    </>
   );
 }
-
-export default UserList;

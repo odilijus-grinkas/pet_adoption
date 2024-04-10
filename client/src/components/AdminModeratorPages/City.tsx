@@ -37,36 +37,34 @@ export default function City() {
   };
 
   return (
-    <div className="admin-moderator-container">
-      <h2 className="admin-moderator-heading">Create City</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className="admin-moderator-input"
-          id="regionId"
-          value={regionId}
-          onChange={(e) => setRegionId(e.target.value)}
-          placeholder="Region ID"
-          required
-        />
-        <input
-          type="text"
-          className="admin-moderator-input"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
-          required
-        />
-        {error && (
-          <div className="admin-moderator-error">
-            <p className="error-message">{error}</p>
-          </div>
-        )}
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </form>
+    <div className="section">
+      <div className="card">
+        <h2>Create City</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className="form-control smaller-input" // Add the smaller-input class
+            id="regionId"
+            value={regionId}
+            onChange={(e) => setRegionId(e.target.value)}
+            placeholder="Region ID"
+            required
+          />
+          <input
+            type="text"
+            className="form-control smaller-input" // Add the smaller-input class
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Name"
+            required
+          />
+          {error && <p className="errorMessage">{error}</p>}
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
