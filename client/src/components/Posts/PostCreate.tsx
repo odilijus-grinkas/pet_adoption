@@ -27,7 +27,9 @@ const PostCreate: React.FC = () => {
 
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error message
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     // Check if user is logged in
@@ -54,19 +56,17 @@ const PostCreate: React.FC = () => {
 
   const handleCreatePost = async (e: FormEvent) => {
     e.preventDefault();
-  
-    // Check if user is admin or user
-    const isPlus = user && (user.role === "4" || user.role === "3" || user.role === "2");
-  
-    // Determine the endpoint based on user's role
+    const userString = localStorage.getItem("user");
+    const loggedInUser = userString ? JSON.parse(userString) : null;
+    const isPlus = loggedInUser && (loggedInUser.role === 2 || loggedInUser.role === 3 || loggedInUser.role === 4);
+
     let endpoint = "";
     if (isPlus) { 
       endpoint = "/post/create/plus";
     } else {
       endpoint = "/post/create/regular";
     }
-  
-    // Continue with post creation
+
     try {
         const authToken = user ? user.token : "";
       
@@ -92,10 +92,11 @@ const PostCreate: React.FC = () => {
             throw new Error(responseData.message);
         }
   
-        navigate("/"); // Redirect to the index page
+        navigate("/Profile"); // Redirect to the index page
     } catch (error) {
         console.error("Error creating post:", error);
-        // Display error message to the user
+        // Set the error message state
+        setErrorMessage(error.message);
     }
 };
 
@@ -148,6 +149,7 @@ const PostCreate: React.FC = () => {
             onChange={handleInputChange}
           />
         </div>
+        {errorMessage && <div  className="error">{errorMessage}</div>}
         <button type="submit">Create Post</button>
       </form>
     </div>

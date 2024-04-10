@@ -123,8 +123,7 @@ const Post = () => {
     }
   };
 
-  const isAdmin =
-    parsedUser && (parsedUser.role === 3 || parsedUser.role === 4);
+  const isAdmin = parsedUser && (parsedUser.role === 3 || parsedUser.role === 4);
   const isUserPost =
     post &&
     parsedUser &&
