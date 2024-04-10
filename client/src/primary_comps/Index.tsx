@@ -1,12 +1,14 @@
 import "./Index.scss";
+
 import Header from "../components/header_footer/header/Header";
+import { Link } from "react-router-dom";
+import bunnylogo from ".././IMG/bunnylogo.jpg";
+import catlogo from ".././IMG/catlogo.jpg";
+import doglogo from ".././IMG/doglogo.png";
+import fishlogo from ".././IMG/fishlogo.jpg";
+
 // import firstpuppy from "./Assets/firstpuppy.png";
 // import secondpuppy from "./Assets/secondpuppy.png";
-import doglogo from ".././IMG/doglogo.png";
-import catlogo from ".././IMG/catlogo.jpg";
-import fishlogo from ".././IMG/fishlogo.jpg";
-import bunnylogo from ".././IMG/bunnylogo.jpg";
-import { Link } from "react-router-dom";
 
 const Index = () => {
   return (

@@ -1,11 +1,13 @@
+import "./AllPostsPage.css";
+
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+
 import FilterSelector from "../components/AllPostsPage/FilterComponents/FilterSelector";
+import Footer from "../components/header_footer/footer/Footer";
+import Header from "../components/header_footer/header/Header";
 import Pagination from "../components/AllPostsPage/Pagination/Pagination";
 import PostList from "../components/AllPostsPage/PostList/PostList";
-import "./AllPostsPage.css";
-import Header from "../components/header_footer/header/Header";
-import Footer from "../components/header_footer/footer/Footer";
 
 const AllPostsPage = () => {
   const [allPosts, setAllPosts] = useState([]);

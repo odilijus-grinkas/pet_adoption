@@ -1,128 +1,120 @@
-@import url('https://fonts.googleapis.com/css2?family=BioRhyme');
-section{
-    font-family: "BioRhyme", serif;
-    background-color: #d4d3d3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+@import url("https://fonts.googleapis.com/css2?family=BioRhyme");
+section {
+  font-family: "BioRhyme", serif;
+  background-color: #d4d3d3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-
-.card{
-    width: 400px;
-    padding: 20px;
-    border:none;
+.card {
+  width: 400px;
+  padding: 20px;
+  border: none;
 }
 
-.form-control{
-    text-indent: 14px;
+.form-control {
+  text-indent: 14px;
 }
-
 
 .form-control:focus {
-    color: #495057;
-    background-color: #fff;
-    border-color: #4a148c;
-    outline: 0;
-    box-shadow: none;
+  color: #495057;
+  background-color: #fff;
+  border-color: #4a148c;
+  outline: 0;
+  box-shadow: none;
 }
 
 .form-check-input {
-    width: 14px;
-    height: 15px;
-    margin-top: 5px;
+  width: 14px;
+  height: 15px;
+  margin-top: 5px;
+}
 
-}
-    
 .forgot {
-        font-size: 14px;
-        text-decoration: none;
-        color: #4A148C;
+  font-size: 14px;
+  text-decoration: none;
+  color: #4a148c;
 }
-    
-    
+
 .btn-primary {
-    color: #fff;
-    background-color: #4A148C;
-    border-color: #4A148C;
+  color: #fff;
+  background-color: #4a148c;
+  border-color: #4a148c;
 }
 
 .btn-primary:hover {
-    background-color: #7E57C2;
-    border-color: #7E57C2;
-    animation: glowingBorder 1.5s infinite alternate; 
+  background-color: #7e57c2;
+  border-color: #7e57c2;
+  animation: glowingBorder 1.5s infinite alternate;
 }
 
 @keyframes glowingBorder {
-    0% {
-        border-color: #7E57C2;
-        box-shadow: 0 0 5px #7E57C2;
-    }
-    100% {
-        border-color: #4A148C; 
-        box-shadow: 0 0 10px #4A148C; 
-    }
+  0% {
+    border-color: #7e57c2;
+    box-shadow: 0 0 5px #7e57c2;
+  }
+  100% {
+    border-color: #4a148c;
+    box-shadow: 0 0 10px #4a148c;
+  }
 }
 .icon {
-    color: #4A148C; 
-    text-shadow: 0 0 20px rgba(74, 20, 140, 0.8); 
+  color: #4a148c;
+  text-shadow: 0 0 20px rgba(74, 20, 140, 0.8);
 }
-
 
 .errorMessage {
-    font-weight: 900;
-    color: red;
+  font-weight: 900;
+  color: red;
 }
 .successMessage {
-    font-weight: 900;
-    color: green;
+  font-weight: 900;
+  color: green;
 }
 .small {
-    font-size: 12px;
+  font-size: 12px;
 }
-
-
 
 // Notification for session timeout
 .notification-container {
-    position: fixed;
-    z-index: 9999;
+  position: fixed;
+  z-index: 9999;
+}
+
+.notification {
+  background-color: rgb(189, 99, 99);
+  border-color: rgb(189, 99, 99);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.notification-text {
+  flex: 1;
+}
+
+.btn-close {
+  margin-left: auto;
+  align-self: center; /* Align the close button vertically center */
+}
+
+@media (min-width: 961px) {
+  .notification-container {
+    top: 46%;
+    right: 20px;
+    left: auto;
   }
-  
-  .notification {
-    background-color: rgb(189, 99, 99);
-    border-color: rgb(189, 99, 99);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
+}
+
+@media (max-width: 960px) {
+  .notification-container {
+    top: 20px;
+    right: 20px;
+    left: 20px;
   }
-  
-  .notification-text {
-    flex: 1;
-  }
-  
-  .btn-close {
-    margin-left: auto;
-    align-self: center; /* Align the close button vertically center */
-  }
-  
-  @media (min-width: 961px) {
-    .notification-container {
-      top: 46%;
-      right: 20px;
-      left: auto;
-    }
-  }
-  
-  @media (max-width: 960px) {
-    .notification-container {
-      top: 20px;
-      right: 20px;
-      left: 20px;
-    }
-  }
-  
+}
