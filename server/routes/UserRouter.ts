@@ -1,5 +1,6 @@
-import { Router } from "express";
 import * as UserController from "../controller/UserController";
+
+import { Router } from "express";
 import authToken from "../utils/authToken";
 
 const userRouter = Router();

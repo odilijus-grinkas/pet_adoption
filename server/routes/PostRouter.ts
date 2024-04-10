@@ -1,7 +1,7 @@
-import { Router } from "express";
-
-import { getFilteredPosts, getOnePost, createPost, updatePost, deletePost, getAllUserPosts, getAllSpeciesCharacteristicsAndOptions, getAllCities } from "../controller/PostController";
+import { createPost, deletePost, getAllCities, getAllSpeciesCharacteristicsAndOptions, getAllUserPosts, getFilteredPosts, getOnePost, updatePost } from "../controller/PostController";
 import { createValidation, updateValidation } from "../requests/PostRequest";
+
+import { Router } from "express";
 import authToken from "../utils/authToken";
 
 const postsRouter = Router()

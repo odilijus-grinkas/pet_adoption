@@ -1,6 +1,8 @@
-import express from "express";
-import { PrismaClient } from "@prisma/client";
 import _, { take } from "underscore";
+
+import { PrismaClient } from "@prisma/client";
+import express from "express";
+
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -231,7 +233,9 @@ const loginUser = async (req: express.Request, res: express.Response) => {
             expiresIn: "1d", // Specify how long until token expires.
           }
         );
-        res.status(200).json({ id: user.id, token: token, role: user.user_role[0].role_id });
+        res
+          .status(200)
+          .json({ id: user.id, token: token, role: user.user_role[0].role_id });
       } else {
         res.status(403).json({ message: "Wrong password." });
       }
