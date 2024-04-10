@@ -5,17 +5,18 @@ const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
-// const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
-// const transporter = nodemailer.createTransport({
-//   host: 'smtp.gmail.com',
-//   port: 587,
-//   secure: false,
-//   auth: {
-//     user: 'svelniejibiciuliai4@gmail.com',
-//     pass: 'svelniejibiciuliaiadmin'
-//   }
-// });
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'svelniejibiciuliai4@gmail.com',
+    pass: 'wgie mtpt thrb bzfv'
+  }
+});
 
 /**
  * Returns permission id: 1=regular, 2=userPlus, 3=mod, 4=admin
@@ -273,22 +274,22 @@ const forgot_password = async (req: express.Request, res: express.Response) => {
           expires: new Date(Date.now() + 300000),
         },
       });
-      // const mailOptions = {
-      //   from: 'svelniejibiciuliai4@gmail.com',
-      //   to: email,
-      //   subject: 'Password Reset',
-      //   html: `<p>Click <a href="http://localhost:3000/reset-password/${token}">here</a> to reset your password.</p>`
-      // };
+      const mailOptions = {
+        from: 'svelniejibiciuliai4@gmail.com',
+        to: email,
+        subject: 'Password Reset',
+        html: `<p>Click <a href="http://localhost:3000/PasswordReset/${token}">here</a> to reset your password.</p>`
+      };
 
-      // transporter.sendMail(mailOptions, (error: any, info: any) => {
-      //   if (error) {
-      //     console.log(error);
-      //     res.status(500).json({ message: "Failed to send email." });
-      //   } else {
-      //     console.log('Email sent: ' + info.response);
-      //     res.status(200).json({ status: "OK", data: UserToken });
-      //   }
-      // });
+      transporter.sendMail(mailOptions, (error: any, info: any) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({ message: "Failed to send email." });
+        } else {
+          console.log('Email sent: ' + info.response);
+          res.status(200).json({ status: "OK", data: UserToken });
+        }
+      });
     }
   } catch (err) {
     console.log(err);
