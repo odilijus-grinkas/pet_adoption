@@ -276,6 +276,56 @@ export const updatePost = async (req: express.Request, res: express.Response) =>
     }
 };
 
+// export const updatePostwithOptions = async (req: express.Request, res: express.Response) => {
+//     const postId = parseInt(req.params.id);
+//     const [post, valid, messages] = postValidation(req);
+
+//     if (!valid) {
+//         return res.status(400).json({
+//             message: "Validacijos klaida",
+//             error_messages: messages,
+//         });
+//     }
+
+//     try {
+//         const existingPost = await PostClient.findUnique({
+//             where: { id: postId },
+//             select: { user_id: true }
+//         });
+
+//         if (!existingPost) {
+//             return res.status(404).json({ message: "Post not found." });
+//         }
+
+//         const userId = existingPost.user_id;
+
+//         if (req.tokenInfo !== undefined && req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) return res.status(401).json({ message: "Access denied." })
+
+//         let updatedData: any = {
+//             city_id: parseInt(post.city_id),
+//             species_id: parseInt(post.species_id),
+//             pet_name: post.pet_name,
+//             description: post.description
+//         };
+
+//         // Check if options are provided in the request
+//         if (req.body.options) {
+//             updatedData.options = req.body.options;
+//         }
+
+//         // Update the post with the combined data
+//         const updatedPost = await PostClient.update({
+//             where: { id: postId },
+//             data: updatedData
+//         });
+
+//         res.status(200).json({ data: updatedPost });
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ status: "error", message: "Serverio klaida" });
+//     }
+// }
+
 /**
  * Deletes post based on id
  * Body requires: id

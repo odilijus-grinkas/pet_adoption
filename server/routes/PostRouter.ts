@@ -1,5 +1,5 @@
 import {
-  createPost,
+  // createPost,
   deletePost,
   getAllCities,
   getAllSpeciesCharacteristicsAndOptions,
@@ -8,7 +8,8 @@ import {
   getOnePost,
   updatePost,
   createCity,
-  createPostwithOptions
+  createPostwithOptions,
+  // updatePostwithOptions
 } from "../controller/PostController";
 import { createValidation, updateValidation } from "../requests/PostRequest";
 
@@ -66,6 +67,7 @@ postsRouter.post(
 postsRouter.put("/post/createCity", authToken, createCity);
 
 postsRouter.put("/post/:id", authToken, updateValidation, updatePost);
+// postsRouter.put("/post/:id", authToken, updateValidation, updatePostwithOptions);
 
 postsRouter.delete("/post/:id", authToken, deletePost);
 
