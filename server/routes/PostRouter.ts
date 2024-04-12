@@ -7,7 +7,8 @@ import {
   getFilteredPosts,
   getOnePost,
   updatePost,
-  createCity
+  createCity,
+  createPostwithOptions
 } from "../controller/PostController";
 import { createValidation, updateValidation } from "../requests/PostRequest";
 
@@ -26,12 +27,30 @@ postsRouter.get("/post/owned/:id", getAllUserPosts);
 
 postsRouter.get("/post/:id", getOnePost);
 
+// postsRouter.post(
+//   "/post/create/regular",
+//   authToken,
+//   createValidation,
+//   async (req: any, res: any) => {
+//     createPost(req, res, 4);
+//   }
+// );
+
+// postsRouter.post(
+//   "/post/create/plus",
+//   authToken,
+//   createValidation,
+//   async (req: any, res: any) => {
+//     createPost(req, res, 3);
+//   }
+// );
+
 postsRouter.post(
   "/post/create/regular",
   authToken,
   createValidation,
   async (req: any, res: any) => {
-    createPost(req, res, 4);
+    createPostwithOptions(req, res, 4);
   }
 );
 
@@ -40,9 +59,10 @@ postsRouter.post(
   authToken,
   createValidation,
   async (req: any, res: any) => {
-    createPost(req, res, 3);
+    createPostwithOptions(req, res, 3);
   }
 );
+
 postsRouter.put("/post/createCity", authToken, createCity);
 
 postsRouter.put("/post/:id", authToken, updateValidation, updatePost);
