@@ -197,7 +197,7 @@ const PostCreate: React.FC = () => {
         </div>
         {options.map((option, index) => (
           <div key={index}>
-            <label>Option ID:</label>
+            <label>{option.characteristic.name}:</label>
             <select
               name="option_id"
               value={post.post_option[index] || ""}
