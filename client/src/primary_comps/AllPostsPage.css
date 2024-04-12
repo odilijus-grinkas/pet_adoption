@@ -1,5 +1,7 @@
 .allposts {
   font-family: "BioRhyme", serif;
+  display: flex;
+  flex-direction: column;
 }
 .pagination {
   display: flex;
@@ -15,7 +17,7 @@
 .pagination li a {
   padding: 8px 12px;
   text-decoration: none;
-  color: white;
+  color: black;
 }
 .selected {
   background-color: #4a148c;
@@ -23,7 +25,7 @@
 }
 a:not([href]):not([class]),
 a:not([href]):not([class]):hover {
-  color: white;
+  color: black;
 }
 
 .card-description {
