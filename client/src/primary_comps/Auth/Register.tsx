@@ -7,7 +7,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const Register = () => {
   return (
-    <section>
+    <article>
       <div className="card">
       <div className='text-start'>
          <Link className="forgot small" to="/"> <FontAwesomeIcon className='icon small me-2' icon={faArrowLeft}/> Titulinis</Link>
@@ -18,7 +18,7 @@ const Register = () => {
         <RegisterForm />
         <div className="d-flex justify-content-between"></div>
       </div>
-    </section>
+    </article>
   );
 };
 

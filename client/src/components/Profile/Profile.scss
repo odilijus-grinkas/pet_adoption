@@ -1,16 +1,31 @@
 .ProfileSection {
-  background-color: #d4d3d3;
-  min-height: 60em;
-  .profilecard {
-    height: 100%;
-    background-color: white;
-    border-radius: 10px;
-    width: 100vh;
-    padding: 20px;
-    border: none;
-  }
+    z-index: 2;
+    height: 70em;
+    .profilecard {
+        height: 100%;
+        max-height: 60em;
+        background-color: white;
+        border-radius: 10px;
+        width: 100vh;
+        padding: 20px;
+        border:none;
+    }
+    .form-control {
+        width: 100%;
+    }
 }
 
-body {
-  background-color: #d4d3d3;
+
+  
+  body {
+    z-index: 1;
+  }
+
+.scrollable {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 44.5em;
+    max-height: 100%; 
 }
+
+

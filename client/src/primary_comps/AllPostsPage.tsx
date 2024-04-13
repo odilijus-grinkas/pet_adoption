@@ -25,6 +25,12 @@ const AllPostsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    if (!speciesParam) {
+      navigate("/");
+    }
+  }, [speciesParam, navigate]);
+
   const fetchCities = async () => {
     try {
       const response = await fetch("http://localhost:3001/api/post/cities");

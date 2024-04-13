@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import FormInput from './FormInput';
 import ErrorMessage from './ErrorMessage';
 import SuccessMessage from './SuccessMessage';
 import { ValidationLogin } from '../../components/Inputs/Validation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLock, faUser,faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import logo from './assets/logo.png'
+import { faLock, faUser, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import logo from './assets/logo.png';
 
 const LoginForm = () => {
+  const navigate = useNavigate(); // Use useNavigate hook
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -51,6 +52,7 @@ const LoginForm = () => {
         setPasswordError("");
         setIsLoggedIn(true); // Update login status to true
         localStorage.setItem('user', JSON.stringify(parsedResponse)); //token
+        navigate("/"); // Navigate to index after successful login
       } else {
         const errorData = await response.json();
         setUsernameError(errorData.username || "");
@@ -64,10 +66,10 @@ const LoginForm = () => {
   };
 
   return (
-    <section>
+    <article>
       <div className="card">
         <div className='text-start'>
-          <Link className="forgot small" to="/"> <FontAwesomeIcon className='icon small me-2' icon={faArrowLeft}/> Titulinis</Link>
+          <Link className="forgot small" to="/"> <FontAwesomeIcon className='icon small me-2' icon={faArrowLeft} /> Titulinis</Link>
         </div>
         <div className="text-center intro">
           <img src={logo} alt="Logo" width="100" height="100" />
@@ -89,7 +91,7 @@ const LoginForm = () => {
         </form>
         <div className="d-flex justify-content-between"></div>
       </div>
-    </section>
+    </article>
   );
 };
 

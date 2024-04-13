@@ -1,10 +1,18 @@
-import { PrismaClient } from "@prisma/client";
-import express from "express";
+import { PrismaClient } from '@prisma/client'
+import express from "express"
 import { postValidation } from "../requests/PostRequest";
 
-const Prisma = new PrismaClient();
-const PostClient = new PrismaClient().post;
-const UserClient = new PrismaClient().user;
+const Prisma = new PrismaClient()
+const PostClient = new PrismaClient().post
+
+interface Post {
+  pet_name: string;
+  city_id: string;
+  species_id: string;
+  description: string;
+  status: string;
+  post_option: number[];
+}
 
 function validDate() {
   const currentDate = new Date();
@@ -13,29 +21,6 @@ function validDate() {
 }
 
 let ValidDate = validDate();
-
-/**
- * Fetches full data of every post.
- */
-// export const getAllPosts = async (req: express.Request, res: express.Response) => {
-//     try {
-//         const AllPosts = await PostClient.findMany({
-//             include: {
-//                 species: true,
-//                 city: true,
-//                 post_option: {
-//                     include: {
-//                         option: true
-//                     }
-//                 }
-//             }
-//         })
-//         res.status(200).json({ data: AllPosts });
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).json({ status: "error", message: "Serverio klaida" });
-//     }
-// };
 
 export const getFilteredPosts = async (
   req: express.Request,
@@ -124,62 +109,63 @@ export const getFilteredPosts = async (
   }
 };
 
-export const getAllUserPosts = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const getAllUserPosts = async (req: express.Request, res: express.Response) => {
   try {
     const userId = req.params.id;
     const userPosts = await PostClient.findMany({
       where: {
-        user_id: parseInt(userId),
+        user_id: parseInt(userId)
       },
-    });
+      include: {
+        photo: true
+      }
+    })
     if (userPosts.length === 0) {
-      return res.status(404).json({
-        status: "error",
-        message: "User doesn't exist or doesn't have posts",
-      });
+      return res.status(404).json({ status: "error", message: "User doesn't exist or doesn't have posts" });
     }
     res.status(200).json({ data: userPosts });
   } catch (err) {
     console.log(err);
     res.status(500).json({ status: "error", message: "Serverio klaida" });
   }
-};
+}
 /**
  * Fetches 1 post based on id parameter.
  * Body requires: id
  */
-export const getOnePost = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const getOnePost = async (req: express.Request, res: express.Response) => {
   try {
     const id = parseInt(req.params.id);
 
+    if (isNaN(id)) {
+      throw new Error("Invalid post ID");
+    }
+
     const OnePost = await PostClient.findUnique({
       where: {
-        id: id,
+        id: id
       },
       include: {
         user: true,
         city: true,
         species: true,
-      },
+        photo: true
+      }
     });
+
     if (OnePost) {
       res.status(200).json({ data: OnePost });
     } else {
-      res
-        .status(404)
-        .json({ message: "user doesn't exist or doesn't have posts" });
+      res.status(404).json({ message: "Post not found" });
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ status: "error", message: "Serverio klaida" });
   }
 };
+
+
+
 /**
  * Creates new post while assigning them incremented id
  * Body requires: city_id,species_id,pet_name,description
@@ -304,6 +290,56 @@ export const updatePost = async (
   }
 };
 
+// export const updatePostwithOptions = async (req: express.Request, res: express.Response) => {
+//     const postId = parseInt(req.params.id);
+//     const [post, valid, messages] = postValidation(req);
+
+//     if (!valid) {
+//         return res.status(400).json({
+//             message: "Validacijos klaida",
+//             error_messages: messages,
+//         });
+//     }
+
+//     try {
+//         const existingPost = await PostClient.findUnique({
+//             where: { id: postId },
+//             select: { user_id: true }
+//         });
+
+//         if (!existingPost) {
+//             return res.status(404).json({ message: "Post not found." });
+//         }
+
+//         const userId = existingPost.user_id;
+
+//         if (req.tokenInfo !== undefined && req.tokenInfo.role_id <= 2 && req.tokenInfo.id != userId) return res.status(401).json({ message: "Access denied." })
+
+//         let updatedData: any = {
+//             city_id: parseInt(post.city_id),
+//             species_id: parseInt(post.species_id),
+//             pet_name: post.pet_name,
+//             description: post.description
+//         };
+
+//         // Check if options are provided in the request
+//         if (req.body.options) {
+//             updatedData.options = req.body.options;
+//         }
+
+//         // Update the post with the combined data
+//         const updatedPost = await PostClient.update({
+//             where: { id: postId },
+//             data: updatedData
+//         });
+
+//         res.status(200).json({ data: updatedPost });
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ status: "error", message: "Serverio klaida" });
+//     }
+// }
+
 /**
  * Deletes post based on id
  * Body requires: id
@@ -408,6 +444,185 @@ export const getAllCities = async (
   try {
     const allCities = await Prisma.city.findMany();
     res.status(200).json({ data: allCities });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: "error", message: "Serverio klaida" });
+  }
+};
+
+export const createCity = async (req: express.Request, res: express.Response) => {
+  try {
+    if (req.tokenInfo !== undefined && req.tokenInfo.role_id <= 2) {
+      return res.status(403).json({ message: "Access denied." });
+    }
+    const postData = req.body;
+    const city = await Prisma.city.create({
+      data: {
+        name: postData.name
+      }
+    });
+    res.status(200).json({ data: city });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: "error", message: "Serverio klaida" });
+  }
+};
+
+// export const createPostwithOptions = async (
+//     req: express.Request,
+//     res: express.Response,
+//     roleLevel: number
+// ) => {
+//     try {
+//         const [post, valid, messages] = postValidation(req);
+//         console.log(post)
+//         if (!valid) {
+//             return res.status(400).json({
+//                 message: "Validacijos klaida",
+//                 error_messages: messages,
+//             });
+//         }
+
+//         const routePath = req.originalUrl;
+//         let userId: number;
+
+//         if (req.tokenInfo !== undefined) {
+//             userId = req.tokenInfo.id;
+//         } else {
+//             return
+//         }
+
+//         const userPostCount = await PostClient.count({
+//             where: { user_id: userId },
+//         });
+
+//         if (routePath === "/api/post/create/plus") {
+//             if (req.tokenInfo !== undefined && req.tokenInfo.role_id === 1) {
+//                 return res.status(403).json({ message: "Access denied." });
+//             }
+//         }
+
+//         if (routePath === "/api/post/create/regular" && userPostCount >= 3) {
+//             return res.status(400).json({
+//                 message: "You have reached the maximum number of posts allowed.",
+//             });
+//         }
+
+//         if (req.tokenInfo !== undefined && req.tokenInfo.role_id === 1) {
+//             post.status = 0;
+//         } else {
+//             post.status = 1;
+//         }
+
+//         const CreatedPost = await PostClient.create({
+//             data: {
+//                 user_id: userId,
+//                 city_id: parseInt(post.city_id),
+//                 species_id: parseInt(post.species_id),
+//                 pet_name: post.pet_name,
+//                 description: post.description,
+//                 created: new Date(),
+//                 status: post.status,
+//                 valid_until: new Date(),
+//                 post_option: {
+//                     create: post.post_option.map((optionId: number) => ({ option_id: optionId }))
+//                 }
+//             }, include: {
+//                 post_option: true
+//             }
+//         });
+
+//         if (post.optionIds && Array.isArray(post.optionIds)) {
+//             const optionIds: number[] = post.optionIds;
+
+//             await Promise.all(optionIds.map(async (optionId) => {
+//                 await Prisma.post_option.create({
+//                     data: {
+//                         post_id: CreatedPost.id,
+//                         option_id: optionId,
+//                     },
+//                 });
+//             }));
+//         }
+
+//         res.status(200).json({ data: CreatedPost });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ status: "error", message: "Serverio klaida" });
+//     }
+// };
+
+export const createPostwithOptions = async (
+  req: express.Request,
+  res: express.Response,
+  roleLevel: number
+) => {
+  try {
+    const [post, valid, messages] = postValidation(req);
+    console.log(post)
+    if (!valid) {
+      return res.status(400).json({
+        message: "Validacijos klaida",
+        error_messages: messages,
+      });
+    }
+
+    const routePath = req.originalUrl;
+    let userId: number;
+
+    if (req.tokenInfo !== undefined) {
+      userId = req.tokenInfo.id;
+    } else {
+      return;
+    }
+
+    const userPostCount = await PostClient.count({
+      where: { user_id: userId },
+    });
+
+    if (routePath === "/api/post/create/plus") {
+      if (req.tokenInfo !== undefined && req.tokenInfo.role_id === 1) {
+        return res.status(403).json({ message: "Access denied." });
+      }
+    }
+
+    if (routePath === "/api/post/create/regular" && userPostCount >= 3) {
+      return res.status(400).json({
+        message: "You have reached the maximum number of posts allowed.",
+      });
+    }
+
+    if (req.tokenInfo !== undefined && req.tokenInfo.role_id === 1) {
+      post.status = 0;
+    } else {
+      post.status = 1;
+    }
+
+    let postOptionsData = {};
+    if (post.post_option && post.post_option.length > 0) {
+      postOptionsData = {
+        create: post.post_option.map((optionId: number) => ({ option_id: optionId })),
+      };
+    }
+
+    const CreatedPost = await PostClient.create({
+      data: {
+        user_id: userId,
+        city_id: parseInt(post.city_id),
+        species_id: parseInt(post.species_id),
+        pet_name: post.pet_name,
+        description: post.description,
+        created: new Date(),
+        status: post.status,
+        valid_until: new Date(),
+        post_option: postOptionsData,
+      },
+      include: {
+        post_option: true,
+      },
+    });
+
+    res.status(200).json({ data: CreatedPost });
   } catch (err) {
     console.error(err);
     res.status(500).json({ status: "error", message: "Serverio klaida" });

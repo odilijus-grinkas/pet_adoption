@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
-
+import { faMapMarkerAlt, faEnvelope, faPhone,faSignature,faStickyNote } from '@fortawesome/free-solid-svg-icons';
 interface PostType {
     pet_name: string;
     city_id: number;
@@ -20,7 +19,10 @@ interface City {
 const PostDetails = ({ post }: { post: PostType }) => {
     return (
         <div className='p-3'>
-            <h3>{post.pet_name}</h3>
+            <div className="form-outline mb-1 d-flex align-items-center">
+                <FontAwesomeIcon icon={faSignature} className='icon me-2' />
+                <h3>{post.pet_name}</h3>
+            </div>
             <div className="form-outline mb-4 d-flex align-items-center">
                 <FontAwesomeIcon icon={faMapMarkerAlt} className='icon me-2' />
                 {post.city.name}
@@ -28,7 +30,10 @@ const PostDetails = ({ post }: { post: PostType }) => {
             <hr />
             <div className="row">
                 <div className="col">
+                    <div className="form-outline mb-4 d-flex align-items-center">
+                    <FontAwesomeIcon icon={faStickyNote} className='icon me-2' />
                     <p>{post.description}</p>
+                    </div>
                 </div>
             </div>
             <div className="row">

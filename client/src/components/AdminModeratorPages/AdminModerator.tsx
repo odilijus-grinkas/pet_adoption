@@ -1,3 +1,5 @@
+import "./assets/AdMod.scss"; // Import the CSS file
+
 import React, { useEffect, useState } from "react";
 
 import { ValidationLogin } from "../Inputs/Validation";
@@ -16,7 +18,7 @@ interface Errors {
   confirmPassword?: string;
 }
 
-function AdminModerator() {
+export default function AdminModerator() {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     username: "",
@@ -25,9 +27,8 @@ function AdminModerator() {
   });
   const [errors, setErrors] = useState<Errors>({});
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
-  const [authToken, setAuthToken] = useState<string>(""); // Define authToken state
+  const [authToken, setAuthToken] = useState<string>("");
 
-  // Simulating fetching authToken from localStorage
   useEffect(() => {
     const authTokenFromLocalStorage = localStorage.getItem("authToken");
     if (authTokenFromLocalStorage) {
@@ -57,14 +58,13 @@ function AdminModerator() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`, // Using authToken here
+          Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify(formData),
       });
       if (!response.ok) {
         throw new Error("Failed to create user");
       }
-      // Refresh the page after successfully creating the user
       window.location.reload();
     } catch (error) {
       console.error("Error:", error);
@@ -90,7 +90,7 @@ function AdminModerator() {
 
   return (
     <div className="admin-moderator-container">
-      <h2 className="admin-moderator-heading">Create special user</h2>
+      <h2 className="admin-moderator-heading">Sukurkite Spec. Paskyrą</h2>
       <div className="admin-moderator-buttons">
         {roles.map((role) => (
           <button
@@ -111,15 +111,15 @@ function AdminModerator() {
           onChange={(e) =>
             setFormData({ ...formData, username: e.target.value })
           }
-          placeholder="Create a username | Susikurkite vartotojo vardą"
-          className="admin-moderator-input"
+          placeholder="Susikurkite vartotojo vardą"
+          className="admin-moderator-input form-control"
         />
         <input
           type="email"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          placeholder="Enter your email address | Įrašykite savo el.pašto adresą"
-          className="admin-moderator-input"
+          placeholder="Įrašykite savo el.pašto adresą"
+          className="admin-moderator-input form-control"
         />
         <input
           type="password"
@@ -127,8 +127,8 @@ function AdminModerator() {
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
           }
-          placeholder="Create a password | Susikurkite slaptažodį"
-          className="admin-moderator-input"
+          placeholder="Susikurkite slaptažodį"
+          className="admin-moderator-input form-control"
         />
         <input
           type="password"
@@ -136,11 +136,11 @@ function AdminModerator() {
           onChange={(e) =>
             setFormData({ ...formData, confirmPassword: e.target.value })
           }
-          placeholder="Confirm password | Patvirtinkite slaptažodį"
-          className="admin-moderator-input"
+          placeholder="Patvirtinkite slaptažodį"
+          className="admin-moderator-input form-control"
         />
-        <button type="submit" className="submit-button">
-          Submit | Pateikti
+        <button type="submit" className="btn btn-primary">
+          Pateikti
         </button>
       </form>
       {Object.keys(errors).length > 0 && (
@@ -155,5 +155,3 @@ function AdminModerator() {
     </div>
   );
 }
-
-export default AdminModerator;
