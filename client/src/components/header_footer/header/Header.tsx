@@ -3,7 +3,6 @@ import "./Header.scss";
 import { Link } from "react-router-dom";
 import logo from "../../../primary_comps/Auth/assets/logo.png";
 import { useState } from "react";
-import logo from "../../../primary_comps/Auth/assets/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
