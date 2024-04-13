@@ -6,6 +6,19 @@ import express from "express";
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'svelniejibiciuliai4@gmail.com',
+    pass: 'wgie mtpt thrb bzfv'
+  }
+});
 
 /**
  * Returns permission id: 1=regular, 2=userPlus, 3=mod, 4=admin
@@ -118,13 +131,13 @@ const createUser = async (
     await prisma.user_role.create({
       data: {
         user_id: newUser.id,
-        role_id: roleLevel,
+        role_id: 1,
       },
     });
     res.status(200).json({ status: "OK" });
   } catch (err: any) {
     if (err.code == "P2002") {
-      res.status(403).json({ message: "User already exists." });
+      res.status(403).json({ message: "Toks vartotojas jau egzistuoja." });
     } else {
       console.log(err);
       res.status(500).json({ message: "Serverio klaida." });
@@ -246,6 +259,132 @@ const loginUser = async (req: express.Request, res: express.Response) => {
   }
 };
 
+const forgot_password = async (req: express.Request, res: express.Response) => {
+  const { email } = req.body;
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
+    if (!user) {
+      return res.status(403).json({ message: "User does not exist." });
+    } else {
+      // Delete expired tokens for the user
+      await prisma.password_reset.deleteMany({
+        where: {
+          user_id: user.id,
+          expires: {
+            lte: new Date(),
+          },
+        },
+      });
+
+      const existingUserToken = await prisma.password_reset.findFirst({
+        where: {
+          user_id: user.id,
+          expires: {
+            gt: new Date(),
+          },
+        },
+      });
+
+      if (existingUserToken) {
+        return res.status(403).json({ message: "Password reset email already sent." });
+      }
+
+      const token = crypto.randomBytes(64).toString("hex");
+
+      const newUserToken = await prisma.password_reset.create({
+        data: {
+          user_id: user.id,
+          token: token,
+          expires: new Date(Date.now() + 300000),
+        },
+      });
+
+      const mailOptions = {
+        from: 'svelniejibiciuliai4@gmail.com',
+        to: email,
+        subject: 'Password Reset',
+        html: `<p>Click <a href="http://localhost:3000/PasswordReset/${token}">here</a> to reset your password.</p>`
+      };
+
+      transporter.sendMail(mailOptions, (error: any, info: any) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({ message: "Failed to send email." });
+        } else {
+          console.log('Email sent: ' + info.response);
+          res.status(200).json({ status: "OK", data: newUserToken });
+        }
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Serverio klaida." });
+  }
+};
+
+
+const password_recovery = async (req: express.Request, res: express.Response) => {
+  try {
+    const token = req.params.token;
+    const postData = req.body;
+    const currentDate = new Date();
+    const user = await prisma.password_reset.findFirst({
+      where: {
+        token: token
+      }
+    });
+
+    if (!user) {
+      return res.status(403).json({ message: "Invalid token." });
+    }
+
+    if (user.expires < currentDate) {
+      await prisma.password_reset.delete({
+        where: {
+          user_id_token: {
+            token: token,
+            user_id: user.user_id
+          }
+        }
+      });
+      return res.status(403).json({ message: "Token expired." });
+    }
+
+    const password = String(postData.password);
+    const passwordHash = await bcrypt.hash(password, 5);
+
+    const passwordUpdate = await prisma.user.update({
+      where: {
+        id: user.user_id,
+      },
+      data: {
+        password: passwordHash
+      }
+    });
+
+    const deleteToken = await prisma.password_reset.delete({
+      where: {
+        user_id_token: {
+          token: token,
+          user_id: user.user_id
+        }
+      }
+    });
+
+    return res.status(200).json({
+      message: "Vartotojo slaptažodis sėkmingai pakeistas!",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+
 export {
   getAllUsers,
   getOneUser,
@@ -254,4 +393,6 @@ export {
   deleteUser,
   loginUser,
   getUserPermissions,
+  forgot_password,
+  password_recovery
 };

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import FormInput from './FormInput';
 import ErrorMessage from './ErrorMessage';
 import SuccessMessage from './SuccessMessage';
@@ -9,14 +9,25 @@ import { faLock, faUser, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import logo from './assets/logo.png';
 
 const LoginForm = () => {
-  const navigate = useNavigate(); // Use useNavigate hook
+  const navigate = useNavigate();
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const registrationSucess = localStorage.getItem('registrationSucess');
   const [formData, setFormData] = useState({
     username: "",
     password: ""
   });
+
+  useEffect(() => {
+    // Remove registrationSuccessMessage from localStorage after 5 seconds
+    if (registrationSucess) {
+      const timeoutId = setTimeout(() => {
+        localStorage.removeItem('registrationSucess');
+      }, 5000); // 5 seconds
+      return () => clearTimeout(timeoutId);
+    }
+  }, [registrationSucess]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,15 +39,12 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const errors = ValidationLogin(formData);
-
     if (Object.keys(errors).length > 0) {
       setUsernameError(errors.username || "");
       setPasswordError(errors.password || "");
       return;
     }
-
     try {
       const response = await fetch("http://localhost:3001/api/login", {
         method: "POST",
@@ -45,18 +53,21 @@ const LoginForm = () => {
         },
         body: JSON.stringify(formData),
       });
-
       if (response.ok) {
         const parsedResponse = await response.json();
         setUsernameError("");
         setPasswordError("");
-        setIsLoggedIn(true); // Update login status to true
-        localStorage.setItem('user', JSON.stringify(parsedResponse)); //token
-        navigate("/"); // Navigate to index after successful login
-      } else {
+        setIsLoggedIn(true);
+        localStorage.setItem('user', JSON.stringify(parsedResponse));
+        navigate("/");
+      }  else {
         const errorData = await response.json();
-        setUsernameError(errorData.username || "");
-        setPasswordError(errorData.password || "");
+        if (response.status === 403) {
+          setUsernameError("Neteisingas vartotojo vardas arba slaptažodis.");
+        } else {
+          setUsernameError(errorData.message || "An error occurred.");
+        }
+        setPasswordError("");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -80,6 +91,7 @@ const LoginForm = () => {
           <FormInput placeholder="Slaptažodis" name="password" type="password" handleChange={handleChange} icon={faLock} />
           {usernameError && <ErrorMessage message={usernameError} />}
           {passwordError && <ErrorMessage message={passwordError} />}
+          {registrationSucess && <SuccessMessage message={registrationSucess} />}
           {isLoggedIn && <SuccessMessage message="Sėkmingai prisijungta!" />}
           <div className="text-center p-1">
             <Link className="forgot" to="/Register">Neturi paskyros? Registruokis</Link> <br />

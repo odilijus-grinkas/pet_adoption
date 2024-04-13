@@ -31,19 +31,29 @@ export default function Header() {
               Titulinis
             </Link>
           </li>
+          {user ? ( // Admin Panel button (if admin/mod logged in)
+            JSON.parse(user).role > 2 ? (
+              <li className="btn btn-primary">
+                <Link to="/Post/Create"> <i><FontAwesomeIcon icon={faPlus} />  </i> Sukurti Skelbimą</Link>
+              </li>
+            ) : null
+          ) : null}
+          
           {user ? ( // Profile button
             <li className="btn btn-primary">
-              <Link to="/profile">Profilis</Link>
+              <Link to="/profile"> <i><FontAwesomeIcon icon={faUser} />  </i> Profilis</Link>
             </li>
           ) : null}
 
           {user ? ( // Admin Panel button (if admin/mod logged in)
             JSON.parse(user).role > 2 ? (
               <li className="btn btn-primary">
-                <Link to="/AdminPanel">Admino Panelė</Link>
+                <Link to="/AdminPanel"> <i><FontAwesomeIcon icon={faCogs} />  </i> Admino Panelė</Link>
               </li>
             ) : null
           ) : null}
+
+          
 
           {user ? ( // Login/Logout button
             <Link
@@ -51,11 +61,11 @@ export default function Header() {
               to={"/login"}
               onClick={() => localStorage.removeItem("user")}
             >
-              Atsijungti
+               <i><FontAwesomeIcon icon={faSignOutAlt} />  </i> Atsijungti
             </Link>
           ) : (
             <li className="btn btn-warning">
-              <Link to="/Login">Prisijungti</Link>
+              <Link to="/Login">  <i><FontAwesomeIcon icon={faSignInAlt} />  </i>  Prisijungti</Link>
             </li>
           )}
         </ul>

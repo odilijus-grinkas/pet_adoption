@@ -22,11 +22,25 @@ article {
   margin: 0; 
   padding: 0; 
 }
+.recovery_article {
+  background: url('assets/background.png') no-repeat center center fixed; 
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0; 
+  padding: 0;
+  flex-direction: column;
+}
+.alert{
+    background-color: #fff!important;
+}
 
-.card {
-  width: 400px;
-  padding: 20px;
-  border: none;
+.card{
+    width: 400px;
+    padding: 20px;
+    border:none;
 }
 
 .form-control {
