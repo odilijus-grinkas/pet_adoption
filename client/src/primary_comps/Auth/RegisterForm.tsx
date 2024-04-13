@@ -1,13 +1,13 @@
 // RegisterForm.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import FormInput from './FormInput';
 import ErrorMessage from './ErrorMessage';
 import { ValidationRegister } from '../../components/Inputs/Validation';
 import { faLock, faUser, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
-
 const RegisterForm = () => {
+    const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState<ErrorMessage>({});
     const [formData, setFormData] = useState({
       email: "",
@@ -43,6 +43,8 @@ const RegisterForm = () => {
             const parsedResponse = await response.json();
             console.log(parsedResponse); 
             setErrorMessage({}); 
+            navigate("/login");
+            localStorage.setItem('registrationSucess', 'Sėkmingai užsiregistravote!'); 
         } else {
           const errorData = await response.json();
           setErrorMessage({ general: errorData.message });

@@ -129,13 +129,13 @@ const createUser = async (
     await prisma.user_role.create({
       data: {
         user_id: newUser.id,
-        role_id: roleLevel,
+        role_id: 1,
       },
     });
     res.status(200).json({ status: "OK" });
   } catch (err: any) {
     if (err.code == "P2002") {
-      res.status(403).json({ message: "User already exists." });
+      res.status(403).json({ message: "Toks vartotojas jau egzistuoja." });
     } else {
       console.log(err);
       res.status(500).json({ message: "Serverio klaida." });
