@@ -2,7 +2,21 @@
 
 ## Bendras Aprašymas
 
-Švelnieji Bičiuliai - tinklalapis, kurio pagalba vartotojai gali lengvai surasti gyvūnus, kurie ieško naujų namų. Svetainėje taip pat yra skatinamas gyvūnų prieglaudų lengvesnis ir greitesnis prieinamumas plačiajai visuomenei.
+Sveiki atvykę į Švelnieji Bičiuliai! Ši svetainė siekia sukurti aplinką, kurioje vartotojai galėtų naršyti ir lengvai surasti gyvūnus, kurie ieško naujų namų. Taip pat čia yra skatinamas gyvūnų prieglaudų lengvesnis ir greitesnis prieinamumas plačiajai visuomenei. Nesvarbu, ar ieškote naujo švelnaus bičiulio, kuris prisijungtų prie jūsų šeimos, ar tiesiog norite paremti gyvūnų gerovę, mūsų svetainė yra čia tam, kad padėtų jums susisiekti su mielais gyvūnais, kurie ieško mylinčių namų.
+
+## Savybės
+
+Naršyti Prieinamus Gyvūnus: Peržiūrėkite gyvūnų profilius, kurie šiuo metu yra prieinami - įskaitant jų nuotraukas, aprašymus ir detalesnę informaciją.
+
+Filtravimo Funkcija: Naudokite filtravimo funkciją, kad surastumėte gyvūnus pagal kriterijus, tokius kaip rūšis, amžius, vieta ir kt.
+
+## Naudojamos Technologijos
+Frontend'as: HTML, CSS, SCSS, Vite, TypeScript, React.js.
+Backend'as: Node.js, Express.js, TypeScript, Ngnix, Docker.
+Duomenų Bazė: Prisma.
+Projekto valdymas: Trello.
+Bibliotekos: dropzone.js.
+Kiti Įrankiai: Git, GitHub.
 
 ## Instrukcijos
 
