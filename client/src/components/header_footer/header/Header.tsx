@@ -31,13 +31,11 @@ export default function Header() {
               Titulinis
             </Link>
           </li>
-          {user ? ( // Admin Panel button (if admin/mod logged in)
-            JSON.parse(user).role > 2 ? (
+          {user ? ( // Profile button
               <li className="btn btn-primary">
                 <Link to="/Post/Create"> <i><FontAwesomeIcon icon={faPlus} />  </i> Sukurti Skelbimą</Link>
               </li>
-            ) : null
-          ) : null}
+            ) : null}
           
           {user ? ( // Profile button
             <li className="btn btn-primary">
