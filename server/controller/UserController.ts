@@ -94,6 +94,7 @@ const createUser = async (
   res: express.Response,
   roleLevel: number
 ) => {
+  const role = roleLevel;
   if (req.tokenInfo) {
     const routePath = req.originalUrl;
     if (
@@ -131,7 +132,7 @@ const createUser = async (
     await prisma.user_role.create({
       data: {
         user_id: newUser.id,
-        role_id: 1,
+        role_id: role,
       },
     });
     res.status(200).json({ status: "OK" });

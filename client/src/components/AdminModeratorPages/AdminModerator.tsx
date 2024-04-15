@@ -27,14 +27,9 @@ export default function AdminModerator() {
   });
   const [errors, setErrors] = useState<Errors>({});
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
-  const [authToken, setAuthToken] = useState<string>("");
-
-  useEffect(() => {
-    const authTokenFromLocalStorage = localStorage.getItem("authToken");
-    if (authTokenFromLocalStorage) {
-      setAuthToken(authTokenFromLocalStorage);
-    }
-  }, []);
+  const user = localStorage.getItem("user") ?? "";
+  const parsedUser = JSON.parse(user);
+  const token = parsedUser.token;
 
   const createUser = async (role: string) => {
     const validationErrors = ValidationLogin(formData);
@@ -58,7 +53,7 @@ export default function AdminModerator() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
