@@ -1,8 +1,9 @@
 import "./assets/AdMod.scss"; // Import the CSS file
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { ValidationLogin } from "../Inputs/Validation";
+import { ValidationRegister } from "../Inputs/Validation";
+import { Navigate } from "react-router-dom";
 
 interface FormData {
   email: string;
@@ -16,6 +17,7 @@ interface Errors {
   username?: string;
   password?: string;
   confirmPassword?: string;
+  error?: string;
 }
 
 export default function AdminModerator() {
@@ -27,12 +29,18 @@ export default function AdminModerator() {
   });
   const [errors, setErrors] = useState<Errors>({});
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState(false);
   const user = localStorage.getItem("user") ?? "";
   const parsedUser = JSON.parse(user);
   const token = parsedUser.token;
+  const role = parsedUser.role;
+  console.log(role);
 
+  if (role == 1 || role == 2) {
+    return <Navigate to="/" />;
+  }
   const createUser = async (role: string) => {
-    const validationErrors = ValidationLogin(formData);
+    const validationErrors = ValidationRegister(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -58,11 +66,22 @@ export default function AdminModerator() {
         body: JSON.stringify(formData),
       });
       if (!response.ok) {
-        throw new Error("Failed to create user");
+        const responseData = await response.json();
+        if (
+          response.status === 403 &&
+          responseData.message ===
+            "Only admins can create another mod or admin."
+        ) {
+          throw new Error(responseData.message);
+        } else {
+          throw new Error("Only admins can create another mod or admin.");
+        }
       }
-      window.location.reload();
-    } catch (error) {
-      console.error("Error:", error);
+      // window.location.reload();
+      setSuccessMessage(true);
+    } catch (error: any) {
+      // console.error("Error:", error);
+      setErrors({ error: error.message });
     }
   };
 
@@ -146,6 +165,9 @@ export default function AdminModerator() {
             </p>
           ))}
         </div>
+      )}
+      {successMessage && (
+        <p className="success-message">Vartotojas sėkmingai sukurta</p>
       )}
     </div>
   );
