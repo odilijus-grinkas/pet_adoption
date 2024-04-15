@@ -36,39 +36,84 @@ const PostCreate: React.FC = () => {
   const [errors, setErrors] = useState<Partial<Post>>({}); // State for errors
   const [errorMessage, setErrorMessage] = useState<object | null>(null);
   const [options, setOptions] = useState<string[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
+  const [species, setSpecies] = useState<string[]>([]);
+  const [selectedSpecies, setSelectedSpecies] = useState<string>("");
+  console.log(selectedSpecies);
   const navigate = useNavigate();
 
-  const fetchOptions = async (species) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3001/api/post/test/${species}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch options");
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        if (!selectedSpecies) {
+          // If no species is selected, set options to an empty array
+          setOptions([]);
+          return;
+        }
+
+        const response = await fetch(
+          `http://localhost:3001/api/post/test/${selectedSpecies}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch options");
+        }
+        const data = await response.json();
+        console.log(data);
+        const allOptions = data.data;
+        setOptions(allOptions);
+      } catch (error) {
+        console.error("Error:", error);
       }
-      const data = await response.json();
-      console.log(data);
-      const allOpions = data.data;
-      setOptions(allOpions);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+    };
+
+    fetchOptions();
+  }, [selectedSpecies]);
 
   useEffect(() => {
-    // Fetch options only when species is selected
-    if (post.species_id !== "") {
-      if (post.species_id === "1") {
-        fetchOptions("Šuo");
-      } else if (post.species_id === "2") {
-        fetchOptions("Katinas");
-      } else if (post.species_id === "3") {
-        fetchOptions("Triušiai");
-      } else if (post.species_id === "4") {
-        fetchOptions("Žuvytės");
+    const fetchSpeciesAndCities = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/post/species");
+        const response2 = await fetch("http://localhost:3001/api/post/cities");
+        if (!response.ok && !response2.ok) {
+          throw new Error("Failed to fetch species or cities");
+        }
+        const species = await response.json();
+        const cities = await response2.json();
+        const allSpecies = species.data;
+        const allCities = cities.data;
+        setCities(allCities);
+        setSpecies(allSpecies);
+        console.log(allCities);
+      } catch (error) {
+        console.error("Error:", error);
       }
-    }
-  }, [post.species_id]);
+    };
+    fetchSpeciesAndCities();
+  }, []);
+
+  // useEffect(() => {
+  //   // Fetch options only when species is selected
+  //   if (post.species_id !== "") {
+  //     // if (post.species_id === "1") {
+  //     //   fetchOptions("Šuo");
+  //     // } else if (post.species_id === "2") {
+  //     //   fetchOptions("Katinas");
+  //     // } else if (post.species_id === "3") {
+  //     //   fetchOptions("Triušiai");
+  //     // } else if (post.species_id === "4") {
+  //     //   fetchOptions("Žuvytės");
+  //     // }
+  //     const selectedSpecies = species.find(
+  //       (species) => species.id === post.species_id
+  //     );
+  //     console.log(selectedSpecies);
+  //     if (selectedSpecies) {
+  //       fetchOptions(selectedSpecies.name);
+  //     }
+  //   } else {
+  //     setOptions([]);
+  //   }
+  // }, [post.species_id]);
 
   useEffect(() => {
     // Check if user is logged in
@@ -87,6 +132,24 @@ const PostCreate: React.FC = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+
+    if (name === "species_id") {
+      // Find the species object with the selected ID
+      const selectedSpeciesId = parseInt(value, 10);
+
+      const selectedSpeciesObj = species.find(
+        (species) => species.id === selectedSpeciesId
+      );
+
+      if (selectedSpeciesObj) {
+        // If the species object is found, set the name as the selected species
+        setSelectedSpecies(selectedSpeciesObj.name);
+      } else {
+        // If species object not found, reset selectedSpecies
+        setSelectedSpecies("");
+      }
+    }
+
     setPost((prevState) => ({
       ...prevState,
       [name]: value,
@@ -179,7 +242,7 @@ const PostCreate: React.FC = () => {
         </div>
         <div>
           <label>City ID:</label>
-          <select
+          {/* <select
             name="city_id"
             value={post.city_id}
             onChange={handleInputChange}
@@ -189,11 +252,25 @@ const PostCreate: React.FC = () => {
             <option value="2">Vilnius</option>
             <option value="3">Klaipeda</option>
             <option value="4">Trakai</option>
-          </select>
+          </select> */}
+          {cities && (
+            <select
+              name="city_id"
+              value={post.city_id}
+              onChange={handleInputChange}
+            >
+              <option value="">Select City</option>
+              {cities.map((city) => (
+                <option key={city.id} value={city.id}>
+                  {city.name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         <div>
           <label>Species ID:</label>
-          <select
+          {/* <select
             name="species_id"
             value={post.species_id}
             onChange={handleInputChange}
@@ -203,7 +280,21 @@ const PostCreate: React.FC = () => {
             <option value="2">Katinas</option>
             <option value="3">Triušis</option>
             <option value="4">Žuvytė</option>
-          </select>
+          </select> */}
+          {species && (
+            <select
+              name="species_id"
+              value={post.species_id}
+              onChange={handleInputChange}
+            >
+              <option value="">Select Species</option>
+              {species.map((species) => (
+                <option key={species.id} value={species.id}>
+                  {species.name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         {options.map((option, index) => (
           <div key={index}>
