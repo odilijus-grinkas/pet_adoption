@@ -137,22 +137,6 @@ async function inconsistentDataSeed() {
         skipDuplicates: true
     });
 
-    const newPhoto = await prisma.photo.createMany({
-        data: [
-            {
-                id: 1,
-                post_id: 1,
-                photo: 'photo.jpg'
-            },
-            {
-                id: 2,
-                post_id: 2,
-                photo: 'photo.jpg'
-            }
-        ],
-        skipDuplicates: true
-    });
-
     let fakePostOption = [];
     let optionId = 0;
     for (let i = 0; i < 50; i++) {
