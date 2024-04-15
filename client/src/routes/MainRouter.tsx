@@ -12,7 +12,9 @@ import Recovery from "../primary_comps/Auth/Recovery";
 import Register from "../primary_comps/Auth/Register";
 import Timeout from "../primary_comps/Auth/Timeout";
 import PasswordReset from "../primary_comps/Auth/PasswordReset";
-
+import CreateMessage from "../components/Chatting/MessageCreate";
+import Chat from "../components/Chatting/Chat";
+import ChatDetail from "../components/Chatting/ChatDetail";
 // import PostList from "../primary_comps/PostList";
 
 function MainRouter() {
@@ -39,6 +41,10 @@ function MainRouter() {
             <Route path="/Profile" element={<Profile />} />
             {/* 404 Not Found Route */}
             <Route path="*" element={<NotFound />} />
+            {/* Chatting System  */}
+            <Route path="/CreateMessage" element={<CreateMessage />} />
+            <Route path="/Chat" element={<Chat />} />
+            <Route path="/Chat/:userId" element={<ChatDetail />} />
             {/* Admin | Moderator Page Route */}
             <Route path="/AdminPanel" element={<AdminPanel />} />
           </Routes>

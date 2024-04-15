@@ -1,0 +1,45 @@
+.sender-left {
+    text-align: left;
+  }
+  
+  .sender-right {
+    text-align: right;
+  }
+  
+  .message-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .message-content {
+    margin-bottom: 5px;
+  }
+
+  .containeris {
+    width: calc(100% + 20em);
+}
+
+.message-box.sender-left .message-date {
+    text-align: left;
+  }
+  
+  .message-box.sender-right .message-date {
+    text-align: right;
+  }
+
+@media (max-width: 1258px) {
+    .containeris {
+        width: calc(100% + 10em); /* Reset width to 100% on smaller screens */
+    }
+}
+@media (max-width: 1043px) {
+    .containeris {
+        width: calc(100% + 5em); /* Reset width to 100% on smaller screens */
+    }
+}
+@media (max-width: 768px) {
+    .containeris {
+        width: 100%; /* Reset width to 100% on smaller screens */
+    }
+}

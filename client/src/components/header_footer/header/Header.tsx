@@ -11,6 +11,7 @@ import {
   faPlus,
   faSignInAlt,
   faSignOutAlt,
+  faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
@@ -31,16 +32,32 @@ export default function Header() {
               Titulinis
             </Link>
           </li>
-          {user ? ( // Profile button
-            <li className="btn btn-primary">
-              <Link to="/Post/Create">
-                {" "}
-                <i>
-                  <FontAwesomeIcon icon={faPlus} />{" "}
-                </i>{" "}
-                Sukurti Skelbimą
-              </Link>
-            </li>
+          {user ? (
+            JSON.parse(user).role > 2 ? (
+              <li className="btn btn-primary">
+                <Link to="/Post/Create">
+                  {" "}
+                  <i>
+                    <FontAwesomeIcon icon={faPlus} />{" "}
+                  </i>{" "}
+                  Sukurti Skelbimą
+                </Link>
+              </li>
+            ) : null
+          ) : null}
+
+          {user ? (
+            JSON.parse(user).role > 2 ? (
+              <li className="btn btn-primary">
+                <Link to="/Chat">
+                  {" "}
+                  <i>
+                    <FontAwesomeIcon icon={faEnvelope} />{" "}
+                  </i>{" "}
+                  Susirašinėjimai
+                </Link>
+              </li>
+            ) : null
           ) : null}
 
           {user ? ( // Profile button
