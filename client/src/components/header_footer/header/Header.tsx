@@ -32,33 +32,29 @@ export default function Header() {
               Titulinis
             </Link>
           </li>
-          {user ? (
-            JSON.parse(user).role > 2 ? (
-              <li className="btn btn-primary">
-                <Link to="/Post/Create">
-                  {" "}
-                  <i>
-                    <FontAwesomeIcon icon={faPlus} />{" "}
-                  </i>{" "}
+          {user && (
+            <li className="btn btn-primary">
+              <Link to="/Post/Create">
+                {" "}
+                <i>
+                  <FontAwesomeIcon icon={faPlus} />{" "}
+                </i>{" "}
                   Sukurti Skelbimą
-                </Link>
+                  </Link>
               </li>
-            ) : null
-          ) : null}
+                )}
 
-          {user ? (
-            JSON.parse(user).role > 2 ? (
-              <li className="btn btn-primary">
-                <Link to="/Chat">
-                  {" "}
-                  <i>
-                    <FontAwesomeIcon icon={faEnvelope} />{" "}
-                  </i>{" "}
-                  Susirašinėjimai
-                </Link>
-              </li>
-            ) : null
-          ) : null}
+          {user && (
+            <li className="btn btn-primary">
+              <Link to="/Chat">
+              {" "}
+              <i>
+                <FontAwesomeIcon icon={faEnvelope} />{" "}
+              </i>{" "}
+              Susirašinėjimai
+            </Link>
+          </li>
+                )}    
 
           {user ? ( // Profile button
             <li className="btn btn-primary">
