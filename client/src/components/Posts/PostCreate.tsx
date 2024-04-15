@@ -1,6 +1,8 @@
 import "./assets/postCreation.scss";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ValidationCreate } from "../Inputs/Validation";
+import ErrorMessage from "../../primary_comps/Auth/ErrorMessage";
 
 interface User {
   id: string;
@@ -31,7 +33,8 @@ const PostCreate: React.FC = () => {
 
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // State for error message
+  const [errors, setErrors] = useState<Partial<Post>>({}); // State for errors
+  const [errorMessage, setErrorMessage] = useState<object | null>(null);
   const [options, setOptions] = useState<string[]>([]);
   const navigate = useNavigate();
 
@@ -105,6 +108,13 @@ const PostCreate: React.FC = () => {
 
   const handleCreatePost = async (e: FormEvent) => {
     e.preventDefault();
+
+    const errors = ValidationCreate(post);
+    if (Object.keys(errors).length !== 0) {
+      setErrors(errors);
+      return;
+    }
+
     const userString = localStorage.getItem("user");
     const loggedInUser = userString ? JSON.parse(userString) : null;
     const isPlus =
@@ -219,6 +229,10 @@ const PostCreate: React.FC = () => {
           />
         </div>
         {errorMessage && <div className="error">{errorMessage}</div>}
+        {errors.city_id && <ErrorMessage message={errors.city_id} />}
+        {errors.description && <ErrorMessage message={errors.description} />}
+        {errors.species_id && <ErrorMessage message={errors.species_id} />}
+        {errors.pet_name && <ErrorMessage message={errors.pet_name} />}
         <button type="submit">Create Post</button>
       </form>
     </div>
