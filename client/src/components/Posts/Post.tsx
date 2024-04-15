@@ -1,6 +1,6 @@
 import "./assets/post.scss";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import PostDetails from "./PostDetails";
@@ -37,7 +37,9 @@ const Post = () => {
   const user = localStorage.getItem("user");
   const parsedUser = user ? JSON.parse(user) : null;
   const authToken = parsedUser ? parsedUser.token : null;
-
+  const logged = JSON.parse(localStorage.getItem("user") || "{}");
+  const loggedIn = logged.id ? true : false;
+  
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -130,26 +132,38 @@ const Post = () => {
     post.user &&
     (parsedUser.id === post.user.id || isAdmin);
 
-  return (
-    <section className="PostSection">
-      <div className="postcard text-black">
-        {post ? (
-          <>
-            <PostImageCarousel
-              post={post}
-              onDeletePhoto={handleDeletePhoto}
-              isEditing={isEditing}
-            />
-            {isEditing ? (
-              <PostEditForm
+   
+
+    const navigateToCreateMessage = () => {
+      if (post && parsedUser) {
+        navigate(`/chat/${post.user.id}`, {
+          state: {
+            loggedInUserId: parsedUser.id,
+            targetUserId: post.user.id,
+          }
+        });
+      }
+    };
+
+    return (
+      <section className="PostSection">
+        <div className="postcard text-black">
+          {post ? (
+            <>
+              <PostImageCarousel
                 post={post}
-                setPost={setPost}
-                handleSave={handleSave}
+                onDeletePhoto={handleDeletePhoto}
+                isEditing={isEditing}
               />
-            ) : (
-              <PostDetails post={post} />
-            )}
-            {isUserPost && !isEditing && (
+              {isEditing ? (
+                <PostEditForm
+                  post={post}
+                  handleSave={handleSave}
+                />
+              ) : (
+                <PostDetails post={post} />
+              )}
+              {isUserPost && !isEditing && (
               <div className="row justify-content-center">
                 <div className="col-auto">
                   <button className="btn btn-primary" onClick={handleEdit}>
@@ -157,23 +171,33 @@ const Post = () => {
                   </button>
                 </div>
               </div>
-            )}
-            {isEditing && isAdmin && (
-              <div className="row justify-content-center">
-                <div className="col-auto">
-                  <button className="btn btn-danger" onClick={handleDelete}>
-                    Ištrinti Skelbimą
+              )}
+              {loggedIn && (
+                <div className="row justify-content-center">
+                 <div className="col-auto">
+                  <button className="btn btn-primary" onClick={navigateToCreateMessage}>
+                    Siųsti Žinutę
                   </button>
                 </div>
               </div>
-            )}
-          </>
-        ) : (
-          <PostNotFound />
-        )}
-      </div>
-    </section>
-  );
-};
+              )}
 
-export default Post;
+              {isEditing && isAdmin && (
+                <div className="row justify-content-center">
+                  <div className="col-auto">
+                    <button className="btn btn-danger" onClick={handleDelete}>
+                      Ištrinti Skelbimą
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <PostNotFound />
+          )}
+        </div>
+      </section>
+    );
+  };
+  
+  export default Post;
