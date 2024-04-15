@@ -29,7 +29,7 @@ export default function AdminModerator() {
   });
   const [errors, setErrors] = useState<Errors>({});
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState(false);
+  // const [successMessage, setSuccessMessage] = useState(false);
   const user = localStorage.getItem("user") ?? "";
   const parsedUser = JSON.parse(user);
   const token = parsedUser.token;
@@ -77,8 +77,8 @@ export default function AdminModerator() {
           throw new Error("Only admins can create another mod or admin.");
         }
       }
-      // window.location.reload();
-      setSuccessMessage(true);
+      window.location.reload();
+      // setSuccessMessage(true);
     } catch (error: any) {
       // console.error("Error:", error);
       setErrors({ error: error.message });
@@ -166,9 +166,9 @@ export default function AdminModerator() {
           ))}
         </div>
       )}
-      {successMessage && (
+      {/* {successMessage && (
         <p className="success-message">Vartotojas sėkmingai sukurta</p>
-      )}
+      )} */}
     </div>
   );
 }
