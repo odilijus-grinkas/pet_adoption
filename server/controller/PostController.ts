@@ -90,6 +90,7 @@ export const getFilteredPosts = async (
       include: {
         species: true,
         city: true,
+        photo: true,
         post_option: {
           include: {
             option: true,
