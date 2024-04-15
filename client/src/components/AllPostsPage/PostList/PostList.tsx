@@ -14,13 +14,13 @@ const PostList = ({ allPosts }) => {
                   <img
                     src={`http://localhost:3001/uploads/${item.photo[0].photo}`}
                     className="card-img-top fluid"
-                    alt="BRR"
+                    alt="Gyvūno Nuotrauka"
                   />
                 ) : (
                   <img
                     src={PetNoPhoto}
                     className="card-img-top fluid"
-                    alt="PetNoPhoto"
+                    alt="Nuotrauka Nerasta"
                   />
                 )}
                 <div className="card-body">
