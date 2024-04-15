@@ -64,7 +64,7 @@ postsRouter.post(
   }
 );
 
-postsRouter.put("/post/createCity", authToken, createCity);
+postsRouter.post("/post/createCity", authToken, createCity);
 
 postsRouter.put("/post/:id", authToken, updateValidation, updatePost);
 // postsRouter.put("/post/:id", authToken, updateValidation, updatePostwithOptions);
