@@ -6,6 +6,12 @@ interface FormData {
   pet_name: string;
   description: string;
 }
+interface post {
+  pet_name: string;
+  description: string;
+  city_id: number;
+  species_id: number;
+}
 
 interface Errors {
   email?: string;
@@ -14,21 +20,48 @@ interface Errors {
   confirmPassword?: string;
   pet_name?: string;
   description?: string;
+  city_id?: string;
+  species_id?: string;
 }
 
-export const ValidationEdit = (formData: FormData): Errors => {
+export const ValidationEdit = (post: post): Errors => {
   const errors: Errors = {};
 
-  if (!formData.pet_name) {
+  if (!post.pet_name) {
     errors.pet_name = "Reikalingas gyvūno vardas";
-  } else if (formData.pet_name.length < 3) {
+  } else if (post.pet_name.length < 3) {
     errors.pet_name = "Gyvūno vardas negali būti trumpesnis už 3 simbolius";
-  } else if (formData.pet_name.length > 30) {
+  } else if (post.pet_name.length > 30) {
     errors.pet_name = "Gyvūno vardas negali būti ilgesnis už 30 simbolių";
   }
 
-  if (!formData.description) {
+  if (!post.description) {
     errors.description = "Reikalingas Skelbimo aprašymas";
+  }
+  return errors;
+};
+
+export const ValidationCreate = (Post: Post): Errors => {
+  const errors: Errors = {};
+
+  if (!Post.pet_name) {
+    errors.pet_name = "Reikalingas gyvūno vardas";
+  } else if (Post.pet_name.length < 3) {
+    errors.pet_name = "Gyvūno vardas negali būti trumpesnis už 3 simbolius";
+  } else if (Post.pet_name.length > 30) {
+    errors.pet_name = "Gyvūno vardas negali būti ilgesnis už 30 simbolių";
+  }
+
+  if (!Post.description) {
+    errors.description = "Reikalingas Skelbimo aprašymas";
+  }
+
+  if (!Post.city_id) {
+    errors.city_id = "Reikalingas miesto pasirinkimas";
+  }
+
+  if (!Post.species_id) {
+    errors.species_id = "Reikalingas gyvūno rūšies pasirinkimas";
   }
   return errors;
 };

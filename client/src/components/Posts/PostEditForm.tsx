@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { faEnvelope, faMapMarkerAlt, faPhone, faSignature } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faMapMarkerAlt,
+  faPhone,
+  faSignature,
+} from "@fortawesome/free-solid-svg-icons";
 import DropzoneComponent from "./DropzoneComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ValidationEdit } from "../Inputs/Validation";
+import ErrorMessage from "../../primary_comps/Auth/ErrorMessage";
 
 interface PostEditFormProps {
   post: Post;
@@ -9,9 +16,14 @@ interface PostEditFormProps {
   handleSave: () => void;
 }
 
-const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }) => {
+const PostEditForm: React.FC<PostEditFormProps> = ({
+  post,
+  setPost,
+  handleSave,
+}) => {
   const [postId, setPostId] = useState<string | null>(null);
   const [cities, setCities] = useState<string[]>([]);
+  const [validationErrors, setValidationErrors] = useState<Errors>({});
 
   useEffect(() => {
     // Check if postId exists in localStorage
@@ -19,7 +31,7 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
     if (storedPostId) {
       setPostId(storedPostId);
     }
-    
+
     // Fetch cities
     fetchCities();
   }, []);
@@ -47,8 +59,14 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
   };
 
   const handleSaveAndRefresh = () => {
-    handleSave(); // Save the changes
-    window.location.reload(); // Reload the page
+    const errors = ValidationEdit(post);
+    if (Object.keys(errors).length === 0) {
+      setValidationErrors({});
+      handleSave(); // Save the changes
+      window.location.reload(); // Reload the page
+    } else {
+      setValidationErrors(errors);
+    }
   };
 
   return (
@@ -84,7 +102,9 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
               }
             >
               {cities.map((city, index) => (
-                <option key={index} value={index + 1}>{city}</option>
+                <option key={index} value={index + 1}>
+                  {city}
+                </option>
               ))}
             </select>
           </div>
@@ -116,9 +136,23 @@ const PostEditForm: React.FC<PostEditFormProps> = ({ post, setPost, handleSave }
           </div>
         </div>
       </div>
+      <div className="text-start">
+        {validationErrors.pet_name && (
+          <ErrorMessage message={validationErrors.pet_name} />
+        )}
+        {validationErrors.city_id && (
+          <ErrorMessage message={validationErrors.city_id} />
+        )}
+        {validationErrors.description && (
+          <ErrorMessage message={validationErrors.description} />
+        )}
+      </div>
       <div className="row">
-        <div className="col-md-6" style={{ maxHeight: "20em", width: "100%", overflowY: "auto" }}>
-          <DropzoneComponent postId={postId ? postId : ''} />
+        <div
+          className="col-md-6"
+          style={{ maxHeight: "20em", width: "100%", overflowY: "auto" }}
+        >
+          <DropzoneComponent postId={postId ? postId : ""} />
         </div>
       </div>
       <hr />

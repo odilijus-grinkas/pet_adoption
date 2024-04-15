@@ -628,3 +628,16 @@ export const createPostwithOptions = async (
     res.status(500).json({ status: "error", message: "Serverio klaida" });
   }
 };
+
+export const getAllSpecies = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const species = await Prisma.species.findMany({
+    });
+    res.status(200).json({ data: species });
+  } catch (err) {
+    console.log(err);
+  }
+}
